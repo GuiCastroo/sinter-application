@@ -56,3 +56,15 @@ def test_acha_o_catalogo_subindo_pastas(
     monkeypatch.chdir(sub)
     monkeypatch.delenv("SINTER_CATALOG", raising=False)
     assert run(["validate"]) == 0
+
+
+def test_dominios_do_exemplo_passam(
+    catalogo_com_dominios: Path,
+    capsys: pytest.CaptureFixture[str],
+    golden: Callable[[str, str], None],
+) -> None:
+    code = run(["validate", str(catalogo_com_dominios), "--json"])
+    out = capsys.readouterr().out
+    assert json.loads(out)["report"]["errors"] == []
+    assert code == 0
+    golden("validate_dominios.json", out)

@@ -30,6 +30,16 @@ def raiz_catalogo(tmp_path: Path) -> Path:
 
 
 @pytest.fixture
+def catalogo_com_dominios(raiz_catalogo: Path) -> Path:
+    """Raiz + o domain.yaml de cada domínio do exemplo: o que a Story 1.2 conhece."""
+    for domain_file in sorted((EXEMPLO / "domains").glob("*/domain.yaml")):
+        target = raiz_catalogo / domain_file.relative_to(EXEMPLO)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(domain_file, target)
+    return raiz_catalogo
+
+
+@pytest.fixture
 def golden(request: pytest.FixtureRequest):  # type: ignore[no-untyped-def]
     update = bool(request.config.getoption("--update-golden"))
 

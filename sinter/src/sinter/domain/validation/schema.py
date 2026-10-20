@@ -64,12 +64,30 @@ def parse_manifest(
         )
         return ParsedManifest(file=file, data=data, positions=positions, kind=kind), [f]
 
+    findings: list[Finding] = []
+    spec = data.get("spec")
+    calc = [f for f in KINDS[kind].calc_fields if isinstance(spec, dict) and f in spec]
+    for name in calc:
+        findings.append(
+            _finding(
+                file,
+                data,
+                positions,
+                ("spec", name),
+                "CALC_FIELD_WRITTEN",
+                f"'{name}' é calculado pela CLI e não deve ser escrito",
+            )
+        )
+    if calc:
+        assert isinstance(spec, dict)
+        data = {**data, "spec": {k: v for k, v in spec.items() if k not in calc}}
+
     try:
         model = KINDS[kind].model.model_validate(data)
     except ValidationError as exc:
-        findings = []
         for err in exc.errors():
             code, msg = _from_pydantic(err)
             findings.append(_finding(file, data, positions, tuple(err["loc"]), code, msg))
         return ParsedManifest(file=file, data=data, positions=positions, kind=kind), findings
-    return ParsedManifest(file=file, data=data, positions=positions, kind=kind, model=model), []
+    manifest = ParsedManifest(file=file, data=data, positions=positions, kind=kind, model=model)
+    return manifest, findings

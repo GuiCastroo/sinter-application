@@ -45,3 +45,65 @@ class GlossaryTerm(SinterModel):
     definition: str
     synonyms: list[str] = Field(default_factory=list)
     not_to_confuse_with: str | None = None
+
+
+Extraction = Literal["human", "extracted", "inferred"]
+Criticality = Literal["baixa", "media", "alta", "critica"]
+
+
+class Evidence(SinterModel):
+    source: str
+    locator: str
+    version: str | dt.date | None = None
+    content_hash: str | None = None
+    extraction: Extraction
+
+
+class Rule(SinterModel):
+    id: str
+    statement: str
+    exceptions: list[str] = Field(default_factory=list)
+    example: str | None = None
+    regulations: list[str] = Field(default_factory=list)
+    evidence: list[Evidence] = Field(default_factory=list)
+
+
+class Decision(SinterModel):
+    id: str
+    title: str
+    date: dt.date
+    context: str
+    decision: str
+    consequences: list[str] = Field(default_factory=list)
+    supersedes: str | None = None
+    evidence: list[Evidence] = Field(default_factory=list)
+
+
+class Operation(SinterModel):
+    hours: str | None = None
+    batch_windows: list[str] = Field(default_factory=list)
+    criticality: Criticality | None = None
+    volume: str | None = None
+
+
+class Modernization(SinterModel):
+    goal: str
+    decision: str | None = None
+
+
+class DataLayerInfo(SinterModel):
+    location: str
+    format: str | None = None
+    refresh: str | None = None
+    quality: list[str] = Field(default_factory=list)
+    consumers: list[str] = Field(default_factory=list)
+
+
+class DataAsset(SinterModel):
+    id: str
+    name: str
+    description: str | None = None
+    produced_by: str | None = None
+    personal_data: bool
+    layers: dict[str, DataLayerInfo]
+    docs: list[Doc] = Field(default_factory=list)

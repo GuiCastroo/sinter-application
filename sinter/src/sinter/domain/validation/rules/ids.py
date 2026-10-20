@@ -4,7 +4,7 @@ from collections import defaultdict
 from collections.abc import Iterable
 
 from sinter.domain.model.catalog import Catalog, Entry
-from sinter.domain.model.registry import ID_SLUG, prefix_for
+from sinter.domain.model.registry import ADR_ID, ID_SLUG, prefix_for
 from sinter.domain.validation.engine import FileFacts, Problem, problem_at, rule
 from sinter.domain.validation.finding import ERROR, Related
 
@@ -12,6 +12,10 @@ from sinter.domain.validation.finding import ERROR, Related
 @rule(code="ID_FORMAT_INVALID", severity=ERROR)
 def id_format(catalog: Catalog, facts: FileFacts) -> Iterable[Problem]:
     for e in catalog.entries:
+        if e.kind == "Decision":
+            if not ADR_ID.match(e.id):
+                yield problem_at(e, message=f"id '{e.id}' deve ser 'ADR-<ID-DOMÍNIO>-NNN'")
+            continue
         prefix = prefix_for(e.kind)
         if prefix is None:
             if not ID_SLUG.match(e.id):

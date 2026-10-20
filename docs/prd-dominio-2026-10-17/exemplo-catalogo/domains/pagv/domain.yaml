@@ -25,7 +25,7 @@ spec:
   doesNot:                       # o que as pessoas ACHAM que faz, mas não faz
     - Antifraude (é do domínio Risco — dom-risco)
     - Emissão de nota fiscal (é do domínio Fiscal)
-    - Pagamentos do atacado (é outro domínio: PAGA)
+    - "Pagamentos do atacado (é outro domínio: PAGA)"
   unknowns:                      # pendências abertas — a IA não deve chutar aqui
     - Limite de parcelas sem juros por categoria ainda não confirmado
     - Quem é dono do contrato com o adquirente secundário

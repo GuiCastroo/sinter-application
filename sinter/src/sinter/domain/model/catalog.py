@@ -1,12 +1,13 @@
 """O catálogo carregado: imutável, indexado por id (AD-29, AD-41)."""
 
-from collections.abc import Iterator, Mapping
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 from typing import Any
 
 from sinter.domain.model.base import SinterModel
 from sinter.domain.model.organization import Organization
-from sinter.domain.validation.finding import Positions, format_path, line_for
+from sinter.domain.model.registry import CHILD_LISTS
+from sinter.domain.validation.finding import Positions, Segment, format_path, line_for
 
 
 @dataclass(frozen=True)
@@ -60,32 +61,27 @@ class Catalog:
         return None
 
 
-_CHILD_LISTS: Mapping[str, tuple[str, str]] = {
-    "Organization": ("areas", "Area"),
-    "RepositoryList": ("repositories", "Repository"),
-}
-
-
 def _child_entries(m: ParsedManifest) -> Iterator[Entry]:
-    if m.kind is None or m.kind not in _CHILD_LISTS:
+    if m.kind is None or m.kind not in CHILD_LISTS:
         return
-    list_name, child_kind = _CHILD_LISTS[m.kind]
-    spec = m.data.get("spec") if isinstance(m.data, dict) else None
-    items = spec.get(list_name) if isinstance(spec, dict) else None
-    if not isinstance(items, list):
-        return
-    for i, item in enumerate(items):
-        ident = item.get("id") if isinstance(item, dict) else None
-        if isinstance(ident, str):
-            segments = ("spec", list_name, i)
-            yield Entry(
-                id=ident,
-                kind=child_kind,
-                file=m.file,
-                path=format_path(m.data, segments),
-                line=line_for(m.positions, segments),
-                valid=m.valid,
-            )
+    for list_path, child_kind in CHILD_LISTS[m.kind]:
+        items: object = m.data
+        for key in list_path:
+            items = items.get(key) if isinstance(items, dict) else None
+        if not isinstance(items, list):
+            continue
+        for i, item in enumerate(items):
+            ident = item.get("id") if isinstance(item, dict) else None
+            if isinstance(ident, str):
+                segments: tuple[Segment, ...] = (*list_path, i)
+                yield Entry(
+                    id=ident,
+                    kind=child_kind,
+                    file=m.file,
+                    path=format_path(m.data, segments),
+                    line=line_for(m.positions, segments),
+                    valid=m.valid,
+                )
 
 
 def build_catalog(manifests: list[ParsedManifest]) -> Catalog:
