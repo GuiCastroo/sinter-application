@@ -4,7 +4,7 @@ from collections import defaultdict
 from collections.abc import Iterable
 
 from sinter.domain.model.catalog import Catalog, Entry
-from sinter.domain.model.registry import ADR_ID, ID_SLUG, prefix_for
+from sinter.domain.model.registry import ADR_ID, ID_SLUG, RELATION_ID, prefix_for
 from sinter.domain.validation.engine import FileFacts, Problem, problem_at, rule
 from sinter.domain.validation.finding import ERROR, Related
 
@@ -15,6 +15,12 @@ def id_format(catalog: Catalog, facts: FileFacts) -> Iterable[Problem]:
         if e.kind == "Decision":
             if not ADR_ID.match(e.id):
                 yield problem_at(e, message=f"id '{e.id}' deve ser 'ADR-<ID-DOMÍNIO>-NNN'")
+            continue
+        if e.kind == "Relation":
+            if not RELATION_ID.match(e.id):
+                yield problem_at(
+                    e, message=f"id '{e.id}' deve ser 'rel-<app-origem>--<tipo>--<app-alvo>'"
+                )
             continue
         prefix = prefix_for(e.kind)
         if prefix is None:

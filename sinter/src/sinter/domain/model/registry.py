@@ -7,8 +7,10 @@ from typing import Any
 
 from sinter.domain.model.base import SinterModel
 from sinter.domain.model.domain import Domain
+from sinter.domain.model.journey import Journey
 from sinter.domain.model.organization import Organization
 from sinter.domain.model.regulation import Regulation
+from sinter.domain.model.relation import Relation
 from sinter.domain.model.repository_list import RepositoryList
 from sinter.domain.model.standard import Standard
 from sinter.domain.model.subdomain import Subdomain
@@ -18,6 +20,11 @@ SUPPORTED_SCHEMA_VERSION = 1
 ID_SLUG = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 DOMAIN_ID = re.compile(r"^[A-Z0-9]{2,8}$")
 ADR_ID = re.compile(r"^ADR-([A-Z0-9]{2,8})-(\d{3})$")
+RELATION_ID = re.compile(r"^rel-(app-[a-z0-9-]+?)--([a-z_]+)--(app-[a-z0-9-]+)$")
+# Ids sem arquivo: só o formato é conferido (FR-17).
+EXTERNAL_ID = re.compile(r"^ext-[a-z0-9]+(-[a-z0-9]+)*$")
+EVENT_ID = re.compile(r"^evt-[a-z0-9]+(-[a-z0-9]+)*$")
+SCHEDULER_ID = re.compile(r"^agenda-[a-z0-9]+(-[a-z0-9]+)*$")
 
 
 DomainFolder = Callable[[str], str | None]
@@ -69,6 +76,14 @@ KINDS: dict[str, KindInfo] = {
             ("boundaries", "repositories", "journeys", "modernizationOverview", "counts"),
         ),
         KindInfo("Subdomain", Subdomain, "sub-", _inside_domain("subdomains"), ("journeys",)),
+        KindInfo(
+            "Journey",
+            Journey,
+            "jor-",
+            _inside_domain("journeys"),
+            ("sequence", "participants", "subdomains"),
+        ),
+        KindInfo("Relation", Relation, "rel-", _inside_domain("relations")),
     )
 }
 
@@ -94,6 +109,7 @@ CHILD_LISTS: dict[str, tuple[tuple[tuple[str, ...], str], ...]] = {
         (("spec", "data"), "Data"),
         (("spec", "docs"), "Doc"),
     ),
+    "Journey": ((("spec", "decisions"), "Decision"), (("spec", "docs"), "Doc")),
     "Subdomain": (
         (("spec", "applications"), "Application"),
         (("spec", "rules"), "Rule"),

@@ -1,10 +1,13 @@
 import json
+import shutil
 from collections.abc import Callable
 from pathlib import Path
 
 import pytest
 
 from sinter.adapters.inbound.cli.app import run
+
+EXEMPLO = Path(__file__).parents[1] / "fixtures" / "exemplo-catalogo"
 
 
 def test_help_mostra_validate(capsys: pytest.CaptureFixture[str]) -> None:
@@ -68,3 +71,15 @@ def test_subdominios_do_exemplo_passam(
     assert json.loads(out)["report"]["errors"] == []
     assert code == 0
     golden("validate_subdominios.json", out)
+
+
+def test_exemplo_completo_passa(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], golden: Callable[[str, str], None]
+) -> None:
+    root = tmp_path / "catalogo"
+    shutil.copytree(EXEMPLO, root)
+    code = run(["validate", str(root), "--json"])
+    out = capsys.readouterr().out
+    assert json.loads(out)["report"]["errors"] == []
+    assert code == 0
+    golden("validate_exemplo.json", out)

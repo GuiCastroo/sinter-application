@@ -27,14 +27,18 @@ def _subdomains(catalog: Catalog) -> Iterable[tuple[ParsedManifest, Subdomain]]:
 
 @rule(code="SUBDOMAIN_DOMAIN_NOT_FOUND", severity=ERROR)
 def domain_exists(catalog: Catalog, facts: FileFacts) -> Iterable[Problem]:
+    """Subdomínio, jornada e relação dizem a que domínio pertencem; ele tem de existir."""
     domains = _domains(catalog)
-    for m, sub in _subdomains(catalog):
-        if sub.metadata.domain not in domains:
+    for m in catalog.valid_manifests():
+        if m.kind not in ("Subdomain", "Journey", "Relation"):
+            continue
+        owner = getattr(getattr(m.model, "metadata", None), "domain", None)
+        if isinstance(owner, str) and owner not in domains:
             yield problem(
                 m,
                 "metadata",
                 "domain",
-                message=f"domínio '{sub.metadata.domain}' não existe no catálogo",
+                message=f"domínio '{owner}' não existe no catálogo",
             )
 
 
