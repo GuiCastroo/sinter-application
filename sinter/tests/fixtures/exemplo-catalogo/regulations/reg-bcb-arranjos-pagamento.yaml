@@ -1,0 +1,11 @@
+# arquivo: regulations/reg-bcb-arranjos-pagamento.yaml  (nomes e datas ilustrativos)
+apiVersion: sinter.dev/v1
+kind: Regulation
+metadata:
+  id: reg-bcb-arranjos-pagamento
+  name: Regulamentação de arranjos de pagamento (BCB)
+  status: approved
+spec:
+  jurisdiction: BR
+  effective: { from: 2020-01-01, to: null }
+  summary: "Regras para instituições que participam de arranjos de pagamento."

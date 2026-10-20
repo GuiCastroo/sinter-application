@@ -1,0 +1,69 @@
+# arquivo: domains/camb/subdomains/sub-camb-carteira.yaml
+# Subdomínio com os mesmos blocos do domínio; aqui só o que é DESTA parte (o resto é herdado de dom-camb).
+apiVersion: sinter.dev/v1
+kind: Subdomain
+metadata:
+  id: sub-camb-carteira
+  name: Carteira
+  domain: dom-camb
+  status: approved
+  owners: [time-mainframe-camb]
+spec:
+  # --- O que a IA lê primeiro ------------------------------------------------
+  purpose: "Registra a operação na carteira de câmbio."
+  does:
+    - "Atualiza a posição de câmbio"
+  doesNot: []
+  unknowns:
+    - "Ainda não há plano para tirar a carteira do mainframe"
+
+  # --- APLICAÇÕES (cada uma com os N repos que a compõem) --------------------
+  applications:
+    - id: app-camb-carteira
+      name: Carteira (CART0100)
+      lifecycle: legacy
+      aliases: [CART0100]
+      repositories:
+        - repo: repo-mainframe-camb
+          path: "cobol/CART*"
+          role: batch
+          platform: mainframe
+
+  # --- DADOS: o que esta parte produz, por camada ----------------------------
+  # As camadas (raw/trusted/refined) vêm de organization.yaml → dataLayers.
+  data:
+    - id: dat-camb-posicao-cambio
+      name: Posição de câmbio
+      description: "Saldo por moeda e por cliente, depois de cada operação."
+      producedBy: app-camb-carteira
+      personalData: true             # tem dado pessoal (LGPD) → reg-lgpd se aplica
+      layers:
+        raw:
+          location: "s3://lake-acme/raw/camb/carteira/movimentos/"
+          format: arquivo posicional (mainframe)
+          refresh: "D+1 03:00"
+        trusted:
+          location: "lake.trusted.camb_carteira_movimentos"
+          format: delta
+          refresh: "D+1 04:00"
+          quality: ["sem duplicidade por número de boleta", "moeda sempre ISO-4217"]
+        refined:
+          location: "lake.refined.camb_posicao_diaria"
+          format: delta
+          refresh: "D+1 06:00"
+          consumers: [dom-contabilidade, dom-risco]
+      docs:
+        - { title: "Dicionário de dados da posição", type: arquitetura, url: "https://wiki.acme.local/camb/dados/posicao" }
+
+  # --- REGRAS, JORNADAS E FRONTEIRAS desta parte -----------------------------
+  boundaries:
+    in:
+      - { from: sub-camb-validacao, what: "operação validada" }
+    out:
+      - { to: dom-contabilidade, what: "posição de câmbio do dia" }
+
+  # --- CONHECIMENTO desta parte (o do domínio já vale aqui; não repetir) ------
+  regulations: []
+  standards:   []
+  docs:
+    - { title: "Runbook da carteira", type: runbook, path: docs/carteira/runbook.md }

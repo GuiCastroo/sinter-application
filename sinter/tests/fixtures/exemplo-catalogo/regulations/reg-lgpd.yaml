@@ -1,0 +1,15 @@
+# arquivo: regulations/reg-lgpd.yaml
+# ----------------------------------------------------------------------------
+# 8. REGULAÇÃO (raiz: vale para vários domínios)
+# ----------------------------------------------------------------------------
+apiVersion: sinter.dev/v1
+kind: Regulation
+metadata:
+  id: reg-lgpd
+  name: Lei Geral de Proteção de Dados (Lei 13.709/2018)
+  status: approved
+spec:
+  jurisdiction: BR
+  effective: { from: 2020-09-18, to: null }
+  docs:
+    - { title: "Texto oficial da lei", type: link, url: "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm" }

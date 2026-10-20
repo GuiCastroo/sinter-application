@@ -1,0 +1,67 @@
+# arquivo: domains/pagv/journeys/jor-pagv-pagar-pedido.yaml
+# ----------------------------------------------------------------------------
+# 5b. JORNADA COMPLETA (arquivo próprio: atravessa subdomínios)
+# O domínio e os subdomínios só APONTAM para ela (mainJourneys / journeys).
+# O diagrama de sequência é GERADO a partir dos passos.
+# ----------------------------------------------------------------------------
+apiVersion: sinter.dev/v1
+kind: Journey
+metadata:
+  id: jor-pagv-pagar-pedido
+  name: Pagar um pedido
+  domain: dom-pagv
+  status: approved
+spec:
+  purpose: "Cliente fecha o pedido e o pagamento é autorizado e capturado."
+  trigger: "Cliente clica em 'Pagar' no checkout"
+  outcome: "Pagamento capturado e evento PagamentoAprovado publicado"
+  orchestrator: app-pagv-checkout        # ou "none" quando é coreografia por eventos
+  # (calc) subdomínios e participantes saem dos passos
+
+  stages:
+    - id: pagar
+      name: Pagar
+      entry: repo-checkout-web               # canal de entrada
+      steps:
+        - id: escolher
+          capability: sub-pagv-checkout
+          actor: Cliente
+          action: "Escolhe forma de pagamento e parcelas"
+          application: app-pagv-checkout
+          result: "Pedido de pagamento montado"
+          rules: [rule-pagv-parcela-minima-10-reais]
+          next: [antifraude]
+
+        - id: antifraude
+          capability: sub-pagv-autorizacao
+          actor: Sistema
+          action: "Consulta antifraude"
+          application: app-pagv-autorizacao
+          calls: dom-risco
+          result: "Risco aprovado ou negado"
+          onFailure: "Negado → pagamento recusado; cliente vê 'tente outro cartão'"
+          next: [capturar]
+
+        - id: capturar
+          capability: sub-pagv-autorizacao
+          actor: Sistema
+          action: "Autoriza e captura no adquirente"
+          application: app-pagv-autorizacao
+          calls: ext-adquirente
+          result: "Pagamento capturado"
+          rules: [rule-pagv-autorizacao-antes-da-captura]
+          onFailure: "Timeout → não captura; nada é cobrado"
+          next: [avisar]
+
+        - id: avisar
+          capability: sub-pagv-autorizacao
+          actor: Sistema
+          action: "Avisa os outros domínios"
+          application: app-pagv-autorizacao
+          event: evt-pagv-pagamento-aprovado     # evento publicado neste passo
+          result: "Fiscal e Vendas sabem que foi pago"
+
+  unknowns:
+    - "O que acontece se a captura passar e o evento não for publicado?"
+  docs:
+    - { title: "Fluxo de pagamento (negócio)", type: negocio, path: docs/checkout/fluxo-pagamento.md }

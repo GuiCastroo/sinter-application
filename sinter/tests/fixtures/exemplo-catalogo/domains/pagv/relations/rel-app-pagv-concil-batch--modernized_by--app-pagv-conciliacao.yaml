@@ -1,0 +1,22 @@
+# arquivo: domains/pagv/relations/rel-app-pagv-concil-batch--modernized_by--app-pagv-conciliacao.yaml
+# ----------------------------------------------------------------------------
+# RELAÇÃO — o que liga aplicações entre si (o grafo)
+# ----------------------------------------------------------------------------
+apiVersion: sinter.dev/v1
+kind: Relation
+metadata:
+  id: rel-app-pagv-concil-batch--modernized_by--app-pagv-conciliacao
+  name: Batch de conciliação substituído pelo Conciliação Service
+  domain: dom-pagv
+  status: approved
+spec:
+  source: app-pagv-concil-batch
+  type: modernized_by
+  target: app-pagv-conciliacao
+  phase: in-progress             # planned | in-progress | done
+  evidence:
+    - source: doc-pagv-ata-2026-10-03
+      locator: "docs/atas/ata-2026-10-03.md#decisoes"
+      version: 3f9a1c2
+      contentHash: sha256:9b1e…
+      extraction: human

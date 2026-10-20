@@ -1,0 +1,59 @@
+# arquivo: domains/camb/subdomains/sub-camb-liquidacao.yaml
+# Subdomínio com os mesmos blocos do domínio; aqui só o que é DESTA parte (o resto é herdado de dom-camb).
+apiVersion: sinter.dev/v1
+kind: Subdomain
+metadata:
+  id: sub-camb-liquidacao
+  name: Liquidação
+  domain: dom-camb
+  status: approved
+  owners: [time-liquidacao]
+spec:
+  # --- O que a IA lê primeiro ------------------------------------------------
+  purpose: "Liquida a operação e dispara o envio ao exterior."
+  does:
+    - "Liquida a operação"
+    - "Envia a ordem ao SWIFT"
+  doesNot:
+    - "Debitar a conta (é do domínio Contas)"
+  unknowns: []
+
+  # --- APLICAÇÕES (cada uma com os N repos que a compõem) --------------------
+  applications:
+    - id: app-camb-liquidacao-legado
+      name: Liquidação (LIQ0100)
+      lifecycle: modernizing
+      aliases: [LIQ0100]
+      repositories:
+        - repo: repo-mainframe-camb
+          path: "cobol/LIQ*"
+          role: batch
+          platform: mainframe
+
+    - id: app-camb-liquidacao
+      name: Liquidação Service
+      lifecycle: modern
+      repositories:
+        - repo: repo-camb-liquidacao
+          role: api
+          platform: java
+
+  # --- REGRAS, JORNADAS E FRONTEIRAS desta parte -----------------------------
+  boundaries:
+    in:
+      - { from: sub-camb-validacao, what: "operação validada" }
+    out:
+      - { to: ext-swift, what: "ordem ao exterior" }
+      - { to: dom-contas, what: "débito em reais" }
+
+  # --- MODERNIZAÇÃO desta parte ----------------------------------------------
+  modernization:
+    goal: "Trocar a LIQ0100 pela app-camb-liquidacao até 2027"
+    decision: ADR-CAMB-002
+
+  # --- CONHECIMENTO desta parte (o do domínio já vale aqui; não repetir) ------
+  regulations: []
+  standards:   [std-mensageria-swift]
+  docs:
+    - { id: doc-camb-ata-2026-09-30-corte, title: "Ata — corte da LIQ0100", type: ata, path: docs/liquidacao/ata-2026-09-30-corte.md }
+    - { title: "Pauta — daily da migração", type: pauta, url: "https://wiki.acme.local/camb/liquidacao/daily" }

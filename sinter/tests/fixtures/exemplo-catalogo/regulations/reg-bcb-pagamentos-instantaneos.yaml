@@ -1,0 +1,11 @@
+# arquivo: regulations/reg-bcb-pagamentos-instantaneos.yaml  (nomes e datas ilustrativos)
+apiVersion: sinter.dev/v1
+kind: Regulation
+metadata:
+  id: reg-bcb-pagamentos-instantaneos
+  name: Regulamento do Pix (BCB)
+  status: approved
+spec:
+  jurisdiction: BR
+  effective: { from: 2020-11-16, to: null }
+  summary: "Regras do arranjo de pagamentos instantâneos."

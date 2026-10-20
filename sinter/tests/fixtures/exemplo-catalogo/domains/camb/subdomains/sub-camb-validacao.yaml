@@ -1,0 +1,44 @@
+# arquivo: domains/camb/subdomains/sub-camb-validacao.yaml
+# Subdomínio com os mesmos blocos do domínio; aqui só o que é DESTA parte (o resto é herdado de dom-camb).
+apiVersion: sinter.dev/v1
+kind: Subdomain
+metadata:
+  id: sub-camb-validacao
+  name: Validação
+  domain: dom-camb
+  status: approved
+  owners: [time-contratacao]
+spec:
+  # --- O que a IA lê primeiro ------------------------------------------------
+  purpose: "Confere a operação antes de liquidar."
+  does:
+    - "Aplica regras de validação"
+    - "Decide se segue para liquidação"
+  doesNot:
+    - "Corrigir a operação (volta ao cliente)"
+  unknowns: []
+
+  # --- APLICAÇÕES (cada uma com os N repos que a compõem) --------------------
+  applications:
+    - id: app-camb-validacao
+      name: Validação
+      lifecycle: modern
+      repositories:
+        - repo: repo-camb-validacao
+          role: api
+          platform: java
+
+  # --- REGRAS, JORNADAS E FRONTEIRAS desta parte -----------------------------
+  boundaries:
+    in:
+      - { from: sub-camb-enriquecimento, what: "operação completa" }
+    out:
+      - { to: sub-camb-liquidacao, what: "operação validada" }
+      - { to: sub-camb-carteira, what: "operação validada" }
+      - { to: ext-bacen, what: "registro da operação" }
+
+  # --- CONHECIMENTO desta parte (o do domínio já vale aqui; não repetir) ------
+  regulations: []
+  standards:   []
+  docs:
+    - { title: "Lista de validações", type: negocio, path: docs/validacao/regras.md }

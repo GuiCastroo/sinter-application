@@ -1,0 +1,50 @@
+# arquivo: domains/pagv/journeys/jor-pagv-conciliar-dia.yaml
+# ----------------------------------------------------------------------------
+# 5c. JORNADA DE LEGADO (mesmo formato: cada job é um passo, quem dispara é a agenda)
+# ----------------------------------------------------------------------------
+apiVersion: sinter.dev/v1
+kind: Journey
+metadata:
+  id: jor-pagv-conciliar-dia
+  name: Conciliar o dia (batch noturno)
+  domain: dom-pagv
+  status: approved
+spec:
+  purpose: "Confere as vendas do dia contra o que o adquirente pagou."
+  trigger: "Agenda batch, todo dia às 02:00 (D+1)"
+  outcome: "Relatório de divergências entregue ao financeiro às 07:00"
+  orchestrator: agenda-batch                 # quem encadeia os jobs (Control-M, CA-7…)
+  # (calc) subdomínios e participantes saem dos passos
+
+  stages:
+    - id: noturno
+      name: Processamento noturno
+      steps:
+        - id: receber
+          capability: sub-pagv-conciliacao
+          actor: Agenda
+          action: "Recebe o arquivo do adquirente"
+          application: app-pagv-concil-batch
+          job: CONC0100
+          result: "Arquivo carregado"
+          onFailure: "Arquivo não chegou → reprocessa às 08:00; financeiro avisado"
+          next: [cruzar]
+        - id: cruzar
+          capability: sub-pagv-conciliacao
+          actor: Agenda
+          action: "Cruza vendas x pagamentos"
+          application: app-pagv-concil-batch
+          job: CONC0200
+          result: "Divergências apuradas"
+          rules: [rule-pagv-conciliacao-d-mais-1]
+          next: [relatorio]
+        - id: relatorio
+          capability: sub-pagv-conciliacao
+          actor: Agenda
+          action: "Gera relatório para o financeiro"
+          application: app-pagv-concil-batch
+          job: CONC0300
+          result: "Relatório publicado"
+
+  unknowns:
+    - "Horário-limite real do arquivo do adquirente (6h ou 8h?)"

@@ -1,0 +1,10 @@
+# arquivo: standards/std-api-rest.yaml
+apiVersion: sinter.dev/v1
+kind: Standard
+metadata:
+  id: std-api-rest
+  name: APIs REST internas
+  status: approved
+spec:
+  summary: "APIs seguem o guia REST interno: versionamento na URL, erros no formato padrão, OpenAPI publicado."
+  appliesTo: [api]

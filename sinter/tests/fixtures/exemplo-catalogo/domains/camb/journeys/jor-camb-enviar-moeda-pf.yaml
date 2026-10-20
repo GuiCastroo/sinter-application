@@ -1,0 +1,66 @@
+# arquivo: domains/camb/journeys/jor-camb-enviar-moeda-pf.yaml
+# ----------------------------------------------------------------------------
+# 5d. JORNADA EM ETAPAS (baseada no Exemplo.drawio.xml — domínio Câmbio)
+#
+# Cada caixa do desenho é um SUBDOMÍNIO (capacidade de negócio).
+# Para ver o detalhe, a pessoa (ou a IA) "abre" o passo:
+#   jornada → passo → subdomínio → aplicações → repos / docs
+#   $ sinter get sub-camb-boletagem --level 1
+# ----------------------------------------------------------------------------
+apiVersion: sinter.dev/v1
+kind: Journey
+metadata:
+  id: jor-camb-enviar-moeda-pf
+  name: Enviar moeda (PF)
+  domain: dom-camb
+  status: approved
+spec:
+  purpose: "Pessoa física envia dinheiro para o exterior."
+  trigger: "Cliente escolhe 'Enviar moeda' no app"
+  outcome: "Ordem liquidada via SWIFT e informada ao Bacen"
+
+  stages:
+    - id: cotar
+      name: Cotar
+      entry: repo-camb-mfe-cotar            # canal (técnico): micro-front da app-camb-cotacao
+      via: [repo-camb-bff]
+      steps:
+        - id: cotacao
+          capability: sub-camb-cotacao
+          action: "Calcula a taxa e o valor final"
+          parallelWith: [limite, cliente]
+        - id: limite
+          capability: sub-camb-limite
+          action: "Confere se o cliente tem limite para o valor"
+          onFailure: "Sem limite → cliente não consegue seguir para contratar"
+        - id: cliente
+          capability: sub-camb-dados-cliente
+          action: "Traz os dados cadastrais do cliente"
+
+    - id: contratar
+      name: Contratar
+      entry: repo-camb-mfe-contratar        # micro-front da app-camb-formalizacao
+      via: [repo-camb-bff]
+      steps:
+        - { id: formalizar, capability: sub-camb-formalizacao,   action: "Registra o aceite do cliente",        next: [boletar] }
+        - { id: boletar,    capability: sub-camb-boletagem,      action: "Gera a boleta da operação",           next: [enriquecer] }
+        - { id: enriquecer, capability: sub-camb-enriquecimento, action: "Completa dados para a operação",      next: [validar] }
+        - id: validar
+          capability: sub-camb-validacao
+          action: "Valida a operação antes de liquidar"
+          next: [carteira, liquidar, bacen]   # três caminhos a partir daqui
+          onFailure: "Reprovada → operação não é liquidada [ASSUMPTION]"
+        - { id: carteira,   capability: sub-camb-carteira,       action: "Registra na carteira de câmbio" }
+        - { id: liquidar,   capability: sub-camb-liquidacao,     action: "Liquida a operação",                  next: [swift] }
+        - { id: swift,      calls: ext-swift,                    action: "Envia a ordem ao exterior",           next: [pld] }
+        - id: pld
+          capability: sub-camb-pld
+          action: "Monitora prevenção à lavagem de dinheiro"
+          governedBy: [reg-pld]
+        - id: bacen
+          calls: ext-bacen
+          action: "Informa a operação ao Banco Central"
+          governedBy: [reg-bcb-cambio]
+
+  unknowns:
+    - "O PLD roda depois do SWIFT (como no desenho) ou também antes de liquidar?"

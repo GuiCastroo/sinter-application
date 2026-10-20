@@ -1,0 +1,47 @@
+# arquivo: domains/camb/subdomains/sub-camb-pld.yaml
+# Subdomínio com os mesmos blocos do domínio; aqui só o que é DESTA parte (o resto é herdado de dom-camb).
+apiVersion: sinter.dev/v1
+kind: Subdomain
+metadata:
+  id: sub-camb-pld
+  name: PLD
+  domain: dom-camb
+  status: approved
+  owners: [time-compliance-camb]
+spec:
+  # --- O que a IA lê primeiro ------------------------------------------------
+  purpose: "Monitora prevenção à lavagem de dinheiro."
+  does:
+    - "Analisa operações suspeitas"
+    - "Comunica ao COAF quando necessário"
+  doesNot:
+    - "Bloquear conta (é do domínio Risco)"
+  unknowns:
+    - "O PLD também deveria rodar antes de liquidar?"
+
+  # --- APLICAÇÕES (cada uma com os N repos que a compõem) --------------------
+  applications:
+    - id: app-camb-pld
+      name: Monitor PLD
+      lifecycle: modern
+      repositories:
+        - repo: repo-camb-pld
+          role: api
+          platform: java
+
+  # --- REGRAS, JORNADAS E FRONTEIRAS desta parte -----------------------------
+  rules:                         # regra = 1 frase; a explicação fica na página .md deste nível
+    - id: rule-camb-comunicar-coaf
+      statement: "Operação suspeita de lavagem é comunicada ao COAF no prazo regulatório."
+      regulations: [reg-pld]
+  boundaries:
+    in:
+      - { from: ext-swift, what: "confirmação da ordem" }
+    out:
+      - { to: ext-coaf, what: "comunicação de operação suspeita" }
+
+  # --- CONHECIMENTO desta parte (o do domínio já vale aqui; não repetir) ------
+  regulations: []
+  standards:   []
+  docs:
+    - { title: "Política de PLD", type: negocio, url: "https://wiki.acme.local/camb/pld/politica" }

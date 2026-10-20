@@ -1,0 +1,43 @@
+# arquivo: domains/pagv/subdomains/sub-pagv-checkout.yaml
+# ----------------------------------------------------------------------------
+# 2. SUBDOMÍNIO — moderno
+# ----------------------------------------------------------------------------
+apiVersion: sinter.dev/v1
+kind: Subdomain
+metadata:
+  id: sub-pagv-checkout
+  name: Checkout
+  domain: dom-pagv
+  status: approved
+  owners: [time-checkout]
+spec:
+  purpose: "Monta o pagamento do pedido: forma, parcelas e confirmação ao cliente."
+  does:
+    - Mostra formas de pagamento disponíveis
+    - Calcula parcelas
+  doesNot:
+    - Autorizar o pagamento (é do subdomínio Autorização)
+  unknowns: []
+
+  # --- APLICAÇÕES: cada uma agrupa os N repos que a compõem ----------------
+  applications:
+    - id: app-pagv-checkout
+      name: Checkout
+      lifecycle: modern              # legacy | modernizing | modern | retired
+      repositories:
+        - { repo: repo-checkout-web, role: frontend, platform: react }
+        - { repo: repo-checkout-api, role: api,      platform: node }
+
+  rules:                         # regra = 1 frase; a explicação fica na página .md deste nível
+    - id: rule-pagv-parcela-minima-10-reais
+      statement: "Nenhuma parcela pode ser menor que R$ 10,00."
+  boundaries:
+    in:
+      - { from: dom-vendas, what: "pedido fechado, valor, forma de pagamento" }
+    out:
+      - { to: sub-pagv-autorizacao, what: "pedido de autorização" }
+
+  # Herda TODO o conhecimento do domínio. Aqui só o que é específico:
+  docs:
+    - { title: "Regras de parcelamento", type: negocio, path: docs/checkout/regras-parcelamento.md }
+    - { title: "Ata — parcelas sem juros", type: ata, path: docs/atas/ata-2026-09-20-parcelas.md, date: 2026-09-20 }

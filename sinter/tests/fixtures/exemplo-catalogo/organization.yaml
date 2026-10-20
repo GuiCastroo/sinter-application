@@ -1,0 +1,40 @@
+# arquivo: organization.yaml
+# Raiz do catálogo: o que vale para TODOS os domínios.
+apiVersion: sinter.dev/v1
+kind: Organization
+metadata:
+  id: org-acme
+  name: ACME
+  status: approved
+spec:
+  schemaVersion: 1
+
+  # Área é só um RÓTULO do domínio (lista fechada para poder virar nível depois)
+  areas:
+    - { id: area-varejo,  name: Varejo,  description: "Clientes pessoa física e lojas: pagamentos, cartões, contas." }
+    - { id: area-atacado, name: Atacado, description: "Clientes empresas e grandes corporações." }
+    - { id: area-cambio,  name: Câmbio,  description: "Compra, venda e envio de moeda estrangeira." }
+
+  # (calc) lista de domínios: a CLI calcula a partir das pastas domains/
+
+  # Camadas de dados DESTA empresa, na ordem do fluxo (cada empresa usa os seus
+  # nomes: raw/trusted/refined, bronze/silver/gold, landing/curated/…)
+  dataLayers:
+    - { id: raw,     name: "Raw",     meaning: "cópia fiel da origem, sem tratamento" }
+    - { id: trusted, name: "Trusted", meaning: "limpo, validado e padronizado" }
+    - { id: refined, name: "Refined", meaning: "pronto para consumo (indicadores, relatórios)" }
+
+  # Glossário CORPORATIVO (vale para todos os domínios)
+  glossary:
+    - { term: "D0 / D+1", definition: "No mesmo dia útil / no dia útil seguinte ao evento." }
+    - { term: "PF / PJ", definition: "Pessoa física / pessoa jurídica." }
+    - term: Sigla
+      definition: "Identificador curto de um domínio (o id-domínio), ex.: PAGV, CAMB."
+      synonyms: [id-domínio]
+
+  # Tipos de doc aceitos (os 7 padrão + os desta empresa)
+  docTypes: [negocio, ata, pauta, runbook, arquitetura, gerado, link, contrato, politica]
+
+  # Como esta empresa chama as coisas (ajuda a IA a traduzir o vocabulário)
+  vocabulary:
+    domainId: "sigla"            # aqui o id-domínio é chamado de "sigla"

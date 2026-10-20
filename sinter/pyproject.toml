@@ -1,0 +1,108 @@
+[project]
+name = "sinter"
+version = "0.1.0"
+description = "Catálogo de contexto para agentes de código: estrutura de domínios em YAML, validada e navegável."
+readme = "README.md"
+requires-python = ">=3.13"
+license = "LicenseRef-Proprietary"
+dependencies = [
+  "pydantic>=2.14,<3",
+  "typer>=0.27,<0.28",
+  "ruamel.yaml>=0.19,<0.20",
+]
+
+[project.scripts]
+sinter = "sinter.adapters.inbound.cli.app:main"
+
+[dependency-groups]
+dev = [
+  "pytest>=9.1",
+  "ruff>=0.17",
+  "mypy>=2.4",
+  "import-linter>=2.15",
+  "poethepoet>=0.49",
+]
+
+[build-system]
+requires = ["hatchling>=1.32"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sinter"]
+
+# ---------------------------------------------------------------------------
+# poe check: as regras da arquitetura quebram o build (AD-34)
+# ---------------------------------------------------------------------------
+[tool.poe.tasks]
+imports = "lint-imports"
+lint = "ruff check ."
+format-check = "ruff format --check ."
+types = "mypy"
+test = "pytest"
+check = ["imports", "lint", "format-check", "types", "test"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = ["perf: testes de desempenho (NFR-3)"]
+
+[tool.mypy]
+strict = true
+files = ["src"]
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["ruamel.*"]
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "T20", "TID"]
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"subprocess".msg = "I/O só em adapters/outbound (AD-1, AD-34)."
+"datetime.datetime.now".msg = "O domínio não lê o relógio (AD-1)."
+"datetime.date.today".msg = "O domínio não lê o relógio (AD-1)."
+"time.time".msg = "O domínio não lê o relógio (AD-1)."
+"importlib.metadata".msg = "A versão é lida só no bootstrap (AD-27)."
+"os.environ".msg = "Ambiente só na CLI ou no bootstrap (AD-27, AD-47)."
+"sys.stdin".msg = "Entrada só no adaptador de entrada (AD-32)."
+
+[tool.ruff.lint.per-file-ignores]
+"src/sinter/adapters/**" = ["TID251"]
+"src/sinter/bootstrap.py" = ["TID251"]
+"tests/**" = ["TID251"]
+
+# ---------------------------------------------------------------------------
+# Contratos do hexágono (AD-25, AD-34)
+# ---------------------------------------------------------------------------
+[tool.importlinter]
+root_packages = ["sinter"]
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "Camadas do hexágono"
+type = "layers"
+layers = [
+  "sinter.adapters.inbound",
+  "sinter.bootstrap",
+  "sinter.application | sinter.adapters.outbound",
+  "sinter.ports",
+  "sinter.domain",
+]
+
+[[tool.importlinter.contracts]]
+name = "Adaptador de entrada não fala com adaptador de saída"
+type = "forbidden"
+source_modules = ["sinter.adapters.inbound"]
+forbidden_modules = ["sinter.adapters.outbound"]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Domínio e aplicação não conhecem bibliotecas de borda"
+type = "forbidden"
+source_modules = ["sinter.domain", "sinter.application", "sinter.ports"]
+forbidden_modules = ["ruamel", "typer", "click"]

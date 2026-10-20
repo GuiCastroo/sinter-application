@@ -1,0 +1,44 @@
+# arquivo: domains/camb/subdomains/sub-camb-enriquecimento.yaml
+# Subdomínio com os mesmos blocos do domínio; aqui só o que é DESTA parte (o resto é herdado de dom-camb).
+apiVersion: sinter.dev/v1
+kind: Subdomain
+metadata:
+  id: sub-camb-enriquecimento
+  name: Enriquecimento
+  domain: dom-camb
+  status: approved
+  owners: [time-contratacao]
+spec:
+  # --- O que a IA lê primeiro ------------------------------------------------
+  purpose: "Completa a operação com os dados exigidos para liquidar."
+  does:
+    - "Adiciona natureza da operação e dados do beneficiário"
+  doesNot: []
+  unknowns: []
+
+  # --- APLICAÇÕES (cada uma com os N repos que a compõem) --------------------
+  applications:
+    - id: app-camb-enriquecimento
+      name: Enriquecimento
+      lifecycle: modern
+      repositories:
+        - repo: repo-camb-enriquecimento
+          role: api
+          platform: java
+
+  glossary:                        # termos que só fazem sentido nesta parte
+    - term: Natureza da operação
+      definition: "Código do Banco Central que classifica o motivo da remessa (ex.: manutenção de residente)."
+
+  # --- REGRAS, JORNADAS E FRONTEIRAS desta parte -----------------------------
+  boundaries:
+    in:
+      - { from: sub-camb-boletagem, what: "boleta gerada" }
+    out:
+      - { to: sub-camb-validacao, what: "operação completa" }
+
+  # --- CONHECIMENTO desta parte (o do domínio já vale aqui; não repetir) ------
+  regulations: []
+  standards:   []
+  docs:
+    - { title: "Tabela de naturezas de operação", type: negocio, url: "https://wiki.acme.local/camb/enriquecimento/naturezas" }

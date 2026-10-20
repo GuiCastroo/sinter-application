@@ -1,0 +1,11 @@
+# arquivo: regulations/reg-bcb-cambio.yaml  (nomes e datas ilustrativos)
+apiVersion: sinter.dev/v1
+kind: Regulation
+metadata:
+  id: reg-bcb-cambio
+  name: Regulamentação do mercado de câmbio (BCB)
+  status: approved
+spec:
+  jurisdiction: BR
+  effective: { from: 2022-12-30, to: null }
+  summary: "Regras para contratação, registro e liquidação de operações de câmbio."

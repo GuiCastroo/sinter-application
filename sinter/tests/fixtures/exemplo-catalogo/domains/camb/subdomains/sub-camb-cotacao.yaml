@@ -1,0 +1,54 @@
+# arquivo: domains/camb/subdomains/sub-camb-cotacao.yaml
+# Subdomínio com os mesmos blocos do domínio; aqui só o que é DESTA parte (o resto é herdado de dom-camb).
+apiVersion: sinter.dev/v1
+kind: Subdomain
+metadata:
+  id: sub-camb-cotacao
+  name: Cotação
+  domain: dom-camb
+  status: approved
+  owners: [time-cotacao]
+spec:
+  # --- O que a IA lê primeiro ------------------------------------------------
+  purpose: "Calcula a taxa e o valor final da operação."
+  does:
+    - "Cota moeda com spread por perfil de cliente"
+    - "Mantém a cotação válida por 30 segundos"
+  doesNot:
+    - "Fechar a operação (é da Formalização)"
+  unknowns:
+    - "Spread de cliente private ainda é manual"
+
+  # --- APLICAÇÕES (cada uma com os N repos que a compõem) --------------------
+  applications:
+    - id: app-camb-cotacao
+      name: Cotação
+      lifecycle: modern
+      repositories:
+        - repo: repo-camb-mfe-cotar
+          role: frontend
+          platform: react
+        - repo: repo-camb-bff
+          role: bff
+          platform: node
+        - repo: repo-camb-cotacao
+          role: api
+          platform: java
+          docs:
+            - { title: "Contrato OpenAPI", type: link, url: "https://git.acme.local/camb/cotacao/-/blob/main/openapi.yaml" }
+
+  # --- REGRAS, JORNADAS E FRONTEIRAS desta parte -----------------------------
+  rules:                         # regra = 1 frase; a explicação fica na página .md deste nível
+    - id: rule-camb-cotacao-valida-por-30s
+      statement: "Uma cotação aceita depois de 30 segundos é recalculada."
+  boundaries:
+    in:
+      - { from: ext-provedor-taxas, what: "taxas de mercado em tempo real" }
+    out:
+      - { to: sub-camb-formalizacao, what: "cotação aceita pelo cliente" }
+
+  # --- CONHECIMENTO desta parte (o do domínio já vale aqui; não repetir) ------
+  regulations: []
+  standards:   []
+  docs:
+    - { title: "Tabela de spreads por perfil", type: negocio, url: "https://wiki.acme.local/camb/cotacao/spreads" }

@@ -1,0 +1,26 @@
+name: sinter-check
+
+on:
+  push:
+    paths: ["sinter/**", "docs/prd-dominio-2026-10-17/exemplo-catalogo/**", ".github/workflows/sinter-check.yml"]
+  pull_request:
+    paths: ["sinter/**", "docs/prd-dominio-2026-10-17/exemplo-catalogo/**", ".github/workflows/sinter-check.yml"]
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python: ["3.13", "3.14"]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: sinter
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - run: uv sync --locked
+      - run: uv run poe check

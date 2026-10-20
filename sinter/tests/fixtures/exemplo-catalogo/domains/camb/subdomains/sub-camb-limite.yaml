@@ -1,0 +1,45 @@
+# arquivo: domains/camb/subdomains/sub-camb-limite.yaml
+# Subdomínio com os mesmos blocos do domínio; aqui só o que é DESTA parte (o resto é herdado de dom-camb).
+apiVersion: sinter.dev/v1
+kind: Subdomain
+metadata:
+  id: sub-camb-limite
+  name: Limite
+  domain: dom-camb
+  status: approved
+  owners: [time-limites]
+spec:
+  # --- O que a IA lê primeiro ------------------------------------------------
+  purpose: "Confere se o cliente pode operar o valor pedido."
+  does:
+    - "Consulta e reserva limite"
+  doesNot:
+    - "Definir o limite (é do comitê de crédito)"
+  unknowns:
+    - "Limite diário PF ainda vem de planilha"
+
+  # --- APLICAÇÕES (cada uma com os N repos que a compõem) --------------------
+  applications:
+    - id: app-camb-limite
+      name: Limite de câmbio
+      lifecycle: modern
+      repositories:
+        - repo: repo-camb-limite
+          role: api
+          platform: java
+
+  # --- REGRAS, JORNADAS E FRONTEIRAS desta parte -----------------------------
+  rules:                         # regra = 1 frase; a explicação fica na página .md deste nível
+    - id: rule-camb-limite-diario-pf
+      statement: "Pessoa física não opera acima do limite diário do seu perfil."
+      exceptions: ["Cliente private: limite negociado"]
+  boundaries:
+    in:
+      - { from: dom-credito, what: "limite aprovado do cliente" }
+    out: []
+
+  # --- CONHECIMENTO desta parte (o do domínio já vale aqui; não repetir) ------
+  regulations: []
+  standards:   []
+  docs:
+    - { title: "Planilha de limites PF (provisória)", type: negocio, url: "https://wiki.acme.local/camb/limite/planilha" }

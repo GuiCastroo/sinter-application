@@ -1,0 +1,31 @@
+# arquivo: domains/pagv/subdomains/sub-pagv-autorizacao.yaml
+apiVersion: sinter.dev/v1
+kind: Subdomain
+metadata:
+  id: sub-pagv-autorizacao
+  name: Autorização
+  domain: dom-pagv
+  status: approved
+  owners: [time-autorizacao]
+spec:
+  purpose: "Consulta antifraude, autoriza e captura o pagamento no adquirente."
+  does:
+    - Consulta o antifraude antes de autorizar
+    - Autoriza e captura no adquirente
+  doesNot:
+    - Decidir se é fraude (é do domínio Risco)
+  unknowns: []
+  applications:
+    - id: app-pagv-autorizacao
+      name: Autorização
+      lifecycle: modern
+      repositories:
+        - { repo: repo-autorizacao-service, role: api, platform: java }
+  rules:                         # regra = 1 frase; a explicação fica na página .md deste nível
+    - id: rule-pagv-autorizacao-antes-da-captura
+      statement: "Nenhum pagamento é capturado sem autorização aprovada no mesmo pedido."
+  boundaries:
+    out:
+      - { to: dom-risco,      what: "consulta antifraude" }
+      - { to: ext-adquirente, what: "autorização e captura" }
+      - { to: dom-fiscal,     what: "evento PagamentoAprovado" }

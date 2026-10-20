@@ -1,0 +1,55 @@
+# arquivo: domains/camb/subdomains/sub-camb-boletagem.yaml
+# Subdomínio com os mesmos blocos do domínio; aqui só o que é DESTA parte (o resto é herdado de dom-camb).
+apiVersion: sinter.dev/v1
+kind: Subdomain
+metadata:
+  id: sub-camb-boletagem
+  name: Boletagem
+  domain: dom-camb
+  status: approved
+  owners: [time-mainframe-camb]
+spec:
+  # --- O que a IA lê primeiro ------------------------------------------------
+  purpose: "Gera a boleta (o registro da operação de câmbio)."
+  does:
+    - "Gera a boleta com número único"
+  doesNot:
+    - "Validar a operação (é da Validação)"
+  unknowns:
+    - "Formato do número da boleta muda na versão nova?"
+
+  # --- APLICAÇÕES (cada uma com os N repos que a compõem) --------------------
+  applications:
+    - id: app-camb-boleta
+      name: Boletagem (BOL0100)
+      lifecycle: legacy
+      aliases: [BOL0100]
+      repositories:
+        - repo: repo-mainframe-camb
+          path: "cobol/BOL*"
+          role: batch
+          platform: mainframe
+          docs:
+            - { title: "Fontes COBOL da boletagem", type: link, url: "https://git.acme.local/mainframe/camb/-/tree/main/cobol/BOL" }
+
+  # --- REGRAS, JORNADAS E FRONTEIRAS desta parte -----------------------------
+  rules:                         # regra = 1 frase; a explicação fica na página .md deste nível
+    - id: rule-camb-boleta-numero-unico
+      statement: "Cada operação tem uma boleta com número único, que nunca é reaproveitado."
+  boundaries:
+    in:
+      - { from: sub-camb-formalizacao, what: "operação formalizada" }
+    out:
+      - { to: sub-camb-enriquecimento, what: "boleta gerada" }
+
+  # --- MODERNIZAÇÃO desta parte ----------------------------------------------
+  modernization:
+    goal: "Tirar a boletagem do mainframe até 2028"
+    decision: ADR-CAMB-002
+
+  # --- CONHECIMENTO desta parte (o do domínio já vale aqui; não repetir) ------
+  regulations: []
+  standards:   []
+  docs:
+    - { title: "Runbook da boletagem", type: runbook, path: docs/boletagem/runbook.md }
+    - { title: "Pauta — migração da boletagem", type: pauta, url: "https://wiki.acme.local/camb/boletagem/migracao/pauta" }

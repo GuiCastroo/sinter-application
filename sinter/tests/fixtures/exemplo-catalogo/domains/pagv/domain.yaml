@@ -1,0 +1,118 @@
+# arquivo: domains/pagv/domain.yaml
+# ----------------------------------------------------------------------------
+# 1. DOMÍNIO
+# ----------------------------------------------------------------------------
+apiVersion: sinter.dev/v1
+kind: Domain
+metadata:
+  id: dom-pagv
+  name: Pagamentos (Varejo)
+  domainId: PAGV                 # o "id-dominio" (ex-sigla); informado por quem cria
+  area: area-varejo              # rótulo; valor vem da lista em organization.yaml
+  status: approved
+  owners: [ana.souza, time-pagamentos-varejo]
+spec:
+  parent: org-acme
+
+  # --- O que a IA lê primeiro ------------------------------------------------
+  purpose: >
+    Recebe, autoriza e concilia os pagamentos das lojas online e físicas
+    do varejo.
+  does:
+    - Autoriza pagamento com cartão, Pix e boleto
+    - Calcula parcelamento
+    - Concilia o que foi vendido com o que o adquirente pagou
+  doesNot:                       # o que as pessoas ACHAM que faz, mas não faz
+    - Antifraude (é do domínio Risco — dom-risco)
+    - Emissão de nota fiscal (é do domínio Fiscal)
+    - Pagamentos do atacado (é outro domínio: PAGA)
+  unknowns:                      # pendências abertas — a IA não deve chutar aqui
+    - Limite de parcelas sem juros por categoria ainda não confirmado
+    - Quem é dono do contrato com o adquirente secundário
+
+  # SUMÁRIO dos subdomínios, na ordem de leitura (o validate confere que bate
+  # com os arquivos em subdomains/ que dizem domain: dom-pagv)
+  subdomains: [sub-pagv-checkout, sub-pagv-autorizacao, sub-pagv-conciliacao]
+
+  # --- REPOS: NÃO são escritos aqui ------------------------------------------
+  # Cada APLICAÇÃO (dentro do subdomínio) diz quais repos a compõem. A lista de repos do domínio é calculada:
+  #   domínio → subdomínios → aplicações → repos
+  # Só entram aqui repos que não pertencem a nenhuma aplicação (libs, infra):
+  sharedRepositories:
+    - repo-pagv-libs-comuns        # biblioteca usada por vários serviços
+    - repo-pagv-infra              # terraform/pipelines do domínio
+
+  rules:                         # regra = 1 frase; a explicação fica na página .md deste nível
+    - id: rule-pagv-estorno-ate-90-dias
+      statement: "Compra no cartão pode ser estornada em até 90 dias."
+      exceptions: ["Compra com cupom: estorna só o valor pago"]
+    - id: rule-pagv-nunca-guardar-cartao
+      statement: "Nenhuma aplicação do domínio guarda o número completo do cartão; só o token do adquirente."
+      regulations: [reg-lgpd]
+  mainJourneys: [jor-pagv-pagar-pedido, jor-pagv-conciliar-dia]
+
+  # Fronteiras do domínio: CALCULADAS a partir das fronteiras dos subdomínios que
+  # apontam para fora do PAGV (assim nenhum vizinho fica esquecido).
+
+  # --- MODERNIZAÇÃO: só a intenção é escrita ---------------------------------
+  modernization:
+    goal: "Desligar o batch de conciliação do mainframe até dez/2027"
+    decision: ADR-PAGV-004
+
+  # --- CONHECIMENTO deste nível (vale também para todos os subdomínios) ------
+  glossary:
+    - term: Adquirente
+      definition: "Empresa que processa o pagamento com cartão junto às bandeiras (ex.: credenciadora)."
+    - term: Captura
+      definition: "Confirmação da cobrança depois da autorização; só aí o dinheiro é efetivamente cobrado."
+      notToConfuseWith: "Autorização (só reserva o valor)"
+
+  regulations: [reg-lgpd, reg-bcb-pagamentos-instantaneos]
+  standards:   [std-api-rest, std-eventos-kafka]
+  decisions:                     # ADR = resumo aqui; o texto completo fica na página .md deste nível
+    - id: ADR-PAGV-001
+      title: "Tokenizar cartão no adquirente"
+      date: 2026-03-10
+      context: "Precisamos guardar meios de pagamento para compras recorrentes sem cair no escopo PCI."
+      decision: "Guardar só o token do adquirente; nunca o número do cartão."
+      consequences: ["Troca de adquirente exige migrar tokens"]
+    - id: ADR-PAGV-004
+      title: "Substituir o batch CONC0100 em paralelo"
+      date: 2026-10-03
+      context: "O batch COBOL de conciliação é caro de manter e só um time conhece."
+      decision: "Rodar o Conciliação Service em paralelo ao batch por 3 meses e então desligar o batch."
+      consequences: ["Durante o paralelo, as duas saídas são comparadas diariamente"]
+      evidence:
+        - { source: doc-pagv-ata-2026-10-03, locator: "docs/atas/ata-2026-10-03.md#decisoes", extraction: human }
+
+  # --- DOCS: arquivo .md (path, relativo à pasta do domínio) OU link (url) ---
+  # type: negocio | ata | pauta | runbook | arquitetura | gerado | link
+  docs:
+    - { id: doc-pagv-politica-estorno, title: "Política de estorno", type: negocio,
+        path: docs/negocio/politica-estorno.md, verifiedAt: 2026-09-12 }
+    - { id: doc-pagv-glossario, title: "Glossário de pagamentos", type: negocio,
+        url: "https://wiki.acme.local/pagv/glossario" }
+    - { id: doc-pagv-ata-2026-10-03, title: "Ata — batch de conciliação", type: ata,
+        path: docs/atas/ata-2026-10-03.md, date: 2026-10-03 }
+    - { id: doc-pagv-pauta-comite-2026-11, title: "Pauta do comitê mensal de pagamentos", type: pauta,
+        url: "https://wiki.acme.local/pagv/comite/2026-11", date: 2026-11-05 }
+    - { id: doc-pagv-visao-geral, title: "Visão geral (gerada pela skill)", type: gerado,
+        path: docs/gerado/visao-geral.md }
+
+  # --- Operação (configuração do Sinter) -------------------------------------
+  nextTaskNumber: 232
+  nextAdrNumber: 5
+  delivery: pr                   # direct | pr
+
+# ----------------------------------------------------------------------------
+# O que a CLI MOSTRA (calculado, nunca escrito):
+#
+#   $ sinter get dom-pagv --level 1
+#   Pagamentos (Varejo) · PAGV · area-varejo
+#   Subdomínios: 3    Aplicações: 4    Repos: 6 (calculado das aplicações)
+#   Modernização: legado 0 · modernizando 1 · moderno 3 · desligado 0
+#     legado/modernizando:
+#       app-pagv-concil-batch (mainframe) → app-pagv-conciliacao  [in-progress]
+#   Conhecimento: 2 regulações · 2 padrões · 2 ADRs · 2 negócio · 1 ata · 1 gerado
+#   Pendências: 2
+# ----------------------------------------------------------------------------

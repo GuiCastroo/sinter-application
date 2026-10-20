@@ -1,0 +1,31 @@
+# arquivo: repositories.yaml
+# ----------------------------------------------------------------------------
+# 7. REPOS (raiz do catálogo: um repo pode servir mais de um domínio)
+# ----------------------------------------------------------------------------
+apiVersion: sinter.dev/v1
+kind: RepositoryList
+metadata:
+  id: repositories
+  name: Repositórios de código da ACME
+  status: approved
+spec:
+  repositories:
+    - { id: repo-checkout-web,         url: "git@git.acme:pagv/checkout-web.git" }
+    - { id: repo-checkout-api,         url: "git@git.acme:pagv/checkout-api.git" }
+    - { id: repo-autorizacao-service,  url: "git@git.acme:pagv/autorizacao.git" }
+    - { id: repo-conciliacao-service,  url: "git@git.acme:pagv/conciliacao.git" }
+    - { id: repo-mainframe-pagv,       url: "git@git.acme:mainframe/pagv.git" }
+    - { id: repo-camb-mfe-cotar, url: "git@git.acme.local:camb/mfe-cotar.git" }
+    - { id: repo-camb-mfe-contratar, url: "git@git.acme.local:camb/mfe-contratar.git" }
+    - { id: repo-camb-bff, url: "git@git.acme.local:camb/bff.git" }
+    - { id: repo-camb-cotacao, url: "git@git.acme.local:camb/cotacao.git" }
+    - { id: repo-camb-limite, url: "git@git.acme.local:camb/limite.git" }
+    - { id: repo-camb-dados-cliente, url: "git@git.acme.local:camb/dados-cliente.git" }
+    - { id: repo-camb-formalizacao, url: "git@git.acme.local:camb/formalizacao.git" }
+    - { id: repo-camb-enriquecimento, url: "git@git.acme.local:camb/enriquecimento.git" }
+    - { id: repo-camb-validacao, url: "git@git.acme.local:camb/validacao.git" }
+    - { id: repo-camb-liquidacao, url: "git@git.acme.local:camb/liquidacao.git" }
+    - { id: repo-camb-pld, url: "git@git.acme.local:camb/pld.git" }
+    - { id: repo-mainframe-camb, url: "git@git.acme.local:camb/mainframe-camb.git" }
+    - { id: repo-pagv-libs-comuns,     url: "git@git.acme:pagv/libs-comuns.git" }
+    - { id: repo-pagv-infra,           url: "git@git.acme:pagv/infra.git" }
