@@ -1,0 +1,87 @@
+# Clínica Veterinária
+
+> Gerir o cadastro de tutores e pets, o corpo clínico de veterinários e o histórico de consultas de uma clínica veterinária, oferecendo atendimento tanto por uma tela web quanto por um assistente virtual com IA generativa. Documentação gerada
+
+Documentação no padrão Sinter: 6 camadas (negócio → infraestrutura). Cada item tem id estável, proveniência e ligações `realiza`/`realizado-por`. Leia primeiro `llm/contexto.md`; consulte `llm/grafo.json` para navegar ligações.
+
+## 1. Negócio
+- [Atender por assistente virtual (IA generativa)](capacidades/cap-atendimento-inteligente.md): A clínica oferece um canal conversacional em que o usuário pergunta ou pede ações sobre tutores, pets e veterinários em linguagem natural, s
+- [Atender o tutor num único canal digital](capacidades/cap-atendimento-omnicanal.md): A clínica oferece uma única porta de entrada (tela web) onde o tutor ou a equipe encontram, numa mesma consulta, o cadastro, os pets e o his
+- [Cadastrar e manter clientes e seus pets](capacidades/cap-cadastro-clientes-pets.md): A clínica consegue cadastrar tutores e seus pets, mantendo esse cadastro atualizado e disponível para todos os demais atendimentos.
+- [Divulgar o corpo clínico e suas especialidades](capacidades/cap-gestao-corpo-clinico.md): A clínica consegue apresentar, a tutores e à própria equipe, quais veterinários atendem e em quais especialidades — hoje como um catálogo de
+- [Registrar e consultar o histórico de consultas](capacidades/cap-registro-consultas.md): A clínica consegue registrar cada consulta realizada em um pet e recuperar esse histórico depois, tanto pet a pet quanto agregado por tutor.
+- [Atendimento via assistente virtual](fluxos/flow-atendimento-assistente-virtual.md): Permitir que um usuário converse em linguagem natural com um assistente virtual para consultar tutores, pets e veterinários, ou até cadastra
+- [Cadastro de tutor e pet](fluxos/flow-cadastro-tutor-pet.md): Permitir que um novo tutor se cadastre na clínica e registre seus pets, para que a clínica possa atendê-lo e manter o histórico de consultas
+- [Consulta de histórico do tutor](fluxos/flow-consulta-historico-tutor.md): Permitir que a clínica veja, numa única tela, o tutor, seus pets e o histórico de visitas de cada pet — sem precisar navegar por telas separ
+- [Registro de consulta veterinária](fluxos/flow-registro-consulta.md): Permitir que a equipe da clínica registre a consulta realizada em um pet, formando o histórico clínico que poderá ser consultado depois pelo
+
+## 3. Subdomínio
+- [Atendimento via assistente virtual: sequência técnica](fluxos/flow-atendimento-assistente-virtual.sequencia.md): Realiza as etapas do [fluxo macro](./flow-atendimento-assistente-virtual.md).
+- [Cadastro de tutor e pet: sequência técnica](fluxos/flow-cadastro-tutor-pet.sequencia.md): Realiza as etapas do [fluxo macro](./flow-cadastro-tutor-pet.md).
+- [Consulta de histórico do tutor: sequência técnica](fluxos/flow-consulta-historico-tutor.sequencia.md): Realiza as etapas do [fluxo macro](./flow-consulta-historico-tutor.md). Esta é a única sequência do domínio com um agregador de dados explíc
+- [Registro de consulta veterinária: sequência técnica](fluxos/flow-registro-consulta.sequencia.md): Realiza as etapas do [fluxo macro](./flow-registro-consulta.md).
+- [Subdomínio Atendimento Digital](subdominios/sub-atendimento-digital.md): Concentra os canais pelos quais tutores e equipe da clínica interagem com o sistema: a tela web (via `api-gateway`) e o assistente virtual (
+- [Subdomínio Cadastro de Clientes e Pets](subdominios/sub-cadastro.md): Mantém o cadastro mestre de tutores e seus pets — é a fonte de verdade referenciada por todos os demais subdomínios (consultas referenciam `
+- [Subdomínio Consultas](subdominios/sub-consultas.md): Registra e consulta o histórico de visitas (consultas veterinárias) de cada pet.
+- [Subdomínio Corpo Clínico](subdominios/sub-corpo-clinico.md): Mantém o cadastro (somente leitura via API) de veterinários e suas especialidades.
+- [Subdomínio Plataforma](subdominios/sub-plataforma.md): Serviços de suporte técnico (configuração centralizada, service discovery, administração e observabilidade) que sustentam todos os demais su
+
+## 4. Sistema
+- [admin-server](sistemas/admin-server/ficha.md): Console de administração (Spring Boot Admin) para observar saúde, métricas e logs dos demais serviços. Não implementa capacidade de negócio.
+- [GET /api/gateway/owners/{ownerId}](sistemas/api-gateway/contratos/ctr-gateway-get-owner-details.md): Agrega, numa única resposta, o tutor, seus pets e as visitas de cada pet. É o contrato central do fluxo [Consulta de histórico do tutor](../
+- [POST /fallback](sistemas/api-gateway/contratos/ctr-gateway-post-fallback.md): Retorna sempre `503 Service Unavailable` com uma mensagem fixa. Usado principalmente quando o `genai-service` está indisponível ("Chat is cu
+- [api-gateway](sistemas/api-gateway/ficha.md): Porta de entrada única do domínio: serve o frontend AngularJS (tela de tutores, pets, veterinários, visitas e chat) e roteia/agrega chamadas
+- [config-server](sistemas/config-server/ficha.md): Servidor de configuração centralizada (Spring Cloud Config). Não implementa nenhuma capacidade de negócio da clínica veterinária — é infraes
+- [GET /owners/{ownerId}](sistemas/customers-service/contratos/ctr-customers-get-owner.md): Retorna um tutor pelo id, incluindo a lista de pets (`Owner.pets`, carregada `EAGER`). É a chamada base do fluxo [Consulta de histórico do t
+- [GET /owners](sistemas/customers-service/contratos/ctr-customers-get-owners.md): Lista todos os tutores cadastrados, sem paginação nem filtro.
+- [GET owners/*/pets/{petId}](sistemas/customers-service/contratos/ctr-customers-get-pet.md): Retorna os detalhes de um pet, incluindo o nome completo do tutor (`PetDetails` monta `owner.getFirstName() + " " + owner.getLastName()`).
+- [GET /petTypes](sistemas/customers-service/contratos/ctr-customers-get-pettypes.md): Lista os tipos de pet cadastrados (dado de referência), usados para popular o formulário de cadastro de pet.
+- [POST /owners](sistemas/customers-service/contratos/ctr-customers-post-owners.md): Cria um novo tutor. Retorna `201 Created` com o owner criado (incluindo `id` gerado).
+- [POST /owners/{ownerId}/pets](sistemas/customers-service/contratos/ctr-customers-post-pet.md): Cria um novo pet associado a um tutor existente. IDs de tipo de pet válidos: 1=cat, 2=dog, 3=lizard, 4=snake, 5=bird, 6=hamster (conforme de
+- [PUT /owners/{ownerId}](sistemas/customers-service/contratos/ctr-customers-put-owner.md): Atualiza os dados de um tutor existente. Retorna `204 No Content`. Lança `ResourceNotFoundException` (caminho de erro) se `ownerId` não exis
+- [PUT /owners/*/pets/{petId}](sistemas/customers-service/contratos/ctr-customers-put-pet.md): Atualiza nome, data de nascimento e tipo de um pet existente. O `ownerId` no path é ignorado (`*`) — o pet é localizado só por `petId`, pres
+- [customers-service](sistemas/customers-service/ficha.md): Mantém o cadastro de tutores (owners) e de seus pets, incluindo os tipos de pet disponíveis (cat, dog, lizard, snake, bird, hamster).
+- [discovery-server](sistemas/discovery-server/ficha.md): Registro de serviços (Netflix Eureka). Não implementa capacidade de negócio — é infraestrutura de plataforma que permite aos demais sistemas
+- [POST /chatclient](sistemas/genai-service/contratos/ctr-genai-post-chatclient.md): Recebe uma pergunta em texto livre e devolve a resposta do assistente virtual, já com eventuais ações executadas (ex.: cadastro de owner/pet
+- [genai-service](sistemas/genai-service/ficha.md): Assistente virtual (chatbot) baseado em LLM que responde perguntas e executa ações sobre owners, pets e vets em nome do usuário, usando Spri
+- [GET /vets](sistemas/vets-service/contratos/ctr-vets-get-vets.md): Retorna a lista completa de veterinários com suas especialidades. Resposta cacheada em produção (`@Cacheable("vets")`).
+- [vets-service](sistemas/vets-service/ficha.md): Mantém o cadastro de veterinários e suas especialidades. É um serviço somente leitura do ponto de vista da API (não expõe criação/edição de 
+- [GET pets/visits](sistemas/visits-service/contratos/ctr-visits-get-visits-batch.md): Consulta em lote: recebe uma lista de `petId` na query string (`?petId=1&petId=2...`, unidos por vírgula pelo cliente) e retorna todas as vi
+- [GET owners/*/pets/{petId}/visits](sistemas/visits-service/contratos/ctr-visits-get-visits-by-pet.md): Lista as visitas de um único pet.
+- [POST owners/*/pets/{petId}/visits](sistemas/visits-service/contratos/ctr-visits-post-visit.md): Registra uma nova visita para um pet. O `petId` do path sobrescreve o campo do corpo (`visit.setPetId(petId)`). Retorna `201 Created`.
+- [visits-service](sistemas/visits-service/ficha.md): Registra e consulta as visitas (consultas veterinárias) de cada pet.
+
+## Transversal
+- [Pet](glossario/term-pet.md): Animal de estimação vinculado a um tutor, com nome, data de nascimento e um tipo (`PetType`). É o sujeito das visitas/consultas registradas 
+- [Tutor (Owner)](glossario/term-tutor-owner.md): Pessoa responsável por um ou mais pets cadastrados na clínica. No código é chamado de `Owner` (nome, sobrenome, endereço, cidade, telefone e
+- [Veterinário / Especialidade](glossario/term-veterinario-especialidade.md): Veterinário (`Vet`): profissional da clínica, com nome e uma ou mais especialidades. Especialidade (`Specialty`): área de atuação do veterin
+- [Visita / Consulta](glossario/term-visita-consulta.md): Registro de um atendimento veterinário prestado a um pet, com data e descrição textual (até 8192 caracteres). No código é chamado de `Visit`
+- [Controllers anotados com @Timed("petclinic.<recurso>")](padroes/pad-metricas-timed.md): Cada controller REST de negócio é anotado com `@Timed` do Micrometer, usando o padrão de nome `petclinic.<recurso>` (`petclinic.owner`, `pet
+- [Chamadas entre serviços sempre via nome lógico + Eureka](padroes/pad-service-discovery-lb.md): Nenhum sistema deste domínio chama outro por host/IP fixo. Todas as chamadas HTTP entre sistemas usam o nome lógico do serviço (`http://cust
+- [A tela do tutor nunca falha por causa do histórico de visitas](regras-de-negocio/reg-degradacao-visitas.md): Se a busca do histórico de visitas (`visits-service`) falhar ou ficar lenta, o `api-gateway` exibe o tutor e seus pets normalmente, apenas c
+- [Descrição da visita limitada a 8192 caracteres](regras-de-negocio/reg-limite-descricao-visita.md): A descrição de uma visita (`Visit.description`) é validada com `@Size(max = 8192)` e a coluna do banco é `VARCHAR(8192)`.
+- [O assistente virtual lembra até 10 mensagens anteriores](regras-de-negocio/reg-memoria-conversa.md): O `MessageChatMemoryAdvisor` é configurado com `.order(10)` — o contexto de conversa considerado pelo LLM cobre até as últimas 10 mensagens.
+- [Telefone do tutor deve ter até 12 dígitos, sem formatação](regras-de-negocio/reg-telefone-formato.md): O telefone do tutor é validado com `@Digits(fraction = 0, integer = 12)` — só dígitos, sem parte fracionária, no máximo 12 caracteres numéri
+- [Um pet só pode ter um dos tipos cadastrados](regras-de-negocio/reg-tipos-de-pet.md): Todo pet deve ter um `typeId` que exista na tabela `types`/entidade `PetType`. Os valores observados (via `data.sql` e a descrição da tool `
+
+## Optional
+- [Ambiente local via Docker Compose](infraestrutura/ambientes/env-local-docker.md): Infraestrutura. Sobe toda a stack (serviços de negócio + plataforma + observabilidade) em containers na mesma máquina, para desenvolvime
+- [Ambiente local via IDE / Maven](infraestrutura/ambientes/env-local-ide.md): Infraestrutura. Cada microsserviço roda como processo Java independente (`../mvnw spring-boot:run` ou execução pela IDE), sem containers
+- [Grafana + Prometheus (métricas)](infraestrutura/recursos/res-grafana-prometheus.md): Infraestrutura. Todos os serviços Spring Boot do domínio expõem métricas via `micrometer-registry-prometheus` (dependência presente nos 
+- [Banco HSQLDB embutido (dev/teste)](infraestrutura/recursos/res-hsqldb-embedded.md): Infraestrutura. Cada serviço de dados (`customers-service`, `vets-service`, `visits-service`) inicializa seu próprio banco HSQLDB em mem
+- [Banco MySQL — customers-service](infraestrutura/recursos/res-mysql-customers.md): Infraestrutura. O schema e a massa de dados MySQL existem no código (driver `mysql-connector-j` no `pom.xml`), mas **nenhum arquivo dest
+- [Banco MySQL — vets-service](infraestrutura/recursos/res-mysql-vets.md): Infraestrutura. 
+- [Banco MySQL — visits-service](infraestrutura/recursos/res-mysql-visits.md): Infraestrutura. A tabela `visits` declara `FOREIGN KEY (pet_id) REFERENCES pets(id)`, mas `pets` vive no banco do `customers-service`. E
+- [Servidor de tracing distribuído (Zipkin)](infraestrutura/recursos/res-tracing-server.md): Infraestrutura. 
+- [SpringBootAdminApplication](sistemas/admin-server/componentes/cmp-admin-server-app.md): Componente. 
+- [ApiGatewayController](sistemas/api-gateway/componentes/cmp-gateway-controller.md): Componente. Endpoint de agregação (padrão *Backend for Frontend*) que junta owner + pets + visitas numa única resposta, evitando que
+- [Rotas do Spring Cloud Gateway](sistemas/api-gateway/componentes/cmp-gateway-routes.md): Componente. Proxy reverso declarativo que encaminha chamadas do frontend para os serviços de negócio, resolvendo o host via Eureka (
+- [ConfigServerApplication](sistemas/config-server/componentes/cmp-config-server-app.md): Componente. 
+- [OwnerResource](sistemas/customers-service/componentes/cmp-customers-owner-api.md): Componente. Endpoint REST para criar, consultar e atualizar tutores (owners).
+- [PetResource](sistemas/customers-service/componentes/cmp-customers-pet-api.md): Componente. Endpoint REST para tipos de pet e para criar/consultar/atualizar pets de um tutor.
+- [DiscoveryServerApplication](sistemas/discovery-server/componentes/cmp-discovery-server-app.md): Componente. 
+- [PetclinicChatClient](sistemas/genai-service/componentes/cmp-genai-chat-api.md): Componente. Endpoint que recebe a pergunta do usuário em texto livre e a repassa ao LLM configurado, com um prompt de sistema fixo e
+- [PetclinicTools / AIDataProvider](sistemas/genai-service/componentes/cmp-genai-tools.md): Componente. Conjunto de "ferramentas" (`@Tool`) que o LLM pode chamar durante a conversa, e o provedor que de fato executa essas cha
+- [VectorStoreController](sistemas/genai-service/componentes/cmp-genai-vectorstore-loader.md): Componente. Carrega os dados dos veterinários no vector store em memória, para permitir busca semântica pela tool `listVets`.
+- [VetResource](sistemas/vets-service/componentes/cmp-vets-vet-api.md): Componente. Endpoint REST único que lista veterinários com suas especialidades.
+- [VisitResource](sistemas/visits-service/componentes/cmp-visits-visit-api.md): Componente. Endpoint REST para criar e consultar visitas (consultas veterinárias) de um pet.

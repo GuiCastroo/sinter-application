@@ -1,0 +1,20 @@
+# arquivo: domains/camb/relations/rel-app-camb-liquidacao-legado--modernized_by--app-camb-liquidacao.yaml
+# RELAÇÃO — a LIQ0100 (mainframe) está sendo substituída pelo serviço novo
+apiVersion: sinter.dev/v1
+kind: Relation
+metadata:
+  id: rel-app-camb-liquidacao-legado--modernized_by--app-camb-liquidacao
+  name: LIQ0100 substituída pelo Liquidação Service
+  domain: dom-camb
+  status: approved
+spec:
+  source: app-camb-liquidacao-legado
+  type: modernized_by
+  target: app-camb-liquidacao
+  phase: in-progress
+  evidence:
+    - source: doc-camb-ata-2026-09-30-corte
+      locator: "docs/liquidacao/ata-2026-09-30-corte.md#decisoes"
+      version: 7c41d0e
+      contentHash: sha256:5d2a…
+      extraction: human

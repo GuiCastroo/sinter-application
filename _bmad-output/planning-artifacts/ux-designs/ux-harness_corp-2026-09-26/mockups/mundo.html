@@ -1,0 +1,284 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sinter: mundo do domínio</title><style>
+/* Esmalte v2
+   chrome   #1F2327  canvas #2A2F34  surface #343A40  tile #3E454C  hairline #474E55
+   ink      #E8E4DB  muted  #9DA3A8
+   neon (foco, aprovado, ação) #46F28E
+   glazes   API cobalto #7EA6F4  evento lilás #B69CF0  arquivo âmbar #E2B566  conflito #EE6F7C */
+:root{
+  --chrome:#1F2327; --canvas:#2A2F34; --surface:#343A40; --tile:#3E454C; --tile-hi:#4A525A; --line:#474E55;
+  --ink:#E8E4DB; --muted:#9DA3A8; --faint:#6E757B;
+  --api:#7EA6F4; --evento:#B69CF0; --neon:#46F28E; --arquivo:#E2B566; --conflict:#EE6F7C;
+  --ui:'Avenir Next','Helvetica Neue',sans-serif; --display:Optima,'Avenir Next',sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#151719;font-family:var(--ui);color:var(--ink)}
+.note{max-width:1440px;margin:24px auto 12px;padding:0 16px;color:#C9C6BF;line-height:1.5}
+.note h1{font-family:var(--display);font-weight:500;font-size:24px;margin:0 0 4px;color:#EEE}
+.note p{margin:0;max-width:78ch}
+.app{max-width:1440px;margin:0 auto 40px;border-radius:12px;overflow:hidden;border:1px solid #2E3338;background:var(--chrome);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+
+/* barra superior */
+.top{display:flex;align-items:center;gap:18px;padding:10px 16px;border-bottom:1px solid #2E3338}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:18px;letter-spacing:.02em}
+.crumbs{font-size:14px;color:var(--muted)} .crumbs b{color:var(--ink);font-weight:500}
+.crumbs span{margin:0 6px;color:var(--faint)}
+.levels{display:flex;background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:2px;margin-left:8px}
+.levels a{font-size:13px;padding:5px 10px;border-radius:6px;color:var(--muted)}
+.levels a.on{background:var(--tile);color:var(--ink)}
+.nav{display:flex;gap:2px;margin-left:auto}
+.nav a{font-size:14px;padding:6px 10px;border-radius:6px;color:var(--muted)}
+.nav a.on{color:var(--ink);background:var(--surface)}
+.count{display:inline-block;min-width:18px;padding:0 5px;margin-left:5px;border-radius:9px;background:var(--conflict);color:#2A1215;font-size:11px;font-weight:700;text-align:center}
+button{font:inherit;font-size:13px;padding:7px 12px;border-radius:7px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+button.glaze{background:var(--neon);border-color:var(--neon);color:#0B2A17;font-weight:600;box-shadow:0 0 14px rgba(70,242,142,.35)}
+
+/* corpo */
+.body{display:grid;grid-template-columns:76px 260px 1fr 320px;height:760px}
+.canvas{position:relative;background:var(--canvas);overflow:hidden}
+.canvas svg{position:absolute;inset:0;width:100%;height:100%}
+.search{position:absolute;top:14px;left:16px;display:flex;gap:10px;align-items:center}
+.search input{font:inherit;font-size:13px;width:250px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+
+/* player de fluxo */
+.flow{position:absolute;left:16px;right:16px;bottom:14px;display:grid;grid-template-columns:auto 1fr auto;gap:6px 16px;align-items:center;background:rgba(31,35,39,.94);border:1px solid var(--line);border-radius:10px;padding:14px;backdrop-filter:blur(6px)}
+.flow h4{margin:0;font-size:14px;font-weight:600}
+.flow .sub{font-size:12px;color:var(--muted);margin:2px 0 0}
+.flow .step{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45}
+.flow .n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--neon);color:#0B2A17;font-weight:700;font-size:12px;display:grid;place-items:center;box-shadow:0 0 0 4px rgba(70,242,142,.18),0 0 12px rgba(70,242,142,.5)}
+.flow .ctrl{display:flex;gap:8px;grid-row:1 / span 2;grid-column:3}
+.flow .head{grid-column:1;grid-row:1 / span 2;padding-right:14px;border-right:1px solid var(--line)}
+.flow .step{grid-column:2}
+.flow .prog{grid-column:2;margin-top:0!important}
+.flow .prog{display:flex;gap:4px;margin-top:10px} .flow .prog i{flex:1;height:3px;border-radius:2px;background:var(--line)} .flow .prog i.d{background:var(--neon)}
+
+/* camadas e zoom */
+.layers{position:absolute;right:16px;top:14px;display:flex;gap:6px}
+.chip{font-size:12px;padding:5px 9px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+.chip.on{color:var(--ink);border-color:#5A626A}
+.zoom{position:absolute;right:16px;bottom:128px;display:flex;gap:10px;align-items:flex-end}
+.mini{width:120px;height:78px;border:1px solid var(--line);border-radius:8px;background:var(--chrome);position:relative}
+.mini i{position:absolute;border-radius:2px;background:#58616A}
+.mini .vp{position:absolute;left:14px;top:10px;width:70px;height:46px;border:1.5px solid var(--neon);border-radius:3px}
+.zbtn{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.zbtn span{width:30px;height:28px;display:grid;place-items:center;background:var(--surface);color:var(--muted);font-size:16px}
+.zbtn span+span{border-top:1px solid var(--line)}
+
+/* painel */
+.panel{background:var(--chrome);border-left:1px solid #2E3338;padding:18px;overflow:auto}
+.ph{display:flex;gap:12px;align-items:center}
+.tech{width:40px;height:40px;border-radius:10px;background:linear-gradient(#4E565E,#3A4148);display:grid;place-items:center;font-size:13px;font-weight:700;color:#C9B8F2;border:1px solid #58606A}
+.ph h3{margin:0;font-size:18px;font-weight:600} .ph p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--neon);margin-top:12px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon)}
+.ptabs{display:flex;gap:14px;border-bottom:1px solid var(--line);margin:14px 0 12px;font-size:13px}
+.ptabs a{padding:6px 0;color:var(--muted)} .ptabs a.on{color:var(--ink);border-bottom:2px solid var(--neon)}
+.resp{font-size:14px;line-height:1.5;margin:0 0 14px}
+dl{display:grid;grid-template-columns:80px 1fr;gap:7px 10px;font-size:13px;margin:0 0 16px} dt{color:var(--muted)} dd{margin:0}
+.infer{border-radius:10px;padding:12px;background:rgba(238,111,124,.07);border:1px solid rgba(238,111,124,.45)}
+.infer strong{font-size:13px} .infer p{font-size:12.5px;line-height:1.45;color:var(--muted);margin:6px 0 10px}
+.infer code{color:var(--ink);font-size:12px}
+.btns{display:flex;gap:8px}
+.src{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.5}
+.src b{color:var(--ink);font-weight:500}
+
+/* trilho de navegação à direita */
+.rail{background:#1A1D20;border-right:1px solid #2E3338;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px}
+.rail a{width:64px;padding:8px 0 6px;border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--muted);position:relative}
+.rail a svg{width:20px;height:20px}
+.rail a.on{background:var(--surface);color:var(--ink)} .rail a.on::before{content:"";position:absolute;left:-6px;top:10px;bottom:10px;width:3px;border-radius:2px;background:var(--neon);box-shadow:0 0 8px var(--neon)}
+.rail .count{position:absolute;top:2px;right:6px;margin:0}
+/* lista de sistemas */
+.side{background:var(--chrome);border-right:1px solid #2E3338;padding:16px 8px;overflow:auto}
+.side .search2{margin:0 6px 14px}
+.list{padding:0}
+.list h5{margin:0 10px 8px;font-size:12px;font-weight:600;color:var(--muted)}
+.row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:13px}
+.row .ic{width:24px;height:24px;border-radius:7px;background:#2F3439;border:1px solid #4D555C;display:grid;place-items:center;font-size:10px;font-weight:700}
+.row em{margin-left:auto;font-style:normal;font-size:11px;color:var(--muted)}
+.row.on{background:var(--surface);box-shadow:inset 0 0 0 1px rgba(70,242,142,.45)}
+.row .dot{margin-left:auto;width:7px;height:7px;border-radius:50%;background:var(--neon);box-shadow:0 0 6px var(--neon)}
+.row.inf em{color:#F2B7BE} .row.dim{opacity:.55}
+
+.levels a{text-decoration:none}
+.body{grid-template-columns:76px 260px 1fr 320px}
+.canvas{background:radial-gradient(ellipse at 50% 45%,#2F353B 0%,#23272B 55%,#1C1F22 100%)}
+#world{position:absolute;inset:0;width:100%;height:100%;cursor:grab}
+#world:active{cursor:grabbing}
+.legend2{position:absolute;left:16px;bottom:16px;display:flex;gap:14px;align-items:center;font-size:12px;color:var(--muted);background:rgba(31,35,39,.9);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.legend2 span{display:flex;align-items:center;gap:6px}
+.legend2 i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.hint{position:absolute;right:16px;bottom:16px;font-size:12px;color:var(--muted);background:rgba(31,35,39,.9);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.stat{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 18px}
+.stat div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px}
+.stat b{display:block;font-family:var(--display);font-size:24px;font-weight:500}
+.stat span{font-size:12px;color:var(--muted)}
+.stat .ok b{color:var(--neon)} .stat .bad b{color:#F2B7BE}
+.sel{background:var(--surface);border:1px solid var(--neon);border-radius:12px;padding:12px;box-shadow:0 0 18px rgba(70,242,142,.15)}
+.sel .k{display:block;font-size:11.5px;color:var(--neon);margin-bottom:8px}
+.sel .ph h3{font-size:16px}
+.row{cursor:pointer}
+</style></head><body>
+<div class="note"><h1>O mundo do domínio</h1>
+<p>Pagamentos como um mundo: cada subdomínio é uma constelação na superfície, cada sistema é uma estrela (o tamanho é o número de integrações). Arraste para girar, clique numa estrela para selecionar, clique num subdomínio à esquerda para voar até ele. No nível Empresa, cada domínio seria um mundo diferente.</p></div>
+<div class="app">
+  <div class="top">
+    <span class="brand"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="4" cy="5" r="1.6" fill="#9DA3A8"/><circle cx="8" cy="3" r="1.2" fill="#9DA3A8"/><circle cx="3" cy="10" r="1.1" fill="#9DA3A8"/><rect x="7" y="7" width="12" height="12" rx="4" fill="#46F28E"/></svg>Sinter</span>
+    <span class="crumbs">Empresa<span>/</span><b>Pagamentos</b></span>
+    <span class="levels"><a>Empresa</a><a class="on">Domínio</a><a>Sistema</a><a>Componente</a></span>
+    <span class="levels" style="margin-left:auto"><a class="on" href="mundo.html">Mundo</a><a href="grafo.html">Grafo</a><a href="caixas.html">Caixas</a></span>
+    <button id="spin">Pausar rotação</button>
+  </div>
+  <div class="body">
+    <nav class="rail" aria-label="Navegação">
+      <a class="on"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="6" height="5" rx="1.5"/><rect x="12" y="3" width="6" height="5" rx="1.5"/><rect x="7" y="12" width="6" height="5" rx="1.5"/><path d="M5 8v2h10V8M10 10v2"/></svg>Mapa</a>
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5h12M4 10h8M4 15h10"/></svg>Curadoria<span class="count">9</span></a>
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9l-4 3v-3H5a2 2 0 0 1-2-2z"/></svg>Conversas</a>
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="14" height="14" rx="3"/><path d="M7 10l2 2 4-4"/></svg>Tarefas</a>
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7l7-4 7 4-7 4z"/><path d="M3 11l7 4 7-4"/></svg>Catálogo</a>
+    </nav>
+    <aside class="side"><div class="list"><h5>Constelações</h5><div class="row on" data-c="Checkout"><span class="ic" style="color:#C9B8F2">✦</span>Checkout<em>4 sistemas</em></div><div class="row" data-c="Autorização"><span class="ic" style="color:#7EA6F4">✦</span>Autorização<em>5 sistemas</em></div><div class="row" data-c="Contabilidade"><span class="ic" style="color:#E2B566">✦</span>Contabilidade<em>6 sistemas</em></div><div class="row" data-c="Comunicação"><span class="ic" style="color:#B69CF0">✦</span>Comunicação<em>3 sistemas</em></div><div class="row" data-c="Assinaturas"><span class="ic" style="color:#8FD0E8">✦</span>Assinaturas<em>7 sistemas</em></div><div class="row" data-c="Conciliação"><span class="ic" style="color:#F0B27A">✦</span>Conciliação<em>5 sistemas</em></div><div class="row" data-c="Cobrança"><span class="ic" style="color:#9FD9B0">✦</span>Cobrança<em>4 sistemas</em></div></div></aside>
+    <div class="canvas">
+      <canvas id="world" aria-label="Mundo do domínio Pagamentos com 34 sistemas em 7 constelações"></canvas>
+      <div class="search"><input value="Buscar sistema, contrato ou regra" readonly></div>
+      <div class="layers"><span class="chip on">Constelações</span><span class="chip on">Status</span><span class="chip">Donos</span><span class="chip">Fluxos</span></div>
+      <div class="legend2"><span><i style="background:#46F28E;box-shadow:0 0 6px #46F28E"></i>Selecionado</span><span><i style="background:#A0A8AF"></i>Entre constelações</span><span><i style="background:#EE6F7C"></i>Inferida</span><span><i style="border:1px dashed #8D949A"></i>Sem acesso</span></div>
+      <div class="hint">Arraste para girar</div>
+    </div>
+    <aside class="panel">
+      <div class="sel"><span class="k">Selecionado</span><div class="ph"><span class="tech">Kt</span><div><h3 id="sel-name">checkout-api</h3><p id="sel-sub">Checkout. 6 integrações.</p></div></div><button class="glaze" style="width:100%;margin-top:10px">Abrir no nível Sistema</button></div>
+      <div class="ph" style="margin-top:18px"><span class="tech" style="color:#46F28E">Pg</span><div><h3>Pagamentos</h3><p>Dono do domínio: Rafael Nunes</p></div></div>
+      <div class="stat"><div><b>34</b><span>sistemas</span></div><div><b>212</b><span>integrações</span></div><div class="ok"><b>88%</b><span>aprovado</span></div><div class="bad"><b>9</b><span>conflitos abertos</span></div></div>
+      <div class="infer"><strong>3 estrelas apagadas</strong><p>billing-batch, journal-export e disputes estão sem acesso de leitura. Sem fonte, não entram no .sinter/ dos vizinhos.</p><div class="btns"><button class="glaze">Pedir acesso</button></div></div>
+    </aside>
+  </div>
+</div>
+<script>
+const D = {"clusters": {"Checkout": {"lat": 28, "lon": -20, "color": "#C9B8F2", "systems": ["checkout-api", "wallet", "cart-service", "checkout-web"]}, "Autorização": {"lat": 40, "lon": 45, "color": "#7EA6F4", "systems": ["payments-gateway", "antifraude", "tokenizer", "3ds-service", "risk-rules"]}, "Contabilidade": {"lat": -8, "lon": 30, "color": "#E2B566", "systems": ["ledger", "billing-batch", "fees-engine", "tax-calc", "journal-export", "reports"]}, "Comunicação": {"lat": -5, "lon": -70, "color": "#B69CF0", "systems": ["notificacoes", "email-sender", "sms-gateway"]}, "Assinaturas": {"lat": 18, "lon": 120, "color": "#8FD0E8", "systems": ["subscriptions", "plans", "renewals", "dunning", "trials", "coupons", "entitlements"]}, "Conciliação": {"lat": -42, "lon": -10, "color": "#F0B27A", "systems": ["recon-engine", "acquirer-files", "chargebacks", "settlement", "disputes"]}, "Cobrança": {"lat": -35, "lon": 95, "color": "#9FD9B0", "systems": ["invoices", "boleto", "pix-charges", "collections"]}}, "edges": [["checkout-api", "payments-gateway"], ["checkout-api", "antifraude"], ["checkout-api", "wallet"], ["checkout-web", "checkout-api"], ["cart-service", "checkout-api"], ["payments-gateway", "tokenizer"], ["payments-gateway", "3ds-service"], ["antifraude", "risk-rules"], ["payments-gateway", "ledger"], ["ledger", "fees-engine"], ["ledger", "tax-calc"], ["ledger", "billing-batch"], ["ledger", "reports"], ["ledger", "journal-export"], ["ledger", "settlement"], ["recon-engine", "acquirer-files"], ["recon-engine", "ledger"], ["chargebacks", "disputes"], ["chargebacks", "ledger"], ["settlement", "recon-engine"], ["subscriptions", "plans"], ["subscriptions", "renewals"], ["renewals", "dunning"], ["subscriptions", "entitlements"], ["renewals", "payments-gateway"], ["trials", "subscriptions"], ["dunning", "email-sender"], ["invoices", "ledger"], ["invoices", "boleto"], ["invoices", "pix-charges"], ["collections", "invoices"], ["notificacoes", "email-sender"], ["notificacoes", "sms-gateway"], ["renewals", "invoices"], ["checkout-api", "notificacoes", "inferida"], ["subscriptions", "coupons", "inferida"]], "noaccess": ["billing-batch", "journal-export", "disputes"], "focus": "checkout-api"};
+const cv = document.getElementById('world'), ctx = cv.getContext('2d');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let W, H, R, cx, cy, rotY = -0.35, rotX = 0.32, drag = null, auto = !reduce, selected = D.focus;
+const rad = d => d * Math.PI / 180;
+// posições dos sistemas: espalhados em volta do centro da constelação
+const nodes = {}; let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+for (const [name, c] of Object.entries(D.clusters)) {
+  c.systems.forEach((s, i) => {
+    const a = 2 * Math.PI * i / c.systems.length + rnd() * .5, r = i ? 5 + rnd() * 9 : 1.5;
+    nodes[s] = {lat: c.lat + r * Math.sin(a), lon: c.lon + r * Math.cos(a) / Math.cos(rad(c.lat)), color: c.color, cluster: name, deg: 0};
+  });
+}
+D.edges.forEach(e => { nodes[e[0]].deg++; nodes[e[1]].deg++; });
+const vec = (lat, lon) => [Math.cos(rad(lat)) * Math.sin(rad(lon)), Math.sin(rad(lat)), Math.cos(rad(lat)) * Math.cos(rad(lon))];
+function proj(v) {
+  let [x, y, z] = v;
+  const cyr = Math.cos(rotY), syr = Math.sin(rotY);
+  [x, z] = [x * cyr + z * syr, -x * syr + z * cyr];
+  const cxr = Math.cos(rotX), sxr = Math.sin(rotX);
+  [y, z] = [y * cxr - z * sxr, y * sxr + z * cxr];
+  return [cx + x * R, cy - y * R, z];
+}
+function slerp(a, b, t) {
+  const d = Math.acos(Math.min(1, a[0]*b[0] + a[1]*b[1] + a[2]*b[2])) || 1e-6, s = Math.sin(d);
+  const k1 = Math.sin((1 - t) * d) / s, k2 = Math.sin(t * d) / s;
+  const v = [a[0]*k1 + b[0]*k2, a[1]*k1 + b[1]*k2, a[2]*k1 + b[2]*k2];
+  const lift = 1 + .06 * Math.sin(Math.PI * t);
+  return v.map(c => c * lift);
+}
+function resize() {
+  const r = cv.getBoundingClientRect(), dpr = devicePixelRatio || 1;
+  cv.width = r.width * dpr; cv.height = r.height * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  W = r.width; H = r.height; R = Math.min(W, H) * .36; cx = W / 2; cy = H / 2 + 6;
+}
+function draw() {
+  ctx.clearRect(0, 0, W, H); ctx.shadowBlur = 0;
+  // estrelas de fundo
+  ctx.fillStyle = 'rgba(232,228,219,.35)';
+  for (let i = 0; i < 90; i++) { const x = (i * 97.3) % W, y = (i * 57.7 + i * i * .3) % H; ctx.fillRect(x, y, i % 7 ? .8 : 1.4, i % 7 ? .8 : 1.4); }
+  // atmosfera
+  const g = ctx.createRadialGradient(cx - R * .3, cy - R * .35, R * .1, cx, cy, R * 1.08);
+  g.addColorStop(0, 'rgba(78,88,97,.6)'); g.addColorStop(.8, 'rgba(40,45,50,.92)'); g.addColorStop(1, 'rgba(34,38,42,.95)');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = 'rgba(70,242,142,.18)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(cx, cy, R + 1, 0, Math.PI * 2); ctx.stroke();
+  // malha do mundo
+  ctx.lineWidth = .6;
+  for (let lat = -75; lat <= 75; lat += 15) line(Array.from({length: 73}, (_, i) => vec(lat, i * 5 - 180)), 'rgba(157,163,168,');
+  for (let lon = -180; lon < 180; lon += 20) line(Array.from({length: 37}, (_, i) => vec(i * 5 - 90, lon)), 'rgba(157,163,168,');
+  // arestas
+  for (const e of D.edges) {
+    const a = nodes[e[0]], b = nodes[e[1]], va = vec(a.lat, a.lon), vb = vec(b.lat, b.lon);
+    const hot = e.includes(selected), inferred = e[2] === 'inferida', cross = a.cluster !== b.cluster;
+    const pts = Array.from({length: 25}, (_, i) => proj(slerp(va, vb, i / 24)));
+    if (inferred) {
+      pts.forEach(([x, y, z], i) => { if (z < -0.05 || i % 2) return; ctx.fillStyle = `rgba(238,111,124,${.4 + .5 * Math.max(0, z)})`;
+        ctx.beginPath(); ctx.arc(x + Math.sin(i * 3) * 1.5, y + Math.cos(i * 5) * 1.5, 1.6, 0, 7); ctx.fill(); });
+      continue;
+    }
+    ctx.lineWidth = hot ? 2 : 1;
+    ctx.shadowBlur = hot ? 10 : 0; ctx.shadowColor = '#46F28E';
+    for (let i = 1; i < pts.length; i++) {
+      const z = (pts[i][2] + pts[i-1][2]) / 2; if (z < -0.08) continue;
+      const al = (hot ? .95 : cross ? .28 : .5) * (.35 + .65 * Math.max(0, z));
+      ctx.strokeStyle = hot ? `rgba(70,242,142,${al})` : cross ? `rgba(160,168,175,${al})` : hex(a.color, al);
+      ctx.beginPath(); ctx.moveTo(pts[i-1][0], pts[i-1][1]); ctx.lineTo(pts[i][0], pts[i][1]); ctx.stroke();
+    }
+    ctx.shadowBlur = 0;
+  }
+  // nós (de trás para frente)
+  const list = Object.entries(nodes).map(([k, n]) => [k, n, proj(vec(n.lat, n.lon))]).sort((p, q) => p[2][2] - q[2][2]);
+  window._hit = [];
+  for (const [k, n, [x, y, z]] of list) {
+    if (z < -0.15) continue;
+    const vis = .25 + .75 * Math.max(0, z), r = Math.min(4 + n.deg * 1.4, 16) * (.7 + .3 * z);
+    const noacc = D.noaccess.includes(k), sel = k === selected;
+    ctx.globalAlpha = vis;
+    if (noacc) { ctx.setLineDash([3, 3]); ctx.strokeStyle = '#8D949A'; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.stroke(); ctx.setLineDash([]); }
+    else {
+      const col = sel ? '#46F28E' : n.color, gg = ctx.createRadialGradient(x - r * .35, y - r * .35, r * .1, x, y, r);
+      gg.addColorStop(0, 'rgba(255,255,255,.85)'); gg.addColorStop(.35, col); gg.addColorStop(1, 'rgba(20,24,27,.9)');
+      ctx.shadowBlur = sel ? 22 : 10; ctx.shadowColor = col; ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
+      if (sel) { ctx.strokeStyle = 'rgba(70,242,142,.5)'; ctx.beginPath(); ctx.arc(x, y, r + 7, 0, 7); ctx.stroke(); }
+    }
+    if ((n.deg >= 4 || sel || noacc) && z > .15) {
+      ctx.font = `${sel ? 600 : 500} ${sel ? 13 : 11.5}px 'Avenir Next', sans-serif`; ctx.textAlign = 'center';
+      ctx.fillStyle = sel ? '#46F28E' : '#D6D2CA'; ctx.fillText(k, x, y + r + (sel ? 20 : 14));
+    }
+    ctx.globalAlpha = 1; window._hit.push([k, x, y, r + 4, z]);
+  }
+  // nomes das constelações
+  for (const [name, c] of Object.entries(D.clusters)) {
+    const [x, y, z] = proj(vec(c.lat + 13, c.lon)); if (z < .2) continue;
+    ctx.globalAlpha = Math.min(1, z * 1.4); ctx.textAlign = 'center';
+    ctx.font = "600 14px Optima, 'Avenir Next', sans-serif"; ctx.fillStyle = c.color; ctx.fillText(name, x, y);
+    ctx.font = "11px 'Avenir Next', sans-serif"; ctx.fillStyle = '#9DA3A8'; ctx.fillText(`${c.systems.length} sistemas`, x, y + 14);
+    ctx.globalAlpha = 1;
+  }
+}
+function line(vs, base) {
+  const p = vs.map(proj);
+  for (let i = 1; i < p.length; i++) { const z = (p[i][2] + p[i-1][2]) / 2; if (z < 0) continue;
+    ctx.strokeStyle = base + (.05 + .14 * z) + ')'; ctx.beginPath(); ctx.moveTo(p[i-1][0], p[i-1][1]); ctx.lineTo(p[i][0], p[i][1]); ctx.stroke(); }
+}
+function hex(h, a) { const n = parseInt(h.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; }
+function loop() { if (auto && !drag) rotY += .0016; draw(); requestAnimationFrame(loop); }
+cv.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY, rotY, rotX, false]; cv.setPointerCapture(e.pointerId); });
+cv.addEventListener('pointermove', e => { if (!drag) return; const dx = e.clientX - drag[0], dy = e.clientY - drag[1];
+  if (Math.abs(dx) + Math.abs(dy) > 3) drag[4] = true; rotY = drag[2] + dx * .006; rotX = Math.max(-1.2, Math.min(1.2, drag[3] + dy * .006)); });
+cv.addEventListener('pointerup', e => { const moved = drag && drag[4]; drag = null; if (moved) return;
+  const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+  const hit = (window._hit || []).filter(h => h[4] > 0 && Math.hypot(h[1] - x, h[2] - y) < h[3]).pop();
+  if (hit) select(hit[0]); });
+function select(k) {
+  selected = k; const n = nodes[k];
+  document.getElementById('sel-name').textContent = k;
+  document.getElementById('sel-sub').textContent = `${n.cluster}. ${n.deg} integrações.`;
+  document.querySelectorAll('.side .row').forEach(r => r.classList.toggle('on', r.dataset.c === n.cluster));
+}
+document.querySelectorAll('.side .row').forEach(r => r.addEventListener('click', () => {
+  const c = D.clusters[r.dataset.c]; auto = false; const t0 = rotY, t1 = -rad(c.lon), x0 = rotX, x1 = rad(c.lat) * .8; let t = 0;
+  (function ease() { t = Math.min(1, t + .05); const k = 1 - Math.pow(1 - t, 3); rotY = t0 + (t1 - t0) * k; rotX = x0 + (x1 - x0) * k; if (t < 1) requestAnimationFrame(ease); })();
+  select(c.systems[0]);
+}));
+document.getElementById('spin').addEventListener('click', e => { auto = !auto; e.target.textContent = auto ? 'Pausar rotação' : 'Girar'; });
+addEventListener('resize', resize); resize(); loop();
+</script>
+</body></html>

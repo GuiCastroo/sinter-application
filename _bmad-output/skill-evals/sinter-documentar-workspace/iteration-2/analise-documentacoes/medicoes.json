@@ -1,0 +1,92 @@
+[
+  {
+    "dominio": "Online Boutique",
+    "pasta": "_bmad-output/skill-evals/sinter-documentar-workspace/iteration-2/eval-1-microservices-boutique/with_skill/run-1/outputs/dominio-online-boutique",
+    "palavras_markdown_aproximadas": 8684,
+    "cartao_estimativa_caracteres_div_4": 1468,
+    "resumos_estimativa_caracteres_div_4": 1916,
+    "servicos": 12,
+    "chamadas": 19,
+    "jornadas": 3,
+    "jornada_usa_servico": 15,
+    "ancoras_repetidas": {
+      "3-servicos.md": {
+        "expõe": 11,
+        "consome": 12,
+        "por-dentro": 12,
+        "dados": 11,
+        "quando-falha": 11,
+        "infra-que-usa": 12
+      },
+      "4-jornadas.md": {
+        "em-linguagem-de-negócio": 3,
+        "quem-orquestra": 3,
+        "passo-a-passo-técnico": 3,
+        "regras-e-dúvidas": 3
+      }
+    },
+    "markdown_embutido_igual_ao_original": true,
+    "scripts_externos": [
+      "https://cdn.jsdelivr.net/npm/marked@15/marked.min.js",
+      "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"
+    ]
+  },
+  {
+    "dominio": "Serverlesspresso",
+    "pasta": "_bmad-output/skill-evals/sinter-documentar-workspace/iteration-2/eval-2-serverless-coffee/with_skill/run-1/outputs/dominio-serverlesspresso",
+    "palavras_markdown_aproximadas": 8635,
+    "cartao_estimativa_caracteres_div_4": 1384,
+    "resumos_estimativa_caracteres_div_4": 1927,
+    "servicos": 13,
+    "chamadas": 22,
+    "jornadas": 2,
+    "jornada_usa_servico": 0,
+    "ancoras_repetidas": {
+      "3-servicos.md": {
+        "expõe": 5,
+        "por-dentro": 7,
+        "quando-falha": 7,
+        "infra-que-usa": 8,
+        "consome": 10,
+        "dados": 4
+      },
+      "4-jornadas.md": {
+        "em-linguagem-de-negócio": 2,
+        "quem-orquestra": 2,
+        "passo-a-passo-técnico": 2,
+        "regras-e-dúvidas": 2
+      }
+    },
+    "markdown_embutido_igual_ao_original": true,
+    "scripts_externos": [
+      "https://cdn.jsdelivr.net/npm/marked@15/marked.min.js",
+      "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"
+    ]
+  },
+  {
+    "dominio": "Clínica Veterinária",
+    "pasta": "_bmad-output/skill-evals/sinter-documentar-workspace/iteration-2/eval-3-petclinic-negocio-contratos/with_skill/run-1/outputs/dominio-clinica-veterinaria",
+    "palavras_markdown_aproximadas": 8297,
+    "cartao_estimativa_caracteres_div_4": 1423,
+    "resumos_estimativa_caracteres_div_4": 1461,
+    "servicos": 8,
+    "chamadas": 7,
+    "jornadas": 5,
+    "jornada_usa_servico": 12,
+    "ancoras_repetidas": {
+      "3-servicos.md": {
+        "expõe": 8,
+        "consome": 8,
+        "por-dentro": 8,
+        "dados": 8,
+        "quando-falha": 8,
+        "infra-que-usa": 8
+      }
+    },
+    "markdown_embutido_igual_ao_original": true,
+    "scripts_externos": [
+      "https://cdn.jsdelivr.net/npm/marked@15/marked.min.js",
+      "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"
+    ]
+  }
+]

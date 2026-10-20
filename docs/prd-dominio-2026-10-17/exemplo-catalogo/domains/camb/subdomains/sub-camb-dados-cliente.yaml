@@ -1,0 +1,39 @@
+# arquivo: domains/camb/subdomains/sub-camb-dados-cliente.yaml
+# Subdomínio com os mesmos blocos do domínio; aqui só o que é DESTA parte (o resto é herdado de dom-camb).
+apiVersion: sinter.dev/v1
+kind: Subdomain
+metadata:
+  id: sub-camb-dados-cliente
+  name: Dados do cliente
+  domain: dom-camb
+  status: approved
+  owners: [time-cotacao]
+spec:
+  # --- O que a IA lê primeiro ------------------------------------------------
+  purpose: "Traz os dados do cliente necessários para a operação."
+  does:
+    - "Consulta o domínio Cliente"
+  doesNot:
+    - "Alterar cadastro (é do domínio Cliente)"
+  unknowns: []
+
+  # --- APLICAÇÕES (cada uma com os N repos que a compõem) --------------------
+  applications:
+    - id: app-camb-dados-cliente
+      name: Dados do cliente
+      lifecycle: modern
+      repositories:
+        - repo: repo-camb-dados-cliente
+          role: api
+          platform: java
+
+  # --- REGRAS, JORNADAS E FRONTEIRAS desta parte -----------------------------
+  boundaries:
+    in:
+      - { from: dom-cliente, what: "cadastro e perfil do cliente" }
+    out: []
+
+  # --- CONHECIMENTO desta parte (o do domínio já vale aqui; não repetir) ------
+  regulations: []
+  standards:   []
+  docs: []

@@ -1,0 +1,173 @@
+{
+  "status": "pass",
+  "results": [
+    {
+      "domain": "dominio-online-boutique",
+      "pages": [
+        {
+          "page": "1-negocio.md",
+          "duplicates": [],
+          "h1": "Negócio: Online Boutique",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        },
+        {
+          "page": "2-arquitetura.md",
+          "duplicates": [],
+          "h1": "Arquitetura: Online Boutique",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        },
+        {
+          "page": "3-servicos.md",
+          "duplicates": [],
+          "h1": "Serviços: Online Boutique",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        },
+        {
+          "page": "4-jornadas.md",
+          "duplicates": [],
+          "h1": "Jornadas: Online Boutique",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        },
+        {
+          "page": "5-infraestrutura.md",
+          "duplicates": [],
+          "h1": "Infraestrutura: Online Boutique",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        },
+        {
+          "page": "6-referencia.md",
+          "duplicates": [],
+          "h1": "Referência: Online Boutique",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        }
+      ],
+      "anchors": 12,
+      "contentLinkTested": true,
+      "mobile": {
+        "width": 390,
+        "body": 390,
+        "doc": 390,
+        "pass": true
+      },
+      "errors": []
+    },
+    {
+      "domain": "dominio-serverlesspresso",
+      "pages": [
+        {
+          "page": "1-negocio.md",
+          "duplicates": [],
+          "h1": "Negócio: Serverlesspresso",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        },
+        {
+          "page": "2-arquitetura.md",
+          "duplicates": [],
+          "h1": "Arquitetura: Serverlesspresso",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        },
+        {
+          "page": "3-servicos.md",
+          "duplicates": [],
+          "h1": "Serviços: Serverlesspresso",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        },
+        {
+          "page": "4-jornadas.md",
+          "duplicates": [],
+          "h1": "Jornadas: Serverlesspresso",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        },
+        {
+          "page": "5-infraestrutura.md",
+          "duplicates": [],
+          "h1": "Infraestrutura: Serverlesspresso",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        },
+        {
+          "page": "6-referencia.md",
+          "duplicates": [],
+          "h1": "Referência: Serverlesspresso",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        }
+      ],
+      "anchors": 10,
+      "contentLinkTested": true,
+      "mobile": {
+        "width": 390,
+        "body": 390,
+        "doc": 390,
+        "pass": true
+      },
+      "errors": []
+    },
+    {
+      "domain": "dominio-clinica-veterinaria",
+      "pages": [
+        {
+          "page": "1-negocio.md",
+          "duplicates": [],
+          "h1": "Negócio: Clínica Veterinária",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        },
+        {
+          "page": "2-arquitetura.md",
+          "duplicates": [],
+          "h1": "Arquitetura: Clínica Veterinária",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        },
+        {
+          "page": "3-servicos.md",
+          "duplicates": [],
+          "h1": "Serviços: Clínica Veterinária",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        },
+        {
+          "page": "4-jornadas.md",
+          "duplicates": [],
+          "h1": "Jornadas: Clínica Veterinária",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        },
+        {
+          "page": "5-infraestrutura.md",
+          "duplicates": [],
+          "h1": "Infraestrutura: Clínica Veterinária",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        },
+        {
+          "page": "6-referencia.md",
+          "duplicates": [],
+          "h1": "Referência: Clínica Veterinária",
+          "syntaxErrors": 0,
+          "rawDiagrams": 0
+        }
+      ],
+      "anchors": 8,
+      "contentLinkTested": true,
+      "mobile": {
+        "width": 390,
+        "body": 390,
+        "doc": 390,
+        "pass": true
+      },
+      "errors": []
+    }
+  ]
+}

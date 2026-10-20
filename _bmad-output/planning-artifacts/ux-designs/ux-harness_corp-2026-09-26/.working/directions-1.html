@@ -1,0 +1,386 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sinter: direções visuais</title><style>
+*{box-sizing:border-box} body{margin:0;background:#EDEDED;color:#222;font-family:'Helvetica Neue',sans-serif}
+.intro{max-width:1180px;margin:32px auto 8px;padding:0 16px} .intro h1{font-size:26px;margin:0 0 6px}
+.intro p{max-width:72ch;line-height:1.5;color:#444}
+.dir{max-width:1180px;margin:40px auto;padding:0 16px}
+.dirhead h2{font-size:22px;margin:0 0 4px} .dirhead p{margin:0 0 6px;max-width:80ch;line-height:1.5;color:#333}
+.dirhead .hex{font-size:12px;color:#666}
+.frame{border-radius:10px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.18);margin-top:12px}
+.chrome{background:#D9D9D9;padding:8px 12px;display:flex;gap:6px;align-items:center}
+.chrome span{width:11px;height:11px;border-radius:50%;background:#BDBDBD} .chrome em{font-style:normal;font-size:12px;color:#555;margin-left:12px}
+.app{background:var(--bg);color:var(--ink)}
+.top{display:flex;align-items:center;gap:20px;padding:12px 18px;border-bottom:1px solid var(--line)}
+.brand{font-weight:700;font-size:18px;letter-spacing:.01em}
+.domain{font-size:18px} .domain small{font-size:12px;color:var(--muted);margin-left:6px}
+.tabs{display:flex;gap:4px;margin-left:auto}
+.tab{padding:6px 10px;border-radius:6px;font-size:14px;color:var(--muted);cursor:default}
+.tab.on{color:var(--ink);background:var(--surface);font-weight:600}
+.badge{font-weight:600;font-size:11px;color:#fff;background:var(--conflict);border-radius:9px;padding:1px 7px;margin-left:4px}
+button{font:inherit;font-size:13px;padding:7px 12px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.body{display:grid;grid-template-columns:1fr 320px;min-height:640px}
+.canvas{position:relative;padding:12px 16px}
+.tools{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.tools input{font:inherit;font-size:13px;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--muted);width:240px}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted)} .lg{display:flex;align-items:center;gap:6px} .lg i{display:inline-block;width:22px}
+.map{width:100%;height:auto;display:block;margin-top:6px} .map text{font-family:inherit}
+.more{font-size:12px;color:var(--muted);margin:0}
+.panel{border-left:1px solid var(--line);background:var(--surface);padding:18px}
+.panel h3{margin:0 0 6px;font-size:18px} .resp{margin:0 0 14px;line-height:1.45;font-size:14px}
+dl{display:grid;grid-template-columns:78px 1fr;gap:6px 10px;font-size:13px;margin:0 0 16px} dt{color:var(--muted)} dd{margin:0}
+.infer{border:1px dashed var(--conflict);border-radius:8px;padding:12px;font-size:13px}
+.infer p{margin:6px 0 10px;line-height:1.4;color:var(--muted)} .infer code{color:var(--ink)}
+.btns{display:flex;gap:8px;flex-wrap:wrap} .links{font-size:12px;color:var(--muted);margin-top:16px}
+@media (max-width:900px){.body{grid-template-columns:1fr}.panel{border-left:0;border-top:1px solid var(--line)}.tabs{display:none}}
+</style></head><body>
+<div class="intro"><h1>Sinter: quatro direções para o mapa do domínio</h1>
+<p>A mesma tela nas quatro: o domínio Pagamentos com foco em checkout-api, uma integração inferida esperando confirmação
+e um sistema sem acesso de leitura. Compare a personalidade, não só a cor. Pode misturar: "linhas do Metrô com a paleta do Esmalte".</p></div>
+
+<section class="dir" id="prancheta">
+<style>
+#prancheta { --bg:#E6ECEF; --surface:#F2F5F6; --ink:#26323B; --muted:#5E6D78; --line:#9FB0BA;
+  --accent:#1F6F8B; --conflict:#B03A2E; font-family:'Avenir Next', 'Helvetica Neue', sans-serif; }
+#prancheta .display { font-family:'Iowan Old Style', Charter, Georgia, serif; }
+</style>
+<header class="dirhead"><h2>Prancheta</h2><p>O mapa como desenho técnico de arquiteto: papel de desenho azul-acinzentado, traço de grafite, cotas e anotações em serifa. Calmo e preciso; transmite rigor e autoria.</p>
+<p class="hex">Fundo #E6ECEF, texto #26323B, API #1F6F8B, evento #4B6A2E, arquivo #8A5A1F, conflito #B03A2E</p></header>
+<div class="frame">
+  <div class="chrome"><span></span><span></span><span></span><em>localhost:4317/dominios/pagamentos/mapa</em></div>
+  <div class="app">
+    <nav class="top">
+      <span class="brand display">Sinter</span>
+      <span class="domain display">Pagamentos <small>34 sistemas, 212 integrações</small></span>
+      <span class="tabs"><a class="tab on">Mapa</a><a class="tab">Curadoria <b class=badge>9 conflitos</b></a><a class="tab">Conversas</a><a class="tab">Tarefas</a><a class="tab">Catálogo</a></span>
+      <button class="primary">Adicionar fonte</button>
+    </nav>
+    <div class="body">
+      <div class="canvas">
+        <div class="tools"><input value="Buscar sistema ou contrato" readonly><span class="legend"><span class="lg"><i style="border-top:3px solid #1F6F8B"></i>API</span><span class="lg"><i style="border-top:3px solid #4B6A2E"></i>Evento</span><span class="lg"><i style="border-top:3px solid #8A5A1F"></i>Arquivo</span><span class="lg"><i style="border-top:3px dashed #B03A2E"></i>Inferida, confirmar</span></span></div>
+        <svg viewBox="0 0 760 600" class="map" role="img" aria-label="Mapa do domínio Pagamentos">
+<defs><pattern id="g-prancheta" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#9FB0BA" stroke-width=".4" opacity=".6"/></pattern></defs><rect width="760" height="600" fill="url(#g-prancheta)"/>
+<path d="M150,150 L380,200" fill="none" stroke="#1F6F8B" stroke-width="1.6"  opacity="1" stroke-linejoin="round"/>
+<path d="M380,200 L610,150" fill="none" stroke="#1F6F8B" stroke-width="1.6"  opacity="1" stroke-linejoin="round"/>
+<path d="M380,200 L610,330" fill="none" stroke="#1F6F8B" stroke-width="1.6"  opacity="1" stroke-linejoin="round"/>
+<path d="M610,150 L380,440" fill="none" stroke="#4B6A2E" stroke-width="1.6"  opacity="1" stroke-linejoin="round"/>
+<path d="M380,200 L150,360" fill="none" stroke="#4B6A2E" stroke-width="1.6" stroke-dasharray="6 5" opacity="1" stroke-linejoin="round"/>
+<path d="M380,440 L610,500" fill="none" stroke="#8A5A1F" stroke-width="1.6" stroke-dasharray="3 4" opacity=".55" stroke-linejoin="round"/>
+<g class="elabel"><rect x="203.0" y="164.0" width="124" height="20" rx="2" fill="#F2F5F6" stroke="#1F6F8B" stroke-width="1" /><text x="265.0" y="179.0" text-anchor="middle" fill="#26323B" font-size="11">GET /balance</text></g>
+<g class="elabel"><rect x="433.0" y="148.0" width="124" height="20" rx="2" fill="#F2F5F6" stroke="#1F6F8B" stroke-width="1" /><text x="495.0" y="163.0" text-anchor="middle" fill="#26323B" font-size="11">POST /authorize</text></g>
+<g class="elabel"><rect x="433.0" y="262.0" width="124" height="20" rx="2" fill="#F2F5F6" stroke="#1F6F8B" stroke-width="1" /><text x="495.0" y="277.0" text-anchor="middle" fill="#26323B" font-size="11">POST /score</text></g>
+<g class="elabel"><rect x="433.0" y="354.0" width="124" height="20" rx="2" fill="#F2F5F6" stroke="#4B6A2E" stroke-width="1" /><text x="495.0" y="369.0" text-anchor="middle" fill="#26323B" font-size="11">PaymentAuthorized</text></g>
+<g class="elabel"><rect x="203.0" y="269.0" width="124" height="20" rx="2" fill="#F2F5F6" stroke="#B03A2E" stroke-width="1.2" stroke-dasharray="3 3"/><text x="265.0" y="284.0" text-anchor="middle" fill="#26323B" font-size="11">PaymentAuthorized (inferida)</text></g>
+<g class="elabel"><rect x="433.0" y="459.0" width="124" height="20" rx="2" fill="#F2F5F6" stroke="#8A5A1F" stroke-width="1" /><text x="495.0" y="474.0" text-anchor="middle" fill="#26323B" font-size="11">conciliação diária</text></g>
+<rect x="75.0" y="127.0" width="150" height="46" rx="2" fill="#F2F5F6" stroke="#26323B" stroke-width="1" />
+<path d="M70.0,127.0 h10 M75.0,122.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M220.0,127.0 h10 M225.0,122.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M70.0,173.0 h10 M75.0,168.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M220.0,173.0 h10 M225.0,168.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<text x="150" y="155" text-anchor="middle" fill="#26323B" font-size="14" font-weight="500" style="font-family:'Iowan Old Style', Charter, Georgia, serif" font-style="italic">wallet</text>
+<rect x="305.0" y="177.0" width="150" height="46" rx="2" fill="#F2F5F6" stroke="#1F6F8B" stroke-width="2.2" />
+<path d="M300.0,177.0 h10 M305.0,172.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M450.0,177.0 h10 M455.0,172.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M300.0,223.0 h10 M305.0,218.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M450.0,223.0 h10 M455.0,218.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<text x="380" y="205" text-anchor="middle" fill="#26323B" font-size="14" font-weight="600" style="font-family:'Iowan Old Style', Charter, Georgia, serif" font-style="italic">checkout-api</text>
+<rect x="535.0" y="127.0" width="150" height="46" rx="2" fill="#F2F5F6" stroke="#26323B" stroke-width="1" />
+<path d="M530.0,127.0 h10 M535.0,122.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M680.0,127.0 h10 M685.0,122.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M530.0,173.0 h10 M535.0,168.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M680.0,173.0 h10 M685.0,168.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<text x="610" y="155" text-anchor="middle" fill="#26323B" font-size="14" font-weight="500" style="font-family:'Iowan Old Style', Charter, Georgia, serif" font-style="italic">payments-gateway</text>
+<rect x="535.0" y="307.0" width="150" height="46" rx="2" fill="#F2F5F6" stroke="#26323B" stroke-width="1" />
+<path d="M530.0,307.0 h10 M535.0,302.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M680.0,307.0 h10 M685.0,302.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M530.0,353.0 h10 M535.0,348.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M680.0,353.0 h10 M685.0,348.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<text x="610" y="335" text-anchor="middle" fill="#26323B" font-size="14" font-weight="500" style="font-family:'Iowan Old Style', Charter, Georgia, serif" font-style="italic">antifraude</text>
+<rect x="75.0" y="337.0" width="150" height="46" rx="2" fill="#F2F5F6" stroke="#26323B" stroke-width="1" />
+<path d="M70.0,337.0 h10 M75.0,332.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M220.0,337.0 h10 M225.0,332.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M70.0,383.0 h10 M75.0,378.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M220.0,383.0 h10 M225.0,378.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<text x="150" y="365" text-anchor="middle" fill="#26323B" font-size="14" font-weight="500" style="font-family:'Iowan Old Style', Charter, Georgia, serif" font-style="italic">notificacoes</text>
+<rect x="305.0" y="417.0" width="150" height="46" rx="2" fill="#F2F5F6" stroke="#26323B" stroke-width="1" />
+<path d="M300.0,417.0 h10 M305.0,412.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M450.0,417.0 h10 M455.0,412.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M300.0,463.0 h10 M305.0,458.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M450.0,463.0 h10 M455.0,458.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<text x="380" y="445" text-anchor="middle" fill="#26323B" font-size="14" font-weight="500" style="font-family:'Iowan Old Style', Charter, Georgia, serif" font-style="italic">ledger</text>
+<rect x="535.0" y="477.0" width="150" height="46" rx="2" fill="#F2F5F6" stroke="#26323B" stroke-width="1" stroke-dasharray="4 4"/>
+<path d="M530.0,477.0 h10 M535.0,472.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M680.0,477.0 h10 M685.0,472.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M530.0,523.0 h10 M535.0,518.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<path d="M680.0,523.0 h10 M685.0,518.0 v10" stroke="#5E6D78" stroke-width=".8"/>
+<text x="610" y="500" text-anchor="middle" fill="#26323B" font-size="14" font-weight="500" style="font-family:'Iowan Old Style', Charter, Georgia, serif" font-style="italic">billing-batch</text>
+<text x="610" y="515" text-anchor="middle" fill="#5E6D78" font-size="10.5">sem acesso de leitura</text>
+</svg>
+        <p class="more">Mostrando checkout-api e vizinhos. 27 sistemas ocultos.</p>
+      </div>
+      
+<aside class="panel">
+  <h3>checkout-api</h3>
+  <p class="resp">Recebe o pedido de pagamento do site e orquestra a autorização e o antifraude.</p>
+  <dl>
+    <dt>Dono</dt><dd>Squad Checkout, Diego Almeida</dd>
+    <dt>Stack</dt><dd>Kotlin, Spring Boot, PostgreSQL</dd>
+    <dt>Expõe</dt><dd>POST /payments<br>GET /payments/{id}</dd>
+    <dt>Consome</dt><dd>payments-gateway, antifraude, wallet</dd>
+  </dl>
+  <div class="infer">
+    <strong>Publica PaymentAuthorized?</strong>
+    <p>Inferido a partir de <code>NotificationPublisher.kt:42</code>. Nenhum contrato documentado.</p>
+    <div class="btns"><button class="primary">Confirmar integração</button><button>Descartar</button></div>
+  </div>
+  <p class="links">3 regras de negócio. ADR-012 Idempotência no checkout</p>
+</aside>
+    </div>
+  </div>
+</div>
+</section>
+<section class="dir" id="metro">
+<style>
+#metro { --bg:#FFFFFF; --surface:#F4F5F7; --ink:#14213D; --muted:#5A6478; --line:#D5D9E0;
+  --accent:#0057B8; --conflict:#D52B1E; font-family:'Avenir Next', 'Helvetica Neue', sans-serif; }
+#metro .display { font-family:'Avenir Next Condensed', 'Avenir Next', 'Helvetica Neue', sans-serif; }
+</style>
+<header class="dirhead"><h2>Metrô</h2><p>O domínio como mapa de metrô: cada tipo de integração é uma linha colorida, cada sistema é uma estação. Lê-se de longe, em reunião, na tela grande. A ousadia está nas linhas; o resto é branco e silencioso.</p>
+<p class="hex">Fundo #FFFFFF, texto #14213D, API #0057B8, evento #00965E, arquivo #F2A900, conflito #D52B1E</p></header>
+<div class="frame">
+  <div class="chrome"><span></span><span></span><span></span><em>localhost:4317/dominios/pagamentos/mapa</em></div>
+  <div class="app">
+    <nav class="top">
+      <span class="brand display">Sinter</span>
+      <span class="domain display">Pagamentos <small>34 sistemas, 212 integrações</small></span>
+      <span class="tabs"><a class="tab on">Mapa</a><a class="tab">Curadoria <b class=badge>9 conflitos</b></a><a class="tab">Conversas</a><a class="tab">Tarefas</a><a class="tab">Catálogo</a></span>
+      <button class="primary">Adicionar fonte</button>
+    </nav>
+    <div class="body">
+      <div class="canvas">
+        <div class="tools"><input value="Buscar sistema ou contrato" readonly><span class="legend"><span class="lg"><i style="border-top:3px solid #0057B8"></i>API</span><span class="lg"><i style="border-top:3px solid #00965E"></i>Evento</span><span class="lg"><i style="border-top:3px solid #F2A900"></i>Arquivo</span><span class="lg"><i style="border-top:3px dashed #D52B1E"></i>Inferida, confirmar</span></span></div>
+        <svg viewBox="0 0 760 600" class="map" role="img" aria-label="Mapa do domínio Pagamentos">
+<path d="M150,150 H265.0 V200 H380" fill="none" stroke="#0057B8" stroke-width="9"  opacity="1" stroke-linejoin="round"/>
+<path d="M380,200 H495.0 V150 H610" fill="none" stroke="#0057B8" stroke-width="9"  opacity="1" stroke-linejoin="round"/>
+<path d="M380,200 H495.0 V330 H610" fill="none" stroke="#0057B8" stroke-width="9"  opacity="1" stroke-linejoin="round"/>
+<path d="M610,150 H495.0 V440 H380" fill="none" stroke="#00965E" stroke-width="9"  opacity="1" stroke-linejoin="round"/>
+<path d="M380,200 H265.0 V360 H150" fill="none" stroke="#00965E" stroke-width="9" stroke-dasharray="6 5" opacity="1" stroke-linejoin="round"/>
+<path d="M380,440 H495.0 V500 H610" fill="none" stroke="#F2A900" stroke-width="9" stroke-dasharray="3 4" opacity=".55" stroke-linejoin="round"/>
+<g class="elabel"><rect x="203.0" y="164.0" width="124" height="20" rx="6" fill="#F4F5F7" stroke="#0057B8" stroke-width="1" /><text x="265.0" y="179.0" text-anchor="middle" fill="#14213D" font-size="11">GET /balance</text></g>
+<g class="elabel"><rect x="433.0" y="148.0" width="124" height="20" rx="6" fill="#F4F5F7" stroke="#0057B8" stroke-width="1" /><text x="495.0" y="163.0" text-anchor="middle" fill="#14213D" font-size="11">POST /authorize</text></g>
+<g class="elabel"><rect x="433.0" y="262.0" width="124" height="20" rx="6" fill="#F4F5F7" stroke="#0057B8" stroke-width="1" /><text x="495.0" y="277.0" text-anchor="middle" fill="#14213D" font-size="11">POST /score</text></g>
+<g class="elabel"><rect x="433.0" y="354.0" width="124" height="20" rx="6" fill="#F4F5F7" stroke="#00965E" stroke-width="1" /><text x="495.0" y="369.0" text-anchor="middle" fill="#14213D" font-size="11">PaymentAuthorized</text></g>
+<g class="elabel"><rect x="203.0" y="269.0" width="124" height="20" rx="6" fill="#F4F5F7" stroke="#D52B1E" stroke-width="1.2" stroke-dasharray="3 3"/><text x="265.0" y="284.0" text-anchor="middle" fill="#14213D" font-size="11">PaymentAuthorized (inferida)</text></g>
+<g class="elabel"><rect x="433.0" y="459.0" width="124" height="20" rx="6" fill="#F4F5F7" stroke="#F2A900" stroke-width="1" /><text x="495.0" y="474.0" text-anchor="middle" fill="#14213D" font-size="11">conciliação diária</text></g>
+<circle cx="150" cy="150" r="12" fill="#FFFFFF" stroke="#14213D" stroke-width="4" />
+<text x="150" y="126" text-anchor="middle" fill="#14213D" font-size="15" font-weight="600" style="font-family:'Avenir Next Condensed', 'Avenir Next', 'Helvetica Neue', sans-serif">wallet</text>
+<circle cx="380" cy="200" r="16" fill="#0057B8" stroke="#14213D" stroke-width="4" />
+<text x="380" y="176" text-anchor="middle" fill="#14213D" font-size="17" font-weight="700" style="font-family:'Avenir Next Condensed', 'Avenir Next', 'Helvetica Neue', sans-serif">checkout-api</text>
+<circle cx="610" cy="150" r="12" fill="#FFFFFF" stroke="#14213D" stroke-width="4" />
+<text x="610" y="126" text-anchor="middle" fill="#14213D" font-size="15" font-weight="600" style="font-family:'Avenir Next Condensed', 'Avenir Next', 'Helvetica Neue', sans-serif">payments-gateway</text>
+<circle cx="610" cy="330" r="12" fill="#FFFFFF" stroke="#14213D" stroke-width="4" />
+<text x="610" y="306" text-anchor="middle" fill="#14213D" font-size="15" font-weight="600" style="font-family:'Avenir Next Condensed', 'Avenir Next', 'Helvetica Neue', sans-serif">antifraude</text>
+<circle cx="150" cy="360" r="12" fill="#FFFFFF" stroke="#14213D" stroke-width="4" />
+<text x="150" y="336" text-anchor="middle" fill="#14213D" font-size="15" font-weight="600" style="font-family:'Avenir Next Condensed', 'Avenir Next', 'Helvetica Neue', sans-serif">notificacoes</text>
+<circle cx="380" cy="440" r="12" fill="#FFFFFF" stroke="#14213D" stroke-width="4" />
+<text x="380" y="416" text-anchor="middle" fill="#14213D" font-size="15" font-weight="600" style="font-family:'Avenir Next Condensed', 'Avenir Next', 'Helvetica Neue', sans-serif">ledger</text>
+<circle cx="610" cy="500" r="12" fill="#FFFFFF" stroke="#14213D" stroke-width="4" stroke-dasharray="4 4" opacity=".6"/>
+<text x="610" y="476" text-anchor="middle" fill="#14213D" font-size="15" font-weight="600" style="font-family:'Avenir Next Condensed', 'Avenir Next', 'Helvetica Neue', sans-serif">billing-batch</text>
+<text x="610" y="534" text-anchor="middle" fill="#5A6478" font-size="11">sem acesso</text>
+</svg>
+        <p class="more">Mostrando checkout-api e vizinhos. 27 sistemas ocultos.</p>
+      </div>
+      
+<aside class="panel">
+  <h3>checkout-api</h3>
+  <p class="resp">Recebe o pedido de pagamento do site e orquestra a autorização e o antifraude.</p>
+  <dl>
+    <dt>Dono</dt><dd>Squad Checkout, Diego Almeida</dd>
+    <dt>Stack</dt><dd>Kotlin, Spring Boot, PostgreSQL</dd>
+    <dt>Expõe</dt><dd>POST /payments<br>GET /payments/{id}</dd>
+    <dt>Consome</dt><dd>payments-gateway, antifraude, wallet</dd>
+  </dl>
+  <div class="infer">
+    <strong>Publica PaymentAuthorized?</strong>
+    <p>Inferido a partir de <code>NotificationPublisher.kt:42</code>. Nenhum contrato documentado.</p>
+    <div class="btns"><button class="primary">Confirmar integração</button><button>Descartar</button></div>
+  </div>
+  <p class="links">3 regras de negócio. ADR-012 Idempotência no checkout</p>
+</aside>
+    </div>
+  </div>
+</div>
+</section>
+<section class="dir" id="esmalte">
+<style>
+#esmalte { --bg:#33383D; --surface:#3D4349; --ink:#E4E1DA; --muted:#A3A7AB; --line:#5B6268;
+  --accent:#6F9BE8; --conflict:#E0735A; font-family:Optima, 'Avenir Next', sans-serif; }
+#esmalte .display { font-family:Optima, 'Gill Sans', 'Avenir Next', sans-serif; }
+</style>
+<header class="dirhead"><h2>Esmalte</h2><p>Vem do próprio nome: sinterizar é fundir partículas soltas em peça sólida. O conhecimento aprovado aparece como cerâmica esmaltada (sólido, brilhante); o inferido aparece como partículas ainda soltas.</p>
+<p class="hex">Fundo #33383D, texto #E4E1DA, API #6F9BE8, evento #9CC5A1, arquivo #E0B36A, conflito #E0735A</p></header>
+<div class="frame">
+  <div class="chrome"><span></span><span></span><span></span><em>localhost:4317/dominios/pagamentos/mapa</em></div>
+  <div class="app">
+    <nav class="top">
+      <span class="brand display">Sinter</span>
+      <span class="domain display">Pagamentos <small>34 sistemas, 212 integrações</small></span>
+      <span class="tabs"><a class="tab on">Mapa</a><a class="tab">Curadoria <b class=badge>9 conflitos</b></a><a class="tab">Conversas</a><a class="tab">Tarefas</a><a class="tab">Catálogo</a></span>
+      <button class="primary">Adicionar fonte</button>
+    </nav>
+    <div class="body">
+      <div class="canvas">
+        <div class="tools"><input value="Buscar sistema ou contrato" readonly><span class="legend"><span class="lg"><i style="border-top:3px solid #6F9BE8"></i>API</span><span class="lg"><i style="border-top:3px solid #9CC5A1"></i>Evento</span><span class="lg"><i style="border-top:3px solid #E0B36A"></i>Arquivo</span><span class="lg"><i style="border-top:3px dashed #E0735A"></i>Inferida, confirmar</span></span></div>
+        <svg viewBox="0 0 760 600" class="map" role="img" aria-label="Mapa do domínio Pagamentos">
+<defs><linearGradient id="glaze-esmalte" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#57606A"/><stop offset="1" stop-color="#434A51"/></linearGradient></defs>
+<path d="M150,150 Q275.0,129.0 380,200" fill="none" stroke="#6F9BE8" stroke-width="3"  opacity="1" stroke-linejoin="round"/>
+<path d="M380,200 Q485.0,129.0 610,150" fill="none" stroke="#6F9BE8" stroke-width="3"  opacity="1" stroke-linejoin="round"/>
+<path d="M380,200 Q521.0,219.0 610,330" fill="none" stroke="#6F9BE8" stroke-width="3"  opacity="1" stroke-linejoin="round"/>
+<path d="M610,150 Q553.0,341.0 380,440" fill="none" stroke="#9CC5A1" stroke-width="3"  opacity="1" stroke-linejoin="round"/>
+<path d="M380,200 Q297.0,326.0 150,360" fill="none" stroke="#9CC5A1" stroke-width="4" stroke-dasharray="1 7" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+<path d="M380,440 Q507.0,424.0 610,500" fill="none" stroke="#E0B36A" stroke-width="3" stroke-dasharray="3 4" opacity=".55" stroke-linejoin="round"/>
+<g class="elabel"><rect x="208.0" y="141.0" width="124" height="20" rx="10" fill="#3D4349" stroke="#6F9BE8" stroke-width="1" /><text x="270.0" y="156.0" text-anchor="middle" fill="#E4E1DA" font-size="11">GET /balance</text></g>
+<g class="elabel"><rect x="428.0" y="125.0" width="124" height="20" rx="10" fill="#3D4349" stroke="#6F9BE8" stroke-width="1" /><text x="490.0" y="140.0" text-anchor="middle" fill="#E4E1DA" font-size="11">POST /authorize</text></g>
+<g class="elabel"><rect x="446.0" y="239.0" width="124" height="20" rx="10" fill="#3D4349" stroke="#6F9BE8" stroke-width="1" /><text x="508.0" y="254.0" text-anchor="middle" fill="#E4E1DA" font-size="11">POST /score</text></g>
+<g class="elabel"><rect x="462.0" y="377.0" width="124" height="20" rx="10" fill="#3D4349" stroke="#9CC5A1" stroke-width="1" /><text x="524.0" y="392.0" text-anchor="middle" fill="#E4E1DA" font-size="11">PaymentAuthorized</text></g>
+<g class="elabel"><rect x="219.0" y="292.0" width="124" height="20" rx="10" fill="#3D4349" stroke="#E0735A" stroke-width="1.2" stroke-dasharray="3 3"/><text x="281.0" y="307.0" text-anchor="middle" fill="#E4E1DA" font-size="11">PaymentAuthorized (inferida)</text></g>
+<g class="elabel"><rect x="439.0" y="436.0" width="124" height="20" rx="10" fill="#3D4349" stroke="#E0B36A" stroke-width="1" /><text x="501.0" y="451.0" text-anchor="middle" fill="#E4E1DA" font-size="11">conciliação diária</text></g>
+<rect x="75.0" y="127.0" width="150" height="46" rx="14" fill="url(#glaze-esmalte)" stroke="#E4E1DA" stroke-width="1" />
+<text x="150" y="155" text-anchor="middle" fill="#E4E1DA" font-size="14" font-weight="500" style="font-family:Optima, 'Gill Sans', 'Avenir Next', sans-serif">wallet</text>
+<rect x="305.0" y="177.0" width="150" height="46" rx="14" fill="url(#glaze-esmalte)" stroke="#6F9BE8" stroke-width="2.2" />
+<rect x="300.0" y="172.0" width="160" height="56" rx="18" fill="none" stroke="#6F9BE8" stroke-width="1" opacity=".5"/>
+<text x="380" y="205" text-anchor="middle" fill="#E4E1DA" font-size="14" font-weight="600" style="font-family:Optima, 'Gill Sans', 'Avenir Next', sans-serif">checkout-api</text>
+<rect x="535.0" y="127.0" width="150" height="46" rx="14" fill="url(#glaze-esmalte)" stroke="#E4E1DA" stroke-width="1" />
+<text x="610" y="155" text-anchor="middle" fill="#E4E1DA" font-size="14" font-weight="500" style="font-family:Optima, 'Gill Sans', 'Avenir Next', sans-serif">payments-gateway</text>
+<rect x="535.0" y="307.0" width="150" height="46" rx="14" fill="url(#glaze-esmalte)" stroke="#E4E1DA" stroke-width="1" />
+<text x="610" y="335" text-anchor="middle" fill="#E4E1DA" font-size="14" font-weight="500" style="font-family:Optima, 'Gill Sans', 'Avenir Next', sans-serif">antifraude</text>
+<rect x="75.0" y="337.0" width="150" height="46" rx="14" fill="url(#glaze-esmalte)" stroke="#E4E1DA" stroke-width="1" />
+<text x="150" y="365" text-anchor="middle" fill="#E4E1DA" font-size="14" font-weight="500" style="font-family:Optima, 'Gill Sans', 'Avenir Next', sans-serif">notificacoes</text>
+<rect x="305.0" y="417.0" width="150" height="46" rx="14" fill="url(#glaze-esmalte)" stroke="#E4E1DA" stroke-width="1" />
+<text x="380" y="445" text-anchor="middle" fill="#E4E1DA" font-size="14" font-weight="500" style="font-family:Optima, 'Gill Sans', 'Avenir Next', sans-serif">ledger</text>
+<rect x="535.0" y="477.0" width="150" height="46" rx="14" fill="#33383D" stroke="#E4E1DA" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="610" y="500" text-anchor="middle" fill="#E4E1DA" font-size="14" font-weight="500" style="font-family:Optima, 'Gill Sans', 'Avenir Next', sans-serif">billing-batch</text>
+<text x="610" y="515" text-anchor="middle" fill="#A3A7AB" font-size="10.5">sem acesso de leitura</text>
+<circle cx="205.6" cy="231.9" r="1.8" fill="#9CC5A1" opacity=".55"/>
+<circle cx="285.2" cy="268.8" r="2.2" fill="#9CC5A1" opacity=".55"/>
+<circle cx="204.3" cy="263.6" r="1.7" fill="#9CC5A1" opacity=".55"/>
+<circle cx="341.9" cy="340.7" r="1.2" fill="#9CC5A1" opacity=".55"/>
+<circle cx="303.4" cy="307.9" r="2.0" fill="#9CC5A1" opacity=".55"/>
+<circle cx="295.7" cy="314.8" r="1.8" fill="#9CC5A1" opacity=".55"/>
+<circle cx="209.9" cy="260.7" r="1.7" fill="#9CC5A1" opacity=".55"/>
+<circle cx="322.9" cy="331.4" r="2.3" fill="#9CC5A1" opacity=".55"/>
+<circle cx="246.9" cy="264.5" r="2.3" fill="#9CC5A1" opacity=".55"/>
+<circle cx="344.1" cy="316.1" r="1.3" fill="#9CC5A1" opacity=".55"/>
+<circle cx="370.8" cy="360.2" r="1.4" fill="#9CC5A1" opacity=".55"/>
+<circle cx="264.4" cy="271.8" r="1.8" fill="#9CC5A1" opacity=".55"/>
+<circle cx="292.5" cy="308.6" r="2.3" fill="#9CC5A1" opacity=".55"/>
+<circle cx="356.8" cy="352.8" r="1.2" fill="#9CC5A1" opacity=".55"/>
+<circle cx="357.2" cy="365.2" r="1.8" fill="#9CC5A1" opacity=".55"/>
+<circle cx="308.4" cy="327.4" r="1.8" fill="#9CC5A1" opacity=".55"/>
+<circle cx="206.8" cy="257.9" r="2.4" fill="#9CC5A1" opacity=".55"/>
+<circle cx="176.4" cy="213.7" r="1.2" fill="#9CC5A1" opacity=".55"/>
+<circle cx="223.0" cy="270.1" r="1.1" fill="#9CC5A1" opacity=".55"/>
+<circle cx="282.2" cy="303.4" r="1.5" fill="#9CC5A1" opacity=".55"/>
+<circle cx="362.2" cy="347.9" r="2.4" fill="#9CC5A1" opacity=".55"/>
+<circle cx="212.8" cy="248.8" r="1.0" fill="#9CC5A1" opacity=".55"/>
+<circle cx="193.6" cy="236.0" r="1.2" fill="#9CC5A1" opacity=".55"/>
+<circle cx="167.1" cy="202.2" r="2.3" fill="#9CC5A1" opacity=".55"/>
+<circle cx="353.8" cy="339.7" r="1.7" fill="#9CC5A1" opacity=".55"/>
+<circle cx="300.0" cy="307.4" r="1.9" fill="#9CC5A1" opacity=".55"/>
+</svg>
+        <p class="more">Mostrando checkout-api e vizinhos. 27 sistemas ocultos.</p>
+      </div>
+      
+<aside class="panel">
+  <h3>checkout-api</h3>
+  <p class="resp">Recebe o pedido de pagamento do site e orquestra a autorização e o antifraude.</p>
+  <dl>
+    <dt>Dono</dt><dd>Squad Checkout, Diego Almeida</dd>
+    <dt>Stack</dt><dd>Kotlin, Spring Boot, PostgreSQL</dd>
+    <dt>Expõe</dt><dd>POST /payments<br>GET /payments/{id}</dd>
+    <dt>Consome</dt><dd>payments-gateway, antifraude, wallet</dd>
+  </dl>
+  <div class="infer">
+    <strong>Publica PaymentAuthorized?</strong>
+    <p>Inferido a partir de <code>NotificationPublisher.kt:42</code>. Nenhum contrato documentado.</p>
+    <div class="btns"><button class="primary">Confirmar integração</button><button>Descartar</button></div>
+  </div>
+  <p class="links">3 regras de negócio. ADR-012 Idempotência no checkout</p>
+</aside>
+    </div>
+  </div>
+</div>
+</section>
+<section class="dir" id="sobrio">
+<style>
+#sobrio { --bg:#F6F7F9; --surface:#FFFFFF; --ink:#1D2433; --muted:#667085; --line:#D0D5DD;
+  --accent:#0F7C86; --conflict:#C4320A; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; }
+#sobrio .display { font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; }
+</style>
+<header class="dirhead"><h2>Sóbrio</h2><p>A opção segura para o comprador corporativo: claro, denso, familiar a quem usa Jira e Confluence. Incluída para comparação honesta; é a que mais se parece com qualquer ferramenta SaaS.</p>
+<p class="hex">Fundo #F6F7F9, texto #1D2433, API #0F7C86, evento #6941C6, arquivo #B54708, conflito #C4320A</p></header>
+<div class="frame">
+  <div class="chrome"><span></span><span></span><span></span><em>localhost:4317/dominios/pagamentos/mapa</em></div>
+  <div class="app">
+    <nav class="top">
+      <span class="brand display">Sinter</span>
+      <span class="domain display">Pagamentos <small>34 sistemas, 212 integrações</small></span>
+      <span class="tabs"><a class="tab on">Mapa</a><a class="tab">Curadoria <b class=badge>9 conflitos</b></a><a class="tab">Conversas</a><a class="tab">Tarefas</a><a class="tab">Catálogo</a></span>
+      <button class="primary">Adicionar fonte</button>
+    </nav>
+    <div class="body">
+      <div class="canvas">
+        <div class="tools"><input value="Buscar sistema ou contrato" readonly><span class="legend"><span class="lg"><i style="border-top:3px solid #0F7C86"></i>API</span><span class="lg"><i style="border-top:3px solid #6941C6"></i>Evento</span><span class="lg"><i style="border-top:3px solid #B54708"></i>Arquivo</span><span class="lg"><i style="border-top:3px dashed #C4320A"></i>Inferida, confirmar</span></span></div>
+        <svg viewBox="0 0 760 600" class="map" role="img" aria-label="Mapa do domínio Pagamentos">
+<path d="M150,150 L380,200" fill="none" stroke="#0F7C86" stroke-width="1.6"  opacity="1" stroke-linejoin="round"/>
+<path d="M380,200 L610,150" fill="none" stroke="#0F7C86" stroke-width="1.6"  opacity="1" stroke-linejoin="round"/>
+<path d="M380,200 L610,330" fill="none" stroke="#0F7C86" stroke-width="1.6"  opacity="1" stroke-linejoin="round"/>
+<path d="M610,150 L380,440" fill="none" stroke="#6941C6" stroke-width="1.6"  opacity="1" stroke-linejoin="round"/>
+<path d="M380,200 L150,360" fill="none" stroke="#6941C6" stroke-width="1.6" stroke-dasharray="6 5" opacity="1" stroke-linejoin="round"/>
+<path d="M380,440 L610,500" fill="none" stroke="#B54708" stroke-width="1.6" stroke-dasharray="3 4" opacity=".55" stroke-linejoin="round"/>
+<g class="elabel"><rect x="203.0" y="164.0" width="124" height="20" rx="8" fill="#FFFFFF" stroke="#0F7C86" stroke-width="1" /><text x="265.0" y="179.0" text-anchor="middle" fill="#1D2433" font-size="11">GET /balance</text></g>
+<g class="elabel"><rect x="433.0" y="148.0" width="124" height="20" rx="8" fill="#FFFFFF" stroke="#0F7C86" stroke-width="1" /><text x="495.0" y="163.0" text-anchor="middle" fill="#1D2433" font-size="11">POST /authorize</text></g>
+<g class="elabel"><rect x="433.0" y="262.0" width="124" height="20" rx="8" fill="#FFFFFF" stroke="#0F7C86" stroke-width="1" /><text x="495.0" y="277.0" text-anchor="middle" fill="#1D2433" font-size="11">POST /score</text></g>
+<g class="elabel"><rect x="433.0" y="354.0" width="124" height="20" rx="8" fill="#FFFFFF" stroke="#6941C6" stroke-width="1" /><text x="495.0" y="369.0" text-anchor="middle" fill="#1D2433" font-size="11">PaymentAuthorized</text></g>
+<g class="elabel"><rect x="203.0" y="269.0" width="124" height="20" rx="8" fill="#FFFFFF" stroke="#C4320A" stroke-width="1.2" stroke-dasharray="3 3"/><text x="265.0" y="284.0" text-anchor="middle" fill="#1D2433" font-size="11">PaymentAuthorized (inferida)</text></g>
+<g class="elabel"><rect x="433.0" y="459.0" width="124" height="20" rx="8" fill="#FFFFFF" stroke="#B54708" stroke-width="1" /><text x="495.0" y="474.0" text-anchor="middle" fill="#1D2433" font-size="11">conciliação diária</text></g>
+<rect x="75.0" y="127.0" width="150" height="46" rx="8" fill="#FFFFFF" stroke="#1D2433" stroke-width="1" />
+<text x="150" y="155" text-anchor="middle" fill="#1D2433" font-size="14" font-weight="500" style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif">wallet</text>
+<rect x="305.0" y="177.0" width="150" height="46" rx="8" fill="#FFFFFF" stroke="#0F7C86" stroke-width="2.2" />
+<text x="380" y="205" text-anchor="middle" fill="#1D2433" font-size="14" font-weight="600" style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif">checkout-api</text>
+<rect x="535.0" y="127.0" width="150" height="46" rx="8" fill="#FFFFFF" stroke="#1D2433" stroke-width="1" />
+<text x="610" y="155" text-anchor="middle" fill="#1D2433" font-size="14" font-weight="500" style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif">payments-gateway</text>
+<rect x="535.0" y="307.0" width="150" height="46" rx="8" fill="#FFFFFF" stroke="#1D2433" stroke-width="1" />
+<text x="610" y="335" text-anchor="middle" fill="#1D2433" font-size="14" font-weight="500" style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif">antifraude</text>
+<rect x="75.0" y="337.0" width="150" height="46" rx="8" fill="#FFFFFF" stroke="#1D2433" stroke-width="1" />
+<text x="150" y="365" text-anchor="middle" fill="#1D2433" font-size="14" font-weight="500" style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif">notificacoes</text>
+<rect x="305.0" y="417.0" width="150" height="46" rx="8" fill="#FFFFFF" stroke="#1D2433" stroke-width="1" />
+<text x="380" y="445" text-anchor="middle" fill="#1D2433" font-size="14" font-weight="500" style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif">ledger</text>
+<rect x="535.0" y="477.0" width="150" height="46" rx="8" fill="#FFFFFF" stroke="#1D2433" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="610" y="500" text-anchor="middle" fill="#1D2433" font-size="14" font-weight="500" style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif">billing-batch</text>
+<text x="610" y="515" text-anchor="middle" fill="#667085" font-size="10.5">sem acesso de leitura</text>
+</svg>
+        <p class="more">Mostrando checkout-api e vizinhos. 27 sistemas ocultos.</p>
+      </div>
+      
+<aside class="panel">
+  <h3>checkout-api</h3>
+  <p class="resp">Recebe o pedido de pagamento do site e orquestra a autorização e o antifraude.</p>
+  <dl>
+    <dt>Dono</dt><dd>Squad Checkout, Diego Almeida</dd>
+    <dt>Stack</dt><dd>Kotlin, Spring Boot, PostgreSQL</dd>
+    <dt>Expõe</dt><dd>POST /payments<br>GET /payments/{id}</dd>
+    <dt>Consome</dt><dd>payments-gateway, antifraude, wallet</dd>
+  </dl>
+  <div class="infer">
+    <strong>Publica PaymentAuthorized?</strong>
+    <p>Inferido a partir de <code>NotificationPublisher.kt:42</code>. Nenhum contrato documentado.</p>
+    <div class="btns"><button class="primary">Confirmar integração</button><button>Descartar</button></div>
+  </div>
+  <p class="links">3 regras de negócio. ADR-012 Idempotência no checkout</p>
+</aside>
+    </div>
+  </div>
+</div>
+</section>
+</body></html>

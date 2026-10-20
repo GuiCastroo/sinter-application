@@ -1,0 +1,1021 @@
+{
+ "dominio": "Online Boutique",
+ "nos": [
+  {
+   "id": "dom-online-boutique",
+   "kind": "domain",
+   "camada": 2,
+   "status": "proposed",
+   "titulo": "Domínio Online Boutique",
+   "caminho": "README.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cap-assistir-compra-com-ia",
+   "kind": "capability",
+   "camada": 1,
+   "status": "proposed",
+   "titulo": "Assistir a compra com IA (recurso opcional)",
+   "caminho": "capacidades/assistir-compra-com-ia.md",
+   "origem": "misto",
+   "conflito": false
+  },
+  {
+   "id": "cap-descobrir-e-recomendar-produtos",
+   "kind": "capability",
+   "camada": 1,
+   "status": "proposed",
+   "titulo": "Descobrir e recomendar produtos",
+   "caminho": "capacidades/descobrir-e-recomendar-produtos.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "cap-vender-produtos-online",
+   "kind": "capability",
+   "camada": 1,
+   "status": "proposed",
+   "titulo": "Vender produtos online",
+   "caminho": "capacidades/vender-produtos-online.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "dec-indice",
+   "kind": "decision",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Decisões (ADRs)",
+   "caminho": "decisoes/README.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "dom-online-boutique-eventos",
+   "kind": "domain",
+   "camada": 2,
+   "status": "proposed",
+   "titulo": "Eventos de domínio",
+   "caminho": "eventos/README.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "flow-compra-do-cliente",
+   "kind": "flow",
+   "camada": 1,
+   "status": "proposed",
+   "titulo": "Compra do cliente",
+   "caminho": "fluxos/compra-do-cliente.md",
+   "origem": "misto",
+   "conflito": false
+  },
+  {
+   "id": "flow-compra-do-cliente-sequencia",
+   "kind": "flow",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Compra do cliente: sequência técnica",
+   "caminho": "fluxos/compra-do-cliente.sequencia.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "term-cotacao-de-frete",
+   "kind": "term",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Cotação de frete",
+   "caminho": "glossario/cotacao-de-frete.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "term-moeda-de-exibicao",
+   "kind": "term",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Moeda de exibição",
+   "caminho": "glossario/moeda-de-exibicao.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "term-pedido",
+   "kind": "term",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Pedido (OrderResult)",
+   "caminho": "glossario/pedido.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "term-sessao",
+   "kind": "term",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Sessão",
+   "caminho": "glossario/sessao.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "env-producao-gke",
+   "kind": "environment",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Ambiente padrão (base Kubernetes / GKE Autopilot)",
+   "caminho": "infraestrutura/ambientes/producao-gke.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "env-variantes-kustomize",
+   "kind": "environment",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Variantes de implantação (componentes Kustomize)",
+   "caminho": "infraestrutura/ambientes/variantes-kustomize.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-alloydb",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "AlloyDB",
+   "caminho": "infraestrutura/recursos/alloydb.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-gke-autopilot",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Cluster GKE Autopilot",
+   "caminho": "infraestrutura/recursos/gke-autopilot-cluster.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-memorystore-redis",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Memorystore (Redis gerenciado)",
+   "caminho": "infraestrutura/recursos/memorystore-redis.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-redis-cart",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "redis-cart",
+   "caminho": "infraestrutura/recursos/redis-cart.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-secret-manager",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Secret Manager (segredo do AlloyDB)",
+   "caminho": "infraestrutura/recursos/secret-manager.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-service-mesh-istio",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Malha de serviço (Istio / Cloud Service Mesh)",
+   "caminho": "infraestrutura/recursos/service-mesh-istio.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-spanner-cartservice",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Cloud Spanner (backend alternativo do cartservice)",
+   "caminho": "infraestrutura/recursos/spanner-cartservice.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "dom-online-boutique-relacoes",
+   "kind": "domain",
+   "camada": 2,
+   "status": "proposed",
+   "titulo": "Relações com outros domínios",
+   "caminho": "mapa/relacoes-com-outros-dominios.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "std-comunicacao-sincrona-grpc",
+   "kind": "standard",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Comunicação síncrona via gRPC, um contrato compartilhado",
+   "caminho": "padroes/comunicacao-sincrona-grpc.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "std-healthcheck-grpc",
+   "kind": "standard",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Health check padrão gRPC",
+   "caminho": "padroes/healthcheck-grpc.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "std-seguranca-de-containers",
+   "kind": "standard",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Segurança de containers (baseline Kubernetes)",
+   "caminho": "padroes/seguranca-de-containers.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "rule-bandeiras-de-cartao-aceitas",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Bandeiras de cartão aceitas",
+   "caminho": "regras-de-negocio/bandeiras-de-cartao-aceitas.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "rule-cartao-nao-pode-estar-vencido",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Cartão não pode estar vencido",
+   "caminho": "regras-de-negocio/cartao-nao-pode-estar-vencido.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "rule-falha-pos-cobranca-nao-reverte-pedido",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Falhas após a cobrança não revertem o pedido (nem sempre bloqueiam)",
+   "caminho": "regras-de-negocio/falha-pos-cobranca-nao-reverte-pedido.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "rule-limite-de-anuncios-servidos",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Limite de anúncios servidos",
+   "caminho": "regras-de-negocio/limite-de-anuncios-servidos.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "rule-moedas-suportadas",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Moedas suportadas para exibição",
+   "caminho": "regras-de-negocio/moedas-suportadas.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "rule-recomendacao-nao-e-personalizada",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Recomendação não é personalizada",
+   "caminho": "regras-de-negocio/recomendacao-nao-e-personalizada.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "rule-sessao-sem-login",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Sessão sem login",
+   "caminho": "regras-de-negocio/sessao-sem-login.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-indice",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "Sistemas do domínio e contrato gRPC comum",
+   "caminho": "sistemas/README.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-adservice",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "adservice",
+   "caminho": "sistemas/adservice/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-cartservice",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "cartservice",
+   "caminho": "sistemas/cartservice/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-checkoutservice-placeorder",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "PlaceOrder",
+   "caminho": "sistemas/checkoutservice/componentes/place-order.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-checkoutservice",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "checkoutservice",
+   "caminho": "sistemas/checkoutservice/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-currencyservice",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "currencyservice",
+   "caminho": "sistemas/currencyservice/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-emailservice",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "emailservice",
+   "caminho": "sistemas/emailservice/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-frontend",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "frontend",
+   "caminho": "sistemas/frontend/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-loadgenerator",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "loadgenerator",
+   "caminho": "sistemas/loadgenerator/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-paymentservice-charge",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "Charge",
+   "caminho": "sistemas/paymentservice/componentes/charge.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-paymentservice",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "paymentservice",
+   "caminho": "sistemas/paymentservice/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-productcatalogservice",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "productcatalogservice",
+   "caminho": "sistemas/productcatalogservice/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-recommendationservice",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "recommendationservice",
+   "caminho": "sistemas/recommendationservice/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-shippingservice",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "shippingservice",
+   "caminho": "sistemas/shippingservice/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-shoppingassistantservice",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "shoppingassistantservice",
+   "caminho": "sistemas/shoppingassistantservice/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sub-assistente-de-compras",
+   "kind": "subdomain",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Subdomínio Assistente de Compras",
+   "caminho": "subdominios/assistente-de-compras.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sub-carrinho-e-sessao",
+   "kind": "subdomain",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Subdomínio Carrinho e Sessão",
+   "caminho": "subdominios/carrinho-e-sessao.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sub-catalogo-e-descoberta",
+   "kind": "subdomain",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Subdomínio Catálogo e Descoberta",
+   "caminho": "subdominios/catalogo-e-descoberta.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sub-checkout-e-pagamento",
+   "kind": "subdomain",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Subdomínio Checkout e Pagamento",
+   "caminho": "subdominios/checkout-e-pagamento.md",
+   "origem": "extraído",
+   "conflito": false
+  }
+ ],
+ "arestas": [
+  {
+   "de": "sub-catalogo-e-descoberta",
+   "para": "dom-online-boutique",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-carrinho-e-sessao",
+   "para": "dom-online-boutique",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-checkout-e-pagamento",
+   "para": "dom-online-boutique",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-assistente-de-compras",
+   "para": "dom-online-boutique",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-assistente-de-compras",
+   "para": "cap-assistir-compra-com-ia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-catalogo-e-descoberta",
+   "para": "cap-descobrir-e-recomendar-produtos",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-catalogo-e-descoberta",
+   "para": "cap-vender-produtos-online",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-carrinho-e-sessao",
+   "para": "cap-vender-produtos-online",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-checkout-e-pagamento",
+   "para": "cap-vender-produtos-online",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "dom-online-boutique-eventos",
+   "para": "dom-online-boutique",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "flow-compra-do-cliente",
+   "para": "cap-vender-produtos-online",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "flow-compra-do-cliente-sequencia",
+   "para": "flow-compra-do-cliente",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-frontend",
+   "para": "flow-compra-do-cliente-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-cartservice",
+   "para": "flow-compra-do-cliente-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-productcatalogservice",
+   "para": "flow-compra-do-cliente-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-currencyservice",
+   "para": "flow-compra-do-cliente-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-checkoutservice",
+   "para": "flow-compra-do-cliente-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-paymentservice",
+   "para": "flow-compra-do-cliente-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-shippingservice",
+   "para": "flow-compra-do-cliente-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-emailservice",
+   "para": "flow-compra-do-cliente-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-recommendationservice",
+   "para": "flow-compra-do-cliente-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "env-producao-gke",
+   "para": "dom-online-boutique",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-gke-autopilot",
+   "para": "env-producao-gke",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-redis-cart",
+   "para": "env-producao-gke",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "env-variantes-kustomize",
+   "para": "dom-online-boutique",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-memorystore-redis",
+   "para": "env-variantes-kustomize",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-spanner-cartservice",
+   "para": "env-variantes-kustomize",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-alloydb",
+   "para": "env-variantes-kustomize",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-service-mesh-istio",
+   "para": "env-variantes-kustomize",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-alloydb",
+   "para": "sys-cartservice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-alloydb",
+   "para": "sys-shoppingassistantservice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-gke-autopilot",
+   "para": "dom-online-boutique",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-memorystore-redis",
+   "para": "sys-cartservice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-redis-cart",
+   "para": "sys-cartservice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-secret-manager",
+   "para": "sys-shoppingassistantservice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-service-mesh-istio",
+   "para": "sys-frontend",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-spanner-cartservice",
+   "para": "sys-cartservice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "dom-online-boutique-relacoes",
+   "para": "dom-online-boutique",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-paymentservice-charge",
+   "para": "rule-bandeiras-de-cartao-aceitas",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-paymentservice-charge",
+   "para": "rule-cartao-nao-pode-estar-vencido",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-checkoutservice-placeorder",
+   "para": "rule-falha-pos-cobranca-nao-reverte-pedido",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-adservice",
+   "para": "rule-limite-de-anuncios-servidos",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-frontend-handlers",
+   "para": "rule-moedas-suportadas",
+   "tipo": "realiza",
+   "alvo_documentado": false
+  },
+  {
+   "de": "sys-currencyservice",
+   "para": "rule-moedas-suportadas",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-recommendationservice",
+   "para": "rule-recomendacao-nao-e-personalizada",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-frontend-handlers",
+   "para": "rule-sessao-sem-login",
+   "tipo": "realiza",
+   "alvo_documentado": false
+  },
+  {
+   "de": "sys-indice",
+   "para": "dom-online-boutique",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-frontend",
+   "para": "sys-indice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-cartservice",
+   "para": "sys-indice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-productcatalogservice",
+   "para": "sys-indice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-currencyservice",
+   "para": "sys-indice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-paymentservice",
+   "para": "sys-indice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-shippingservice",
+   "para": "sys-indice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-emailservice",
+   "para": "sys-indice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-checkoutservice",
+   "para": "sys-indice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-recommendationservice",
+   "para": "sys-indice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-adservice",
+   "para": "sys-indice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-shoppingassistantservice",
+   "para": "sys-indice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-loadgenerator",
+   "para": "sys-indice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-adservice",
+   "para": "sub-catalogo-e-descoberta",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-adservice-grpc",
+   "para": "sys-adservice",
+   "tipo": "realiza",
+   "alvo_documentado": false
+  },
+  {
+   "de": "sys-cartservice",
+   "para": "sub-carrinho-e-sessao",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-cartservice-grpc",
+   "para": "sys-cartservice",
+   "tipo": "realiza",
+   "alvo_documentado": false
+  },
+  {
+   "de": "cmp-checkoutservice-placeorder",
+   "para": "sys-checkoutservice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-nenhum-recurso-proprio",
+   "para": "cmp-checkoutservice-placeorder",
+   "tipo": "realiza",
+   "alvo_documentado": false
+  },
+  {
+   "de": "sys-checkoutservice",
+   "para": "sub-checkout-e-pagamento",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-currencyservice",
+   "para": "sub-checkout-e-pagamento",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-currencyservice",
+   "para": "sub-catalogo-e-descoberta",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-currencyservice-grpc",
+   "para": "sys-currencyservice",
+   "tipo": "realiza",
+   "alvo_documentado": false
+  },
+  {
+   "de": "sys-emailservice",
+   "para": "sub-checkout-e-pagamento",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-emailservice-grpc",
+   "para": "sys-emailservice",
+   "tipo": "realiza",
+   "alvo_documentado": false
+  },
+  {
+   "de": "sys-frontend",
+   "para": "sub-carrinho-e-sessao",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-frontend-handlers",
+   "para": "sys-frontend",
+   "tipo": "realiza",
+   "alvo_documentado": false
+  },
+  {
+   "de": "cmp-loadgenerator-locust",
+   "para": "sys-loadgenerator",
+   "tipo": "realiza",
+   "alvo_documentado": false
+  },
+  {
+   "de": "cmp-paymentservice-charge",
+   "para": "sys-paymentservice",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-paymentservice",
+   "para": "sub-checkout-e-pagamento",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-productcatalogservice",
+   "para": "sub-catalogo-e-descoberta",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-productcatalogservice-grpc",
+   "para": "sys-productcatalogservice",
+   "tipo": "realiza",
+   "alvo_documentado": false
+  },
+  {
+   "de": "sys-recommendationservice",
+   "para": "sub-catalogo-e-descoberta",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-recommendationservice-grpc",
+   "para": "sys-recommendationservice",
+   "tipo": "realiza",
+   "alvo_documentado": false
+  },
+  {
+   "de": "sys-shippingservice",
+   "para": "sub-checkout-e-pagamento",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-shippingservice-grpc",
+   "para": "sys-shippingservice",
+   "tipo": "realiza",
+   "alvo_documentado": false
+  },
+  {
+   "de": "sys-shoppingassistantservice",
+   "para": "sub-assistente-de-compras",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-shoppingassistant-chat",
+   "para": "sys-shoppingassistantservice",
+   "tipo": "realiza",
+   "alvo_documentado": false
+  }
+ ]
+}

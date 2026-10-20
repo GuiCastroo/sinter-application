@@ -1,0 +1,114 @@
+{
+ "dominio": "Clínica Veterinária",
+ "servicos": [
+  "customers-service",
+  "visits-service",
+  "vets-service",
+  "genai-service",
+  "api-gateway",
+  "config-server",
+  "discovery-server",
+  "admin-server"
+ ],
+ "jornadas": [
+  "Cadastrar dono e pet",
+  "Registrar uma visita",
+  "Consultar a ficha do dono",
+  "Consultar veterinários",
+  "Conversar com o assistente de IA"
+ ],
+ "chamadas": [
+  {
+   "de": "genai-service",
+   "para": "customers-service",
+   "contrato": "GET /owners, POST /owners, POST /owners/{id}/pets",
+   "interno": true
+  },
+  {
+   "de": "genai-service",
+   "para": "vets-service",
+   "contrato": "GET /vets",
+   "interno": true
+  },
+  {
+   "de": "genai-service",
+   "para": "OpenAI / Azure OpenAI 🩷",
+   "contrato": "Chat completions + tool calling",
+   "interno": false
+  },
+  {
+   "de": "api-gateway",
+   "para": "customers-service",
+   "contrato": "GET /owners/{ownerId}",
+   "interno": true
+  },
+  {
+   "de": "api-gateway",
+   "para": "visits-service",
+   "contrato": "GET /pets/visits?petId=...",
+   "interno": true
+  },
+  {
+   "de": "api-gateway",
+   "para": "vets-service",
+   "contrato": "Proxy transparente via Spring Cloud Gateway",
+   "interno": true
+  },
+  {
+   "de": "config-server",
+   "para": "Repositório Git spring-petclinic-microservices-config 🩷",
+   "contrato": "Git clone/pull",
+   "interno": false
+  }
+ ],
+ "jornada_usa_servico": [
+  {
+   "jornada": "Cadastrar dono e pet",
+   "servico": "customers-service"
+  },
+  {
+   "jornada": "Registrar uma visita",
+   "servico": "customers-service"
+  },
+  {
+   "jornada": "Registrar uma visita",
+   "servico": "visits-service"
+  },
+  {
+   "jornada": "Consultar a ficha do dono",
+   "servico": "customers-service"
+  },
+  {
+   "jornada": "Consultar a ficha do dono",
+   "servico": "visits-service"
+  },
+  {
+   "jornada": "Consultar a ficha do dono",
+   "servico": "api-gateway"
+  },
+  {
+   "jornada": "Consultar veterinários",
+   "servico": "vets-service"
+  },
+  {
+   "jornada": "Consultar veterinários",
+   "servico": "api-gateway"
+  },
+  {
+   "jornada": "Consultar veterinários",
+   "servico": "config-server"
+  },
+  {
+   "jornada": "Conversar com o assistente de IA",
+   "servico": "customers-service"
+  },
+  {
+   "jornada": "Conversar com o assistente de IA",
+   "servico": "genai-service"
+  },
+  {
+   "jornada": "Conversar com o assistente de IA",
+   "servico": "api-gateway"
+  }
+ ]
+}

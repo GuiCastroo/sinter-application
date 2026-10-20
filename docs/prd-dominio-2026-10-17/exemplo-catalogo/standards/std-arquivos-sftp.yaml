@@ -1,0 +1,10 @@
+# arquivo: standards/std-arquivos-sftp.yaml
+apiVersion: sinter.dev/v1
+kind: Standard
+metadata:
+  id: std-arquivos-sftp
+  name: Troca de arquivos por SFTP
+  status: approved
+spec:
+  summary: "Arquivos com parceiros chegam por SFTP, com checksum e nome com data."
+  appliesTo: [batch]

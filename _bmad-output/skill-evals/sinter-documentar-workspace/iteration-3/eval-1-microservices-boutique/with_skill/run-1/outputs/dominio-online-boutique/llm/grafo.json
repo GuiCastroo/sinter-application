@@ -1,0 +1,431 @@
+{
+  "versao": 3,
+  "dominio": "Online Boutique",
+  "semantica": "Aresta de dependência: consumidor → fornecedor; tipo preserva evento, dado, callback, API e inicialização. Não representa cronologia de execução.",
+  "servicos": [
+    {
+      "id": "frontend",
+      "nome": "frontend",
+      "estado": "ativo",
+      "origem": "3-servicos.md#frontend",
+      "resumo": "único serviço com porta HTTP pública; monta as páginas do site e chama todos os outros serviços via gRPC (e o assistente via HTTP) para montar cada tela."
+    },
+    {
+      "id": "cartservice",
+      "nome": "cartservice",
+      "estado": "ativo",
+      "origem": "3-servicos.md#cartservice",
+      "resumo": "guarda e devolve os itens do carrinho de cada usuário; se não houver Redis configurado, usa um armazenamento em memória do próprio processo (perde tudo ao reiniciar)."
+    },
+    {
+      "id": "productcatalogservice",
+      "nome": "productcatalogservice",
+      "estado": "ativo",
+      "origem": "3-servicos.md#productcatalogservice",
+      "resumo": "fonte da verdade sobre os produtos; por padrão lê um JSON estático embutido na imagem, sem escrita — é só leitura."
+    },
+    {
+      "id": "currencyservice",
+      "nome": "currencyservice",
+      "estado": "ativo",
+      "origem": "3-servicos.md#currencyservice",
+      "resumo": "converte valores entre moedas usando uma tabela de taxas fixa embutida na imagem — apesar do README dizer que usa \"valores reais do Banco Central Europeu\", o código lê um arquivo JSON estático, não busca nada em tempo real."
+    },
+    {
+      "id": "shippingservice",
+      "nome": "shippingservice",
+      "estado": "ativo",
+      "origem": "3-servicos.md#shippingservice",
+      "resumo": "calcula uma cotação de frete fixa e gera um código de rastreio aleatório — não existe integração real com transportadora."
+    },
+    {
+      "id": "checkoutservice",
+      "nome": "checkoutservice",
+      "estado": "ativo",
+      "origem": "3-servicos.md#checkoutservice",
+      "resumo": "o orquestrador da compra. Recebe o pedido do `frontend` e, em uma única chamada síncrona, busca o carrinho, precifica em moeda local, cota o frete, cobra o cartão, despacha o envio, esvazia o carrinho e dispara o email de confirmação."
+    },
+    {
+      "id": "paymentservice",
+      "nome": "paymentservice",
+      "estado": "ativo",
+      "origem": "3-servicos.md#paymentservice",
+      "resumo": "valida o cartão (formato, bandeira, validade) e devolve um ID de transação aleatório — não cobra nada de verdade, não há gateway de pagamento real."
+    },
+    {
+      "id": "emailservice",
+      "nome": "emailservice",
+      "estado": "ativo",
+      "origem": "3-servicos.md#emailservice",
+      "resumo": "renderiza um HTML de confirmação de pedido com Jinja2 e loga que \"enviaria\" o email — não há envio real (sem SMTP/SendGrid configurado no código lido)."
+    },
+    {
+      "id": "recommendationservice",
+      "nome": "recommendationservice",
+      "estado": "ativo",
+      "origem": "3-servicos.md#recommendationservice",
+      "resumo": "sugere até 5 produtos do catálogo escolhidos aleatoriamente, excluindo os que já estão no carrinho — não é um motor de recomendação real (sem histórico, sem afinidade)."
+    },
+    {
+      "id": "adservice",
+      "nome": "adservice",
+      "estado": "ativo",
+      "origem": "3-servicos.md#adservice",
+      "resumo": "devolve anúncios de texto estáticos, escolhidos por palavra-chave de categoria ou aleatoriamente — mapa de anúncios fixo no código, sem targeting real."
+    },
+    {
+      "id": "shoppingassistantservice",
+      "nome": "shoppingassistantservice (opcional)",
+      "estado": "opcional",
+      "origem": "3-servicos.md#shoppingassistantservice-opcional",
+      "resumo": "assistente de compras com IA generativa — recebe uma foto de um ambiente, usa Gemini para descrever o estilo, busca produtos parecidos por similaridade vetorial no AlloyDB e pede ao Gemini uma recomendação final. Só existe quando o componente Kustomize `shopping-assistant` é aplicado; não faz parte do deploy padrão."
+    },
+    {
+      "id": "loadgenerator",
+      "nome": "loadgenerator",
+      "estado": "ativo",
+      "origem": "3-servicos.md#loadgenerator",
+      "resumo": "não faz parte do domínio de negócio — é uma ferramenta de suporte que simula clientes reais navegando, comprando e saindo, usada para gerar carga e tráfego de demonstração."
+    }
+  ],
+  "jornadas": [
+    {
+      "id": "comprar-um-produto",
+      "nome": "Comprar um produto",
+      "participantes": [
+        "frontend",
+        "checkoutservice",
+        "cartservice",
+        "productcatalogservice",
+        "currencyservice",
+        "shippingservice",
+        "paymentservice",
+        "emailservice",
+        "recommendationservice"
+      ],
+      "origem": "4-jornadas.md#comprar-um-produto"
+    },
+    {
+      "id": "navegar-e-montar-o-carrinho",
+      "nome": "Navegar e montar o carrinho",
+      "participantes": [
+        "frontend",
+        "productcatalogservice",
+        "currencyservice",
+        "cartservice",
+        "recommendationservice",
+        "adservice"
+      ],
+      "origem": "4-jornadas.md#navegar-e-montar-o-carrinho"
+    },
+    {
+      "id": "pedir-ajuda-ao-assistente-de-compras-opcional",
+      "nome": "Pedir ajuda ao assistente de compras (opcional)",
+      "participantes": [
+        "frontend",
+        "shoppingassistantservice"
+      ],
+      "origem": "4-jornadas.md#pedir-ajuda-ao-assistente-de-compras-opcional"
+    }
+  ],
+  "relacoes": [
+    {
+      "de": "frontend",
+      "para": "productcatalogservice",
+      "contrato": "ListProducts, GetProduct",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#frontend"
+    },
+    {
+      "de": "frontend",
+      "para": "currencyservice",
+      "contrato": "GetSupportedCurrencies, Convert",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#frontend"
+    },
+    {
+      "de": "frontend",
+      "para": "cartservice",
+      "contrato": "GetCart, AddItem, EmptyCart",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#frontend"
+    },
+    {
+      "de": "frontend",
+      "para": "recommendationservice",
+      "contrato": "ListRecommendations",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#frontend"
+    },
+    {
+      "de": "frontend",
+      "para": "shippingservice",
+      "contrato": "GetQuote",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#frontend"
+    },
+    {
+      "de": "frontend",
+      "para": "checkoutservice",
+      "contrato": "PlaceOrder",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#frontend"
+    },
+    {
+      "de": "frontend",
+      "para": "adservice",
+      "contrato": "GetAds (timeout de 100 ms)",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#frontend"
+    },
+    {
+      "de": "frontend",
+      "para": "shoppingassistantservice",
+      "contrato": "POST /",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "opcional",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#frontend"
+    },
+    {
+      "de": "checkoutservice",
+      "para": "cartservice",
+      "contrato": "GetCart, EmptyCart",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#checkoutservice"
+    },
+    {
+      "de": "checkoutservice",
+      "para": "productcatalogservice",
+      "contrato": "GetProduct",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#checkoutservice"
+    },
+    {
+      "de": "checkoutservice",
+      "para": "currencyservice",
+      "contrato": "Convert",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#checkoutservice"
+    },
+    {
+      "de": "checkoutservice",
+      "para": "shippingservice",
+      "contrato": "GetQuote, ShipOrder",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#checkoutservice"
+    },
+    {
+      "de": "checkoutservice",
+      "para": "paymentservice",
+      "contrato": "Charge",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#checkoutservice"
+    },
+    {
+      "de": "checkoutservice",
+      "para": "emailservice",
+      "contrato": "SendOrderConfirmation",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#checkoutservice"
+    },
+    {
+      "de": "recommendationservice",
+      "para": "productcatalogservice",
+      "contrato": "ListProducts",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#recommendationservice"
+    },
+    {
+      "de": "shoppingassistantservice",
+      "para": "Gemini (gemini-1.5-flash, Google AI) 🩷",
+      "contrato": "API de chat/visão",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": false,
+      "estado_origem": "opcional",
+      "estado_destino": "externo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#shoppingassistantservice-opcional"
+    },
+    {
+      "de": "shoppingassistantservice",
+      "para": "AlloyDB 🩷",
+      "contrato": "busca vetorial (AlloyDBVectorStore)",
+      "tipo": "acessa_dado",
+      "tipo_declarado": "acessa_dado",
+      "interno": false,
+      "estado_origem": "opcional",
+      "estado_destino": "externo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#shoppingassistantservice-opcional"
+    },
+    {
+      "de": "shoppingassistantservice",
+      "para": "Secret Manager 🩷",
+      "contrato": "leitura da senha do AlloyDB",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": false,
+      "estado_origem": "opcional",
+      "estado_destino": "externo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#shoppingassistantservice-opcional"
+    },
+    {
+      "de": "loadgenerator",
+      "para": "frontend",
+      "contrato": "/, /setCurrency, /product/{id}, /cart, /cart/checkout, /logout",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#loadgenerator"
+    }
+  ],
+  "jornada_usa_servico": [
+    {
+      "jornada": "comprar-um-produto",
+      "servico": "frontend"
+    },
+    {
+      "jornada": "comprar-um-produto",
+      "servico": "checkoutservice"
+    },
+    {
+      "jornada": "comprar-um-produto",
+      "servico": "cartservice"
+    },
+    {
+      "jornada": "comprar-um-produto",
+      "servico": "productcatalogservice"
+    },
+    {
+      "jornada": "comprar-um-produto",
+      "servico": "currencyservice"
+    },
+    {
+      "jornada": "comprar-um-produto",
+      "servico": "shippingservice"
+    },
+    {
+      "jornada": "comprar-um-produto",
+      "servico": "paymentservice"
+    },
+    {
+      "jornada": "comprar-um-produto",
+      "servico": "emailservice"
+    },
+    {
+      "jornada": "comprar-um-produto",
+      "servico": "recommendationservice"
+    },
+    {
+      "jornada": "navegar-e-montar-o-carrinho",
+      "servico": "frontend"
+    },
+    {
+      "jornada": "navegar-e-montar-o-carrinho",
+      "servico": "productcatalogservice"
+    },
+    {
+      "jornada": "navegar-e-montar-o-carrinho",
+      "servico": "currencyservice"
+    },
+    {
+      "jornada": "navegar-e-montar-o-carrinho",
+      "servico": "cartservice"
+    },
+    {
+      "jornada": "navegar-e-montar-o-carrinho",
+      "servico": "recommendationservice"
+    },
+    {
+      "jornada": "navegar-e-montar-o-carrinho",
+      "servico": "adservice"
+    },
+    {
+      "jornada": "pedir-ajuda-ao-assistente-de-compras-opcional",
+      "servico": "frontend"
+    },
+    {
+      "jornada": "pedir-ajuda-ao-assistente-de-compras-opcional",
+      "servico": "shoppingassistantservice"
+    }
+  ]
+}

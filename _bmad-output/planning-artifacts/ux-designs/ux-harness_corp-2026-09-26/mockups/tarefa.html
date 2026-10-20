@@ -1,0 +1,197 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sinter: pacote de contexto</title><style>
+/* Esmalte v2
+   chrome   #1F2327  canvas #2A2F34  surface #343A40  tile #3E454C  hairline #474E55
+   ink      #E8E4DB  muted  #9DA3A8
+   neon (foco, aprovado, ação) #46F28E
+   glazes   API cobalto #7EA6F4  evento lilás #B69CF0  arquivo âmbar #E2B566  conflito #EE6F7C */
+:root{
+  --chrome:#1F2327; --canvas:#2A2F34; --surface:#343A40; --tile:#3E454C; --tile-hi:#4A525A; --line:#474E55;
+  --ink:#E8E4DB; --muted:#9DA3A8; --faint:#6E757B;
+  --api:#7EA6F4; --evento:#B69CF0; --neon:#46F28E; --arquivo:#E2B566; --conflict:#EE6F7C;
+  --ui:'Avenir Next','Helvetica Neue',sans-serif; --display:Optima,'Avenir Next',sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#151719;font-family:var(--ui);color:var(--ink)}
+.note{max-width:1440px;margin:24px auto 12px;padding:0 16px;color:#C9C6BF;line-height:1.5}
+.note h1{font-family:var(--display);font-weight:500;font-size:24px;margin:0 0 4px;color:#EEE}
+.note p{margin:0;max-width:78ch}
+.app{max-width:1440px;margin:0 auto 40px;border-radius:12px;overflow:hidden;border:1px solid #2E3338;background:var(--chrome);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+
+/* barra superior */
+.top{display:flex;align-items:center;gap:18px;padding:10px 16px;border-bottom:1px solid #2E3338}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:18px;letter-spacing:.02em}
+.crumbs{font-size:14px;color:var(--muted)} .crumbs b{color:var(--ink);font-weight:500}
+.crumbs span{margin:0 6px;color:var(--faint)}
+.levels{display:flex;background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:2px;margin-left:8px}
+.levels a{font-size:13px;padding:5px 10px;border-radius:6px;color:var(--muted)}
+.levels a.on{background:var(--tile);color:var(--ink)}
+.nav{display:flex;gap:2px;margin-left:auto}
+.nav a{font-size:14px;padding:6px 10px;border-radius:6px;color:var(--muted)}
+.nav a.on{color:var(--ink);background:var(--surface)}
+.count{display:inline-block;min-width:18px;padding:0 5px;margin-left:5px;border-radius:9px;background:var(--conflict);color:#2A1215;font-size:11px;font-weight:700;text-align:center}
+button{font:inherit;font-size:13px;padding:7px 12px;border-radius:7px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+button.glaze{background:var(--neon);border-color:var(--neon);color:#0B2A17;font-weight:600;box-shadow:0 0 14px rgba(70,242,142,.35)}
+
+/* corpo */
+.body{display:grid;grid-template-columns:76px 260px 1fr 320px;height:760px}
+.canvas{position:relative;background:var(--canvas);overflow:hidden}
+.canvas svg{position:absolute;inset:0;width:100%;height:100%}
+.search{position:absolute;top:14px;left:16px;display:flex;gap:10px;align-items:center}
+.search input{font:inherit;font-size:13px;width:250px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+
+/* player de fluxo */
+.flow{position:absolute;left:16px;right:16px;bottom:14px;display:grid;grid-template-columns:auto 1fr auto;gap:6px 16px;align-items:center;background:rgba(31,35,39,.94);border:1px solid var(--line);border-radius:10px;padding:14px;backdrop-filter:blur(6px)}
+.flow h4{margin:0;font-size:14px;font-weight:600}
+.flow .sub{font-size:12px;color:var(--muted);margin:2px 0 0}
+.flow .step{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45}
+.flow .n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--neon);color:#0B2A17;font-weight:700;font-size:12px;display:grid;place-items:center;box-shadow:0 0 0 4px rgba(70,242,142,.18),0 0 12px rgba(70,242,142,.5)}
+.flow .ctrl{display:flex;gap:8px;grid-row:1 / span 2;grid-column:3}
+.flow .head{grid-column:1;grid-row:1 / span 2;padding-right:14px;border-right:1px solid var(--line)}
+.flow .step{grid-column:2}
+.flow .prog{grid-column:2;margin-top:0!important}
+.flow .prog{display:flex;gap:4px;margin-top:10px} .flow .prog i{flex:1;height:3px;border-radius:2px;background:var(--line)} .flow .prog i.d{background:var(--neon)}
+
+/* camadas e zoom */
+.layers{position:absolute;right:16px;top:14px;display:flex;gap:6px}
+.chip{font-size:12px;padding:5px 9px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+.chip.on{color:var(--ink);border-color:#5A626A}
+.zoom{position:absolute;right:16px;bottom:128px;display:flex;gap:10px;align-items:flex-end}
+.mini{width:120px;height:78px;border:1px solid var(--line);border-radius:8px;background:var(--chrome);position:relative}
+.mini i{position:absolute;border-radius:2px;background:#58616A}
+.mini .vp{position:absolute;left:14px;top:10px;width:70px;height:46px;border:1.5px solid var(--neon);border-radius:3px}
+.zbtn{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.zbtn span{width:30px;height:28px;display:grid;place-items:center;background:var(--surface);color:var(--muted);font-size:16px}
+.zbtn span+span{border-top:1px solid var(--line)}
+
+/* painel */
+.panel{background:var(--chrome);border-left:1px solid #2E3338;padding:18px;overflow:auto}
+.ph{display:flex;gap:12px;align-items:center}
+.tech{width:40px;height:40px;border-radius:10px;background:linear-gradient(#4E565E,#3A4148);display:grid;place-items:center;font-size:13px;font-weight:700;color:#C9B8F2;border:1px solid #58606A}
+.ph h3{margin:0;font-size:18px;font-weight:600} .ph p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--neon);margin-top:12px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon)}
+.ptabs{display:flex;gap:14px;border-bottom:1px solid var(--line);margin:14px 0 12px;font-size:13px}
+.ptabs a{padding:6px 0;color:var(--muted)} .ptabs a.on{color:var(--ink);border-bottom:2px solid var(--neon)}
+.resp{font-size:14px;line-height:1.5;margin:0 0 14px}
+dl{display:grid;grid-template-columns:80px 1fr;gap:7px 10px;font-size:13px;margin:0 0 16px} dt{color:var(--muted)} dd{margin:0}
+.infer{border-radius:10px;padding:12px;background:rgba(238,111,124,.07);border:1px solid rgba(238,111,124,.45)}
+.infer strong{font-size:13px} .infer p{font-size:12.5px;line-height:1.45;color:var(--muted);margin:6px 0 10px}
+.infer code{color:var(--ink);font-size:12px}
+.btns{display:flex;gap:8px}
+.src{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.5}
+.src b{color:var(--ink);font-weight:500}
+
+/* trilho de navegação à direita */
+.rail{background:#1A1D20;border-right:1px solid #2E3338;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px}
+.rail a{width:64px;padding:8px 0 6px;border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--muted);position:relative}
+.rail a svg{width:20px;height:20px}
+.rail a.on{background:var(--surface);color:var(--ink)} .rail a.on::before{content:"";position:absolute;left:-6px;top:10px;bottom:10px;width:3px;border-radius:2px;background:var(--neon);box-shadow:0 0 8px var(--neon)}
+.rail .count{position:absolute;top:2px;right:6px;margin:0}
+/* lista de sistemas */
+.side{background:var(--chrome);border-right:1px solid #2E3338;padding:16px 8px;overflow:auto}
+.side .search2{margin:0 6px 14px}
+.list{padding:0}
+.list h5{margin:0 10px 8px;font-size:12px;font-weight:600;color:var(--muted)}
+.row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:13px}
+.row .ic{width:24px;height:24px;border-radius:7px;background:#2F3439;border:1px solid #4D555C;display:grid;place-items:center;font-size:10px;font-weight:700}
+.row em{margin-left:auto;font-style:normal;font-size:11px;color:var(--muted)}
+.row.on{background:var(--surface);box-shadow:inset 0 0 0 1px rgba(70,242,142,.45)}
+.row .dot{margin-left:auto;width:7px;height:7px;border-radius:50%;background:var(--neon);box-shadow:0 0 6px var(--neon)}
+.row.inf em{color:#F2B7BE} .row.dim{opacity:.55}
+
+.body{grid-template-columns:76px 270px 1fr 360px}
+.work{background:var(--canvas);padding:22px 28px;overflow:auto}
+.work h2{margin:0;font-size:22px;font-weight:600}
+.work .lede{color:var(--muted);font-size:14px;margin:6px 0 22px}
+.chain{position:relative;padding-left:34px}
+.chain::before{content:"";position:absolute;left:13px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--neon) 0 62%,#474E55 62% 100%)}
+.layer{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.layer .dot{position:absolute;left:-29px;top:18px;width:16px;height:16px;border-radius:50%;background:var(--chrome);border:2px solid #5D656C}
+.layer.done .dot{background:var(--neon);border-color:var(--neon);box-shadow:0 0 10px var(--neon)}
+.layer.now{border-color:rgba(70,242,142,.55)}
+.layer.now .dot{border-color:var(--neon);background:var(--chrome);box-shadow:0 0 0 4px rgba(70,242,142,.15)}
+.layer.todo{opacity:.6}
+.lh{display:flex;align-items:center;gap:10px}
+.lh b{font-size:15px;font-weight:600}
+.lh .who{font-size:12.5px;color:var(--muted)}
+.lh em{margin-left:auto;font-style:normal;font-size:11.5px;padding:2px 9px;border-radius:9px}
+.ok{background:rgba(70,242,142,.12);color:var(--neon)} .wip{background:rgba(226,181,102,.14);color:var(--arquivo)} .wait{background:#30353A;color:var(--muted)}
+.items{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.it{font-size:12.5px;padding:5px 9px;border-radius:8px;background:#2F3439;border:1px solid #4D555C}
+.it i{font-style:normal;font-size:10px;font-weight:700;margin-right:6px;color:var(--muted)}
+.note2{font-size:13px;line-height:1.5;margin:10px 0 0;padding:10px 12px;border-radius:10px;background:#2A2F34;border:1px dashed #5A626A}
+.pack{background:var(--chrome);border-left:1px solid #2E3338;padding:18px;overflow:auto}
+.pack h4{margin:0 0 10px;font-size:13px;color:var(--muted);font-weight:600}
+.tree{font-family:Menlo,monospace;font-size:12px;line-height:1.75;background:#1A1D20;border:1px solid #2E3338;border-radius:10px;padding:12px 14px;margin-bottom:18px;color:#C9C6BF}
+.tree .n{color:var(--neon)} .tree .d{color:var(--faint)}
+.budget{margin-bottom:18px}
+.bar{height:8px;border-radius:5px;background:#30353A;overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.bl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:6px}
+.cmd{display:flex;align-items:center;gap:8px;font-family:Menlo,monospace;font-size:12.5px;background:#1A1D20;border:1px solid var(--neon);border-radius:10px;padding:10px 12px;box-shadow:0 0 14px rgba(70,242,142,.15)}
+.cmd span{flex:1;color:#C8FBDD}
+.side .trow{padding:10px;border-radius:9px;margin-bottom:4px;font-size:13px}
+.side .trow b{display:block;font-weight:600}
+.side .trow span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.side .trow.on{background:var(--surface);box-shadow:inset 0 0 0 1px rgba(70,242,142,.45)}
+.pips{display:flex;gap:3px;margin-top:6px}.pips i{width:18px;height:4px;border-radius:2px;background:#474E55}.pips i.d{background:var(--neon)}
+</style></head><body>
+<div class="note"><h1>Pacote de contexto da tarefa</h1>
+<p>UJ-4: a tarefa passa de mão em mão e cada papel só adiciona a sua camada. A linha à esquerda mostra onde o bastão está. À direita, exatamente o que vai para o .sinter/ do repo e quanto isso custa em contexto para o agente.</p></div>
+<div class="app">
+  <div class="top"><span class="brand"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="4" cy="5" r="1.6" fill="#9DA3A8"/><circle cx="8" cy="3" r="1.2" fill="#9DA3A8"/><circle cx="3" cy="10" r="1.1" fill="#9DA3A8"/><rect x="7" y="7" width="12" height="12" rx="4" fill="#46F28E"/></svg>Sinter</span>
+    <span class="crumbs">Pagamentos<span>/</span>Tarefas<span>/</span><b>PAG-231</b></span>
+    <button style="margin-left:auto">Abrir conversa de origem</button>
+  </div>
+  <div class="body">
+    <nav class="rail" aria-label="Navegação">
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="6" height="5" rx="1.5"/><rect x="12" y="3" width="6" height="5" rx="1.5"/><rect x="7" y="12" width="6" height="5" rx="1.5"/><path d="M5 8v2h10V8M10 10v2"/></svg>Mapa</a>
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5h12M4 10h8M4 15h10"/></svg>Curadoria<span class="count">9</span></a>
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9l-4 3v-3H5a2 2 0 0 1-2-2z"/></svg>Conversas</a>
+      <a class="on"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="14" height="14" rx="3"/><path d="M7 10l2 2 4-4"/></svg>Tarefas</a>
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7l7-4 7 4-7 4z"/><path d="M3 11l7 4 7-4"/></svg>Catálogo</a>
+    </nav>
+    <aside class="side">
+      <div class="list"><h5>Tarefas do domínio</h5></div>
+      <div class="trow on"><b>PAG-231 Parcelamento no checkout</b><span>Com Diego, camada do repo</span><div class="pips"><i class="d"></i><i class="d"></i><i></i><i></i></div></div>
+      <div class="trow"><b>PAG-232 installment-policy</b><span>Com Rafael, camada de solução</span><div class="pips"><i class="d"></i><i></i><i></i><i></i></div></div>
+      <div class="trow"><b>PAG-219 Estorno parcial</b><span>Pronta para o dev</span><div class="pips"><i class="d"></i><i class="d"></i><i class="d"></i><i></i></div></div>
+      <div class="trow"><b>PAG-214 Timeout do gateway</b><span>Implementada</span><div class="pips"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></div></div>
+    </aside>
+    <main class="work">
+      <h2>PAG-231 Parcelamento no checkout</h2>
+      <p class="lede">checkout-api. Nasceu da conversa "Parcelamento no checkout" em 26 set.</p>
+      <div class="chain">
+        <section class="layer done"><span class="dot"></span>
+          <div class="lh"><b>Negócio</b><span class="who">Carla Mendes, PM</span><em class="ok">aprovada</em></div>
+          <div class="items"><span class="it"><i>REGRA</i>Até 12x, sem juros até 6x</span><span class="it"><i>REGRA</i>Parcela mínima R$ 20</span><span class="it"><i>REGRA</i>Só no crédito</span><span class="it"><i>PRD</i>Parcelamento no checkout</span></div>
+        </section>
+        <section class="layer done"><span class="dot"></span>
+          <div class="lh"><b>Solução</b><span class="who">Rafael Nunes, arquiteto</span><em class="ok">aprovada</em></div>
+          <div class="items"><span class="it"><i>ADR</i>ADR-013 Idempotência com parcelas</span><span class="it"><i>SYS</i>installment-policy (novo)</span><span class="it"><i>EVT</i>PaymentAuthorized + installments</span><span class="it"><i>API</i>POST /score + installments</span></div>
+        </section>
+        <section class="layer now"><span class="dot"></span>
+          <div class="lh"><b>Repo</b><span class="who">Diego Almeida, tech lead</span><em class="wip">em edição</em></div>
+          <div class="items"><span class="it"><i>PADRÃO</i>Usar InstallmentPolicyClient</span><span class="it"><i>PADRÃO</i>Nunca calcular juros no front</span></div>
+          <p class="note2">Testes de contrato com o antifraude ficam em src/test/contract. Não mexer no fluxo de 3DS nesta tarefa.</p>
+          <div style="display:flex;gap:8px;margin-top:12px"><button>Adicionar item</button><button class="glaze">Aprovar camada e passar para o dev</button></div>
+        </section>
+        <section class="layer todo"><span class="dot"></span>
+          <div class="lh"><b>Dev</b><span class="who">Bia Souza</span><em class="wait">aguardando</em></div>
+          <p class="note2" style="border-style:solid">Recebe o pacote com <b>sinter task pull PAG-231</b>.</p>
+        </section>
+      </div>
+    </main>
+    <aside class="pack">
+      <h4>O que vai para o .sinter/ do checkout-api</h4>
+      <div class="tree">.sinter/<br>├─ tasks/<span class="n">PAG-231.md</span> <span class="d">novo</span><br>├─ context/<br>│  ├─ domain.md<br>│  ├─ neighbors/<span class="n">installment-policy.md</span> <span class="d">novo</span><br>│  ├─ neighbors/antifraude.md <span class="d">alterado</span><br>│  ├─ business-rules.md <span class="d">+3 regras</span><br>│  └─ decisions.md <span class="d">+ADR-013</span><br>└─ flows/nova-feature.md<br><br>AGENTS.md, CLAUDE.md, .cursor/rules <span class="d">regerados</span></div>
+      <div class="budget"><h4>Orçamento de contexto da tarefa</h4>
+        <div class="bar"><i style="width:22%;background:#B69CF0"></i><i style="width:34%;background:#7EA6F4"></i><i style="width:18%;background:#46F28E"></i></div>
+        <div class="bl"><span>3,7 mil de 5 mil tokens</span><span>negócio, solução, repo</span></div></div>
+      <h4>Comando para o dev</h4>
+      <div class="cmd"><span>sinter task pull PAG-231</span><button>Copiar</button></div>
+      <p style="font-size:12px;color:var(--muted);line-height:1.5;margin-top:10px">Disponível quando a camada do repo for aprovada. A Bia recebe um aviso.</p>
+    </aside>
+  </div>
+</div></body></html>

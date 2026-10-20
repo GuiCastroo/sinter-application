@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Usa as gavetas do padrão (5+ de: capacidades, fluxos, sistemas, infraestrutura, subdominios, glossario, regras-de-negocio, decisoes, padroes)",
+      "passed": false,
+      "evidence": "gavetas encontradas: []"
+    },
+    {
+      "text": "80%+ dos itens têm cabeçalho YAML com proveniência e tipo de extração",
+      "passed": false,
+      "evidence": "0/13 itens com proveniência (0%)"
+    },
+    {
+      "text": "Itens nascem como proposta (status: proposed) e nenhum como approved",
+      "passed": false,
+      "evidence": "proposed=0, approved=0"
+    },
+    {
+      "text": "Itens ligam camadas com realiza / realizado-por",
+      "passed": false,
+      "evidence": "0 itens com realiza/realizado-por"
+    },
+    {
+      "text": "Tem ao menos um diagrama de sequência Mermaid",
+      "passed": false,
+      "evidence": "0 diagramas de sequência"
+    },
+    {
+      "text": "Tem RELATORIO.md com perguntas para as pessoas",
+      "passed": false,
+      "evidence": "sem RELATORIO.md ou sem perguntas"
+    },
+    {
+      "text": "Marca inferências na camada de negócio (extraction: inferred em capacidades ou fluxos)",
+      "passed": false,
+      "evidence": "0 itens de negócio marcados como inferidos"
+    },
+    {
+      "text": "Documenta infraestrutura como itens próprios (1+ arquivo em infraestrutura/recursos)",
+      "passed": false,
+      "evidence": "0 recursos de infraestrutura"
+    },
+    {
+      "text": "Modelo de dados com erDiagram em 3+ serviços",
+      "passed": true,
+      "evidence": "3 arquivos com erDiagram"
+    },
+    {
+      "text": "2+ capacidades de negócio documentadas",
+      "passed": false,
+      "evidence": "0 capacidades"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 9,
+    "total": 10,
+    "pass_rate": 0.1
+  }
+}

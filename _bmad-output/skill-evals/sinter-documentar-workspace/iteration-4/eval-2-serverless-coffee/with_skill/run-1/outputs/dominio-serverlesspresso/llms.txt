@@ -1,0 +1,46 @@
+# Serverlesspresso
+
+uma cafeteria de eventos (pop-up, tipo re:Invent) em que o cliente pede café pelo celular escaneando um QR code no balcão, e o barista prepara na ordem em que os pedidos chegam. O domínio controla quem pode pedir, quantos pedidos cabem ao mesmo tempo, e acompanha cada pedido do QR code até um recibo final — sem fila física e sem dinheiro trocando de mãos no sistema.
+
+## Onde procurar
+
+- [Negócio](1-negocio.md)
+- [Arquitetura](2-arquitetura.md)
+- [Serviços](3-servicos.md)
+- [Jornadas](4-jornadas.md)
+- [Infraestrutura](5-infraestrutura.md)
+- [Referência](6-referencia.md)
+
+## Serviços
+
+- [00-baseCore](3-servicos.md#00-basecore)
+- [validator-service (backends/9-validator)](3-servicos.md#validator-service-backends9-validator)
+- [config-service (backends/2-config-service)](3-servicos.md#config-service-backends2-config-service)
+- [order-processor (backends/4-order-processing)](3-servicos.md#order-processor-backends4-order-processing)
+- [order-manager (backends/5-order-manager)](3-servicos.md#order-manager-backends5-order-manager)
+- [publisher-service (backends/6-publisher-service)](3-servicos.md#publisher-service-backends6-publisher-service)
+- [order-journey-service (backends/8-order-journey)](3-servicos.md#order-journey-service-backends8-order-journey)
+- [metrics-service (backends/7-metrics-service)](3-servicos.md#metrics-service-backends7-metrics-service)
+- [counting-service (backends/1-counting-service, não usado)](3-servicos.md#counting-service-backends1-counting-service-não-usado)
+- [EventPlayer (extensions/EventPlayer)](3-servicos.md#eventplayer-extensionseventplayer)
+- [OrderRobotExtension (extensions/OrderRobotExtension)](3-servicos.md#orderrobotextension-extensionsorderrobotextension)
+- [PersistOrderMetricsToDynamoDB (extensions/PersistOrderMetricsToDynamoDB)](3-servicos.md#persistordermetricstodynamodb-extensionspersistordermetricstodynamodb)
+- [WaitTimes (extensions/WaitTimes)](3-servicos.md#waittimes-extensionswaittimes)
+
+## Jornadas
+
+- [Pedir um café](4-jornadas.md#pedir-um-café)
+- [Configurar o evento](4-jornadas.md#configurar-o-evento)
+
+## Ainda não se sabe
+
+- **PM:** Existe plano de cobrança/pagamento? Hoje não há nenhum passo de pagamento no domínio. [Origem Q01](6-referencia.md#perguntas-para-decisão)
+- **PM:** Quais são os indicadores de sucesso de um evento (KPIs)? Não encontramos nada documentado além do que a extensão `WaitTimes` calcula. [Origem Q02](6-referencia.md#perguntas-para-decisão)
+- **PM:** `maxOrdersPerUser = 1` é uma regra real hoje ou só um valor de config sem efeito? [Origem Q03](6-referencia.md#perguntas-para-decisão)
+- **Arquiteto:** Por que duas máquinas de Step Functions em vez de uma? O acoplamento via `TaskToken` no DynamoDB foi uma escolha deliberada ou uma consequência de como o workshop foi montado em módulos? [Origem Q04](6-referencia.md#perguntas-para-decisão)
+- **Arquiteto:** Vale a pena mover o limite de capacidade (hoje fixo em `20` no ASL) para a tabela de config, já que ela já tem um campo parecido (`maxOrdersInQueue`) sem uso? [Origem Q05](6-referencia.md#perguntas-para-decisão)
+- **Tech lead:** `1-counting-service` e os dois lambdas órfãos de `4-order-processing/functions` podem ser removidos, ou há algum plano de reativá-los? [Origem Q06](6-referencia.md#perguntas-para-decisão)
+- **Tech lead:** O endpoint `POST /order` em `backends/4-order-processing/api.yaml` é usado por algum dos 3 frontends externos (não incluídos neste repositório)? [Origem Q07](6-referencia.md#perguntas-para-decisão)
+- **Tech lead:** Existe algum alarme/DLQ para quando `publisher-service` falha ao publicar no IoT (hoje só loga e segue)? [Origem Q08](6-referencia.md#perguntas-para-decisão)
+
+[Resumos explicativos](llm/resumos.md) · [Grafo tipado](llm/grafo.json)

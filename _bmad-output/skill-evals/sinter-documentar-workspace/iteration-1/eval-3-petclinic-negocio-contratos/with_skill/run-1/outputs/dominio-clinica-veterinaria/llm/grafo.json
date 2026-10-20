@@ -1,0 +1,1439 @@
+{
+ "dominio": "Clínica Veterinária",
+ "nos": [
+  {
+   "id": "dom-clinica-veterinaria",
+   "kind": "domain",
+   "camada": 2,
+   "status": "proposed",
+   "titulo": "Domínio Clínica Veterinária",
+   "caminho": "README.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "cap-atendimento-inteligente",
+   "kind": "capability",
+   "camada": 1,
+   "status": "proposed",
+   "titulo": "Atender por assistente virtual (IA generativa)",
+   "caminho": "capacidades/cap-atendimento-inteligente.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "cap-atendimento-omnicanal",
+   "kind": "capability",
+   "camada": 1,
+   "status": "proposed",
+   "titulo": "Atender o tutor num único canal digital",
+   "caminho": "capacidades/cap-atendimento-omnicanal.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "cap-cadastro-clientes-pets",
+   "kind": "capability",
+   "camada": 1,
+   "status": "proposed",
+   "titulo": "Cadastrar e manter clientes e seus pets",
+   "caminho": "capacidades/cap-cadastro-clientes-pets.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "cap-gestao-corpo-clinico",
+   "kind": "capability",
+   "camada": 1,
+   "status": "proposed",
+   "titulo": "Divulgar o corpo clínico e suas especialidades",
+   "caminho": "capacidades/cap-gestao-corpo-clinico.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "cap-registro-consultas",
+   "kind": "capability",
+   "camada": 1,
+   "status": "proposed",
+   "titulo": "Registrar e consultar o histórico de consultas",
+   "caminho": "capacidades/cap-registro-consultas.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "flow-atendimento-assistente-virtual",
+   "kind": "flow",
+   "camada": 1,
+   "status": "proposed",
+   "titulo": "Atendimento via assistente virtual",
+   "caminho": "fluxos/flow-atendimento-assistente-virtual.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "flow-atendimento-assistente-virtual-sequencia",
+   "kind": "flow",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Atendimento via assistente virtual: sequência técnica",
+   "caminho": "fluxos/flow-atendimento-assistente-virtual.sequencia.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "flow-cadastro-tutor-pet",
+   "kind": "flow",
+   "camada": 1,
+   "status": "proposed",
+   "titulo": "Cadastro de tutor e pet",
+   "caminho": "fluxos/flow-cadastro-tutor-pet.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "flow-cadastro-tutor-pet-sequencia",
+   "kind": "flow",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Cadastro de tutor e pet: sequência técnica",
+   "caminho": "fluxos/flow-cadastro-tutor-pet.sequencia.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "flow-consulta-historico-tutor",
+   "kind": "flow",
+   "camada": 1,
+   "status": "proposed",
+   "titulo": "Consulta de histórico do tutor",
+   "caminho": "fluxos/flow-consulta-historico-tutor.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "flow-consulta-historico-tutor-sequencia",
+   "kind": "flow",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Consulta de histórico do tutor: sequência técnica",
+   "caminho": "fluxos/flow-consulta-historico-tutor.sequencia.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "flow-registro-consulta",
+   "kind": "flow",
+   "camada": 1,
+   "status": "proposed",
+   "titulo": "Registro de consulta veterinária",
+   "caminho": "fluxos/flow-registro-consulta.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "flow-registro-consulta-sequencia",
+   "kind": "flow",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Registro de consulta veterinária: sequência técnica",
+   "caminho": "fluxos/flow-registro-consulta.sequencia.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "term-pet",
+   "kind": "term",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Pet",
+   "caminho": "glossario/term-pet.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "term-tutor-owner",
+   "kind": "term",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Tutor (Owner)",
+   "caminho": "glossario/term-tutor-owner.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "term-veterinario-especialidade",
+   "kind": "term",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Veterinário / Especialidade",
+   "caminho": "glossario/term-veterinario-especialidade.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "term-visita-consulta",
+   "kind": "term",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Visita / Consulta",
+   "caminho": "glossario/term-visita-consulta.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "env-local-docker",
+   "kind": "environment",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Ambiente local via Docker Compose",
+   "caminho": "infraestrutura/ambientes/env-local-docker.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "env-local-ide",
+   "kind": "environment",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Ambiente local via IDE / Maven",
+   "caminho": "infraestrutura/ambientes/env-local-ide.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-grafana-prometheus",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Grafana + Prometheus (métricas)",
+   "caminho": "infraestrutura/recursos/res-grafana-prometheus.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-hsqldb-embedded",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Banco HSQLDB embutido (dev/teste)",
+   "caminho": "infraestrutura/recursos/res-hsqldb-embedded.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-mysql-customers",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Banco MySQL — customers-service",
+   "caminho": "infraestrutura/recursos/res-mysql-customers.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-mysql-vets",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Banco MySQL — vets-service",
+   "caminho": "infraestrutura/recursos/res-mysql-vets.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-mysql-visits",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Banco MySQL — visits-service",
+   "caminho": "infraestrutura/recursos/res-mysql-visits.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-tracing-server",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Servidor de tracing distribuído (Zipkin)",
+   "caminho": "infraestrutura/recursos/res-tracing-server.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "pad-metricas-timed",
+   "kind": "standard",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Controllers anotados com @Timed(\"petclinic.<recurso>\")",
+   "caminho": "padroes/pad-metricas-timed.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "pad-service-discovery-lb",
+   "kind": "standard",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Chamadas entre serviços sempre via nome lógico + Eureka",
+   "caminho": "padroes/pad-service-discovery-lb.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "reg-degradacao-visitas",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "A tela do tutor nunca falha por causa do histórico de visitas",
+   "caminho": "regras-de-negocio/reg-degradacao-visitas.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "reg-limite-descricao-visita",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Descrição da visita limitada a 8192 caracteres",
+   "caminho": "regras-de-negocio/reg-limite-descricao-visita.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "reg-memoria-conversa",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "O assistente virtual lembra até 10 mensagens anteriores",
+   "caminho": "regras-de-negocio/reg-memoria-conversa.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "reg-telefone-formato",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Telefone do tutor deve ter até 12 dígitos, sem formatação",
+   "caminho": "regras-de-negocio/reg-telefone-formato.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "reg-tipos-de-pet",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Um pet só pode ter um dos tipos cadastrados",
+   "caminho": "regras-de-negocio/reg-tipos-de-pet.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-admin-server-app",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "SpringBootAdminApplication",
+   "caminho": "sistemas/admin-server/componentes/cmp-admin-server-app.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-admin-server",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "admin-server",
+   "caminho": "sistemas/admin-server/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-gateway-controller",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "ApiGatewayController",
+   "caminho": "sistemas/api-gateway/componentes/cmp-gateway-controller.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-gateway-routes",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "Rotas do Spring Cloud Gateway",
+   "caminho": "sistemas/api-gateway/componentes/cmp-gateway-routes.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-gateway-get-owner-details",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "GET /api/gateway/owners/{ownerId}",
+   "caminho": "sistemas/api-gateway/contratos/ctr-gateway-get-owner-details.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-gateway-post-fallback",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "POST /fallback",
+   "caminho": "sistemas/api-gateway/contratos/ctr-gateway-post-fallback.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-api-gateway",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "api-gateway",
+   "caminho": "sistemas/api-gateway/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-config-server-app",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "ConfigServerApplication",
+   "caminho": "sistemas/config-server/componentes/cmp-config-server-app.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-config-server",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "config-server",
+   "caminho": "sistemas/config-server/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-customers-owner-api",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "OwnerResource",
+   "caminho": "sistemas/customers-service/componentes/cmp-customers-owner-api.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-customers-pet-api",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "PetResource",
+   "caminho": "sistemas/customers-service/componentes/cmp-customers-pet-api.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-customers-get-owner",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "GET /owners/{ownerId}",
+   "caminho": "sistemas/customers-service/contratos/ctr-customers-get-owner.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-customers-get-owners",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "GET /owners",
+   "caminho": "sistemas/customers-service/contratos/ctr-customers-get-owners.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-customers-get-pet",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "GET owners/*/pets/{petId}",
+   "caminho": "sistemas/customers-service/contratos/ctr-customers-get-pet.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-customers-get-pettypes",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "GET /petTypes",
+   "caminho": "sistemas/customers-service/contratos/ctr-customers-get-pettypes.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-customers-post-owners",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "POST /owners",
+   "caminho": "sistemas/customers-service/contratos/ctr-customers-post-owners.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-customers-post-pet",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "POST /owners/{ownerId}/pets",
+   "caminho": "sistemas/customers-service/contratos/ctr-customers-post-pet.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-customers-put-owner",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "PUT /owners/{ownerId}",
+   "caminho": "sistemas/customers-service/contratos/ctr-customers-put-owner.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-customers-put-pet",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "PUT /owners/*/pets/{petId}",
+   "caminho": "sistemas/customers-service/contratos/ctr-customers-put-pet.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-customers-service",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "customers-service",
+   "caminho": "sistemas/customers-service/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-discovery-server-app",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "DiscoveryServerApplication",
+   "caminho": "sistemas/discovery-server/componentes/cmp-discovery-server-app.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-discovery-server",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "discovery-server",
+   "caminho": "sistemas/discovery-server/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-genai-chat-api",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "PetclinicChatClient",
+   "caminho": "sistemas/genai-service/componentes/cmp-genai-chat-api.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-genai-tools",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "PetclinicTools / AIDataProvider",
+   "caminho": "sistemas/genai-service/componentes/cmp-genai-tools.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-genai-vectorstore-loader",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "VectorStoreController",
+   "caminho": "sistemas/genai-service/componentes/cmp-genai-vectorstore-loader.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-genai-post-chatclient",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "POST /chatclient",
+   "caminho": "sistemas/genai-service/contratos/ctr-genai-post-chatclient.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-genai-service",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "genai-service",
+   "caminho": "sistemas/genai-service/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-vets-vet-api",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "VetResource",
+   "caminho": "sistemas/vets-service/componentes/cmp-vets-vet-api.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-vets-get-vets",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "GET /vets",
+   "caminho": "sistemas/vets-service/contratos/ctr-vets-get-vets.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-vets-service",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "vets-service",
+   "caminho": "sistemas/vets-service/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-visits-visit-api",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "VisitResource",
+   "caminho": "sistemas/visits-service/componentes/cmp-visits-visit-api.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-visits-get-visits-batch",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "GET pets/visits",
+   "caminho": "sistemas/visits-service/contratos/ctr-visits-get-visits-batch.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-visits-get-visits-by-pet",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "GET owners/*/pets/{petId}/visits",
+   "caminho": "sistemas/visits-service/contratos/ctr-visits-get-visits-by-pet.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-visits-post-visit",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "POST owners/*/pets/{petId}/visits",
+   "caminho": "sistemas/visits-service/contratos/ctr-visits-post-visit.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-visits-service",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "visits-service",
+   "caminho": "sistemas/visits-service/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sub-atendimento-digital",
+   "kind": "subdomain",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Subdomínio Atendimento Digital",
+   "caminho": "subdominios/sub-atendimento-digital.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sub-cadastro",
+   "kind": "subdomain",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Subdomínio Cadastro de Clientes e Pets",
+   "caminho": "subdominios/sub-cadastro.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sub-consultas",
+   "kind": "subdomain",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Subdomínio Consultas",
+   "caminho": "subdominios/sub-consultas.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sub-corpo-clinico",
+   "kind": "subdomain",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Subdomínio Corpo Clínico",
+   "caminho": "subdominios/sub-corpo-clinico.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sub-plataforma",
+   "kind": "subdomain",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Subdomínio Plataforma",
+   "caminho": "subdominios/sub-plataforma.md",
+   "origem": "extraído",
+   "conflito": false
+  }
+ ],
+ "arestas": [
+  {
+   "de": "sub-cadastro",
+   "para": "dom-clinica-veterinaria",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-corpo-clinico",
+   "para": "dom-clinica-veterinaria",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-consultas",
+   "para": "dom-clinica-veterinaria",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-atendimento-digital",
+   "para": "dom-clinica-veterinaria",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-plataforma",
+   "para": "dom-clinica-veterinaria",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cap-atendimento-inteligente",
+   "para": "dom-clinica-veterinaria",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "flow-atendimento-assistente-virtual",
+   "para": "cap-atendimento-inteligente",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cap-atendimento-omnicanal",
+   "para": "dom-clinica-veterinaria",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "flow-consulta-historico-tutor",
+   "para": "cap-atendimento-omnicanal",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cap-cadastro-clientes-pets",
+   "para": "dom-clinica-veterinaria",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "flow-cadastro-tutor-pet",
+   "para": "cap-cadastro-clientes-pets",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "flow-consulta-historico-tutor",
+   "para": "cap-cadastro-clientes-pets",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cap-gestao-corpo-clinico",
+   "para": "dom-clinica-veterinaria",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cap-registro-consultas",
+   "para": "dom-clinica-veterinaria",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "flow-registro-consulta",
+   "para": "cap-registro-consultas",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "flow-consulta-historico-tutor",
+   "para": "cap-registro-consultas",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-genai-service",
+   "para": "flow-atendimento-assistente-virtual",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-api-gateway",
+   "para": "flow-atendimento-assistente-virtual",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-customers-service",
+   "para": "flow-atendimento-assistente-virtual",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-vets-service",
+   "para": "flow-atendimento-assistente-virtual",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "flow-atendimento-assistente-virtual-sequencia",
+   "para": "flow-atendimento-assistente-virtual",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-genai-post-chatclient",
+   "para": "flow-atendimento-assistente-virtual-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-customers-get-owners",
+   "para": "flow-atendimento-assistente-virtual-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-customers-post-owners",
+   "para": "flow-atendimento-assistente-virtual-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-customers-post-pet",
+   "para": "flow-atendimento-assistente-virtual-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-customers-service",
+   "para": "flow-cadastro-tutor-pet",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-api-gateway",
+   "para": "flow-cadastro-tutor-pet",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "flow-cadastro-tutor-pet-sequencia",
+   "para": "flow-cadastro-tutor-pet",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-customers-post-owners",
+   "para": "flow-cadastro-tutor-pet-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-customers-post-pet",
+   "para": "flow-cadastro-tutor-pet-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-customers-get-pettypes",
+   "para": "flow-cadastro-tutor-pet-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-api-gateway",
+   "para": "flow-consulta-historico-tutor",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-customers-service",
+   "para": "flow-consulta-historico-tutor",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-visits-service",
+   "para": "flow-consulta-historico-tutor",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "flow-consulta-historico-tutor-sequencia",
+   "para": "flow-consulta-historico-tutor",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-gateway-get-owner-details",
+   "para": "flow-consulta-historico-tutor-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-customers-get-owner",
+   "para": "flow-consulta-historico-tutor-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-visits-get-visits-batch",
+   "para": "flow-consulta-historico-tutor-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-visits-service",
+   "para": "flow-registro-consulta",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-api-gateway",
+   "para": "flow-registro-consulta",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "flow-registro-consulta-sequencia",
+   "para": "flow-registro-consulta",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-visits-post-visit",
+   "para": "flow-registro-consulta-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-tracing-server",
+   "para": "env-local-docker",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-grafana-prometheus",
+   "para": "env-local-docker",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-grafana-prometheus",
+   "para": "sub-plataforma",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-hsqldb-embedded",
+   "para": "sys-customers-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-hsqldb-embedded",
+   "para": "sys-vets-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-hsqldb-embedded",
+   "para": "sys-visits-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-mysql-customers",
+   "para": "sys-customers-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-mysql-vets",
+   "para": "sys-vets-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-mysql-visits",
+   "para": "sys-visits-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-tracing-server",
+   "para": "sub-plataforma",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-admin-server-app",
+   "para": "sys-admin-server",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-admin-server",
+   "para": "sub-plataforma",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-gateway-controller",
+   "para": "sys-api-gateway",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-gateway-routes",
+   "para": "sys-api-gateway",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-gateway-get-owner-details",
+   "para": "cap-atendimento-omnicanal",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-gateway-get-owner-details",
+   "para": "cap-cadastro-clientes-pets",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-gateway-controller",
+   "para": "ctr-gateway-get-owner-details",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-gateway-post-fallback",
+   "para": "cap-atendimento-omnicanal",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-gateway-routes",
+   "para": "ctr-gateway-post-fallback",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-api-gateway",
+   "para": "sub-atendimento-digital",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-api-gateway",
+   "para": "cap-atendimento-omnicanal",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-config-server-app",
+   "para": "sys-config-server",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-config-server",
+   "para": "sub-plataforma",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-customers-owner-api",
+   "para": "sys-customers-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-hsqldb-embedded",
+   "para": "cmp-customers-owner-api",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-mysql-customers",
+   "para": "cmp-customers-owner-api",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-customers-pet-api",
+   "para": "sys-customers-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-hsqldb-embedded",
+   "para": "cmp-customers-pet-api",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-mysql-customers",
+   "para": "cmp-customers-pet-api",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-customers-get-owner",
+   "para": "cap-cadastro-clientes-pets",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-customers-owner-api",
+   "para": "ctr-customers-get-owner",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-customers-get-owners",
+   "para": "cap-cadastro-clientes-pets",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-customers-owner-api",
+   "para": "ctr-customers-get-owners",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-customers-get-pet",
+   "para": "cap-cadastro-clientes-pets",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-customers-pet-api",
+   "para": "ctr-customers-get-pet",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-customers-get-pettypes",
+   "para": "cap-cadastro-clientes-pets",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-customers-pet-api",
+   "para": "ctr-customers-get-pettypes",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-customers-post-owners",
+   "para": "cap-cadastro-clientes-pets",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-customers-owner-api",
+   "para": "ctr-customers-post-owners",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-customers-post-pet",
+   "para": "cap-cadastro-clientes-pets",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-customers-pet-api",
+   "para": "ctr-customers-post-pet",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-customers-put-owner",
+   "para": "cap-cadastro-clientes-pets",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-customers-owner-api",
+   "para": "ctr-customers-put-owner",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-customers-put-pet",
+   "para": "cap-cadastro-clientes-pets",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-customers-pet-api",
+   "para": "ctr-customers-put-pet",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-customers-service",
+   "para": "sub-cadastro",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-customers-service",
+   "para": "cap-cadastro-clientes-pets",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-discovery-server-app",
+   "para": "sys-discovery-server",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-discovery-server",
+   "para": "sub-plataforma",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-genai-chat-api",
+   "para": "sys-genai-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-genai-tools",
+   "para": "cmp-genai-chat-api",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-genai-tools",
+   "para": "sys-genai-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-genai-vectorstore-loader",
+   "para": "sys-genai-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-genai-post-chatclient",
+   "para": "cap-atendimento-inteligente",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-genai-chat-api",
+   "para": "ctr-genai-post-chatclient",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-genai-service",
+   "para": "sub-atendimento-digital",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-genai-service",
+   "para": "cap-atendimento-inteligente",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-vets-vet-api",
+   "para": "sys-vets-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-hsqldb-embedded",
+   "para": "cmp-vets-vet-api",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-mysql-vets",
+   "para": "cmp-vets-vet-api",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-vets-get-vets",
+   "para": "cap-gestao-corpo-clinico",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-vets-vet-api",
+   "para": "ctr-vets-get-vets",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-vets-service",
+   "para": "sub-corpo-clinico",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-vets-service",
+   "para": "cap-gestao-corpo-clinico",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-visits-visit-api",
+   "para": "sys-visits-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-hsqldb-embedded",
+   "para": "cmp-visits-visit-api",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-mysql-visits",
+   "para": "cmp-visits-visit-api",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-visits-get-visits-batch",
+   "para": "cap-registro-consultas",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-visits-visit-api",
+   "para": "ctr-visits-get-visits-batch",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-visits-get-visits-by-pet",
+   "para": "cap-registro-consultas",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-visits-visit-api",
+   "para": "ctr-visits-get-visits-by-pet",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-visits-post-visit",
+   "para": "cap-registro-consultas",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-visits-visit-api",
+   "para": "ctr-visits-post-visit",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-visits-service",
+   "para": "sub-consultas",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-visits-service",
+   "para": "cap-registro-consultas",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  }
+ ]
+}

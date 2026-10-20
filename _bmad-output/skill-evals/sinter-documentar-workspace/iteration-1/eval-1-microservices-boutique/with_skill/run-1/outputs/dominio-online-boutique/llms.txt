@@ -1,0 +1,67 @@
+# Online Boutique
+
+> Loja de e-commerce cloud-native de demonstração (Google Cloud): o cliente navega por um catálogo de produtos, monta um carrinho, informa endereço e cartão de crédito e finaliza uma compra. O domínio cobre a jornada completa de compra self-s
+
+Documentação no padrão Sinter: 6 camadas (negócio → infraestrutura). Cada item tem id estável, proveniência e ligações `realiza`/`realizado-por`. Leia primeiro `llm/contexto.md`; consulte `llm/grafo.json` para navegar ligações.
+
+## 2. Domínio
+- [Eventos de domínio](eventos/README.md): Este domínio **não publica nem consome eventos assíncronos**. Foi buscado por bibliotecas e padrões de mensageria (Kafka, Pub/Sub, RabbitMQ/
+- [Relações com outros domínios](mapa/relacoes-com-outros-dominios.md): O repositório documenta um único domínio autocontido (demo de referência); não há outro domínio de negócio (ex.: "Estoque", "Contabilidade",
+
+## 1. Negócio
+- [Assistir a compra com IA (recurso opcional)](capacidades/assistir-compra-com-ia.md): A empresa pode oferecer um assistente conversacional que sugere produtos do catálogo a partir de uma pergunta em linguagem natural do client
+- [Descobrir e recomendar produtos](capacidades/descobrir-e-recomendar-produtos.md): A empresa consegue guiar o cliente até produtos relevantes: por navegação/busca no catálogo, por recomendações associadas ao que já está no 
+- [Vender produtos online](capacidades/vender-produtos-online.md): A empresa consegue vender produtos diretamente ao consumidor final por um site self-service, sem exigir cadastro: o visitante navega, monta 
+- [Compra do cliente](fluxos/compra-do-cliente.md): Objetivo: permitir que um visitante, sem se cadastrar, transforme o interesse em produtos em um pedido pago, com frete cotado e e-mail de co
+
+## 3. Subdomínio
+- [Compra do cliente: sequência técnica](fluxos/compra-do-cliente.sequencia.md): Realiza as etapas do [fluxo macro](./compra-do-cliente.md). Todas as chamadas entre sistemas são **gRPC síncronas**; a única chamada HTTP é 
+- [Subdomínio Assistente de Compras](subdominios/assistente-de-compras.md): Recurso opcional (desligado por padrão) que responde perguntas em linguagem natural sobre o catálogo usando busca vetorial + um modelo de li
+- [Subdomínio Carrinho e Sessão](subdominios/carrinho-e-sessao.md): Identifica o visitante sem exigir cadastro e mantém o carrinho de compras entre requisições, mesmo sem estado no navegador além de um cookie
+- [Subdomínio Catálogo e Descoberta](subdominios/catalogo-e-descoberta.md): Responsável por manter e expor o catálogo de produtos e por ajudar o cliente a descobrir itens além do que ele já procurou (recomendações e 
+- [Subdomínio Checkout e Pagamento](subdominios/checkout-e-pagamento.md): Orquestra a finalização do pedido: reúne o carrinho, precifica na moeda do cliente, cota e executa o frete, cobra o cartão e confirma por e-
+
+## 4. Sistema
+- [Sistemas do domínio e contrato gRPC comum](sistemas/README.md): Todos os sistemas do domínio (exceto o `shoppingassistantservice`, que expõe HTTP/Flask, e o `frontend`, que expõe HTTP para o navegador) im
+- [adservice](sistemas/adservice/ficha.md): Devolve anúncios de texto associados a categorias de produto (contexto da página atual). `[extracted, README.md#L35]`
+- [cartservice](sistemas/cartservice/ficha.md): Guarda o carrinho de compras por `user_id` (o cookie de sessão do frontend) e o devolve sob demanda. `[extracted, README.md#L28]`
+- [checkoutservice](sistemas/checkoutservice/ficha.md): Orquestrador da finalização do pedido: é o único sistema do domínio que fala com `paymentservice`, `shippingservice` e `emailservice`. `[ext
+- [currencyservice](sistemas/currencyservice/ficha.md): Converte um valor monetário de uma moeda para outra. É o serviço de maior QPS do domínio segundo o README (chamado a cada preço exibido ou c
+- [emailservice](sistemas/emailservice/ficha.md): Envia (mock, por padrão) o e-mail de confirmação do pedido. `[extracted, README.md#L32]`
+- [frontend](sistemas/frontend/ficha.md): Servidor HTTP que renderiza a vitrine, o carrinho e o checkout; é a única porta de entrada do domínio para o navegador e para o `loadgenerat
+- [loadgenerator](sistemas/loadgenerator/ficha.md): Ferramenta de teste/demo (Locust) que simula clientes reais navegando e comprando na loja continuamente. Não faz parte do domínio de negócio
+- [paymentservice](sistemas/paymentservice/ficha.md): Valida os dados de um cartão de crédito e simula a cobrança, devolvendo um id de transação. **Não há integração real com nenhuma adquirente/
+- [productcatalogservice](sistemas/productcatalogservice/ficha.md): Fonte de verdade dos produtos vendidos na loja: lista, busca e devolve detalhe. Não tem banco de dados — o catálogo é um arquivo JSON estáti
+- [recommendationservice](sistemas/recommendationservice/ficha.md): Sugere produtos a partir dos itens já no carrinho do cliente. `[extracted, README.md#L34]`
+- [shippingservice](sistemas/shippingservice/ficha.md): Dá uma cotação de frete e "expede" o pedido (mock: gera um código de rastreio determinístico; não integra transportadora real). `[extracted,
+- [shoppingassistantservice](sistemas/shoppingassistantservice/ficha.md): Responde perguntas em linguagem natural sobre o catálogo, usando busca por similaridade vetorial (AlloyDB) e um modelo de linguagem generati
+
+## Transversal
+- [Decisões (ADRs)](decisoes/README.md): Nenhum ADR ou registro de decisão arquitetural foi encontrado no repositório-fonte (não há `docs/adr/`, `decisions/` nem qualquer arquivo no
+- [Cotação de frete](glossario/cotacao-de-frete.md): Valor em USD devolvido por `shippingservice.GetQuote`, calculado apenas a partir da contagem total de itens do carrinho — o endereço de entr
+- [Moeda de exibição](glossario/moeda-de-exibicao.md): Código ISO 4217 (ex.: `USD`, `EUR`, `BRL`) escolhido pelo cliente via `POST /setCurrency` e guardado no cookie `shop_currency`. Todo preço m
+- [Pedido (OrderResult)](glossario/pedido.md): Resultado devolvido por `checkoutservice.PlaceOrder`: id do pedido, itens com preço convertido, custo e endereço de frete, e código de rastr
+- [Sessão](glossario/sessao.md): Identificador único (UUID) atribuído automaticamente a cada visitante da loja no primeiro acesso, guardado no cookie `shop_session-id`. É o 
+- [Comunicação síncrona via gRPC, um contrato compartilhado](padroes/comunicacao-sincrona-grpc.md): Todo sistema interno do domínio (exceto o `shoppingassistantservice`, HTTP/Flask) implementa um serviço gRPC gerado a partir do mesmo arquiv
+- [Health check padrão gRPC](padroes/healthcheck-grpc.md): Todo serviço gRPC do domínio registra o serviço padrão `grpc.health.v1.Health` (`Check`/`Watch`), consumido pelas probes nativas `readinessP
+- [Segurança de containers (baseline Kubernetes)](padroes/seguranca-de-containers.md): Todo `Deployment` do domínio define o mesmo `securityContext` restritivo, tanto no pod quanto no container: `runAsNonRoot: true`, `runAsUser
+- [Bandeiras de cartão aceitas](regras-de-negocio/bandeiras-de-cartao-aceitas.md): Somente cartões **Visa** e **MasterCard** são aceitos. Qualquer outra bandeira identificada (ex.: American Express, Diners Club) é rejeitada
+- [Cartão não pode estar vencido](regras-de-negocio/cartao-nao-pode-estar-vencido.md): A cobrança só é aceita se `ano_expiração*12 + mês_expiração >= ano_atual*12 + mês_atual`; caso contrário a cobrança é recusada com `ExpiredC
+- [Falhas após a cobrança não revertem o pedido (nem sempre bloqueiam)](regras-de-negocio/falha-pos-cobranca-nao-reverte-pedido.md): Depois que `paymentservice.Charge` é aprovado:
+- [Limite de anúncios servidos](regras-de-negocio/limite-de-anuncios-servidos.md): No máximo `MAX_ADS_TO_SERVE = 2` anúncios são devolvidos por chamada, tanto no caso de correspondência por categoria quanto no fallback alea
+- [Moedas suportadas para exibição](regras-de-negocio/moedas-suportadas.md): O `currencyservice` conhece um conjunto de códigos de moeda (arquivo `data/currency_conversion.json`), mas o `frontend` filtra essa lista po
+- [Recomendação não é personalizada](regras-de-negocio/recomendacao-nao-e-personalizada.md): Apesar do nome, o `recommendationservice` não usa histórico de compras, similaridade de produto nem qualquer modelo — ele sorteia aleatoriam
+- [Sessão sem login](regras-de-negocio/sessao-sem-login.md): A loja não exige cadastro nem autenticação. Ao primeiro acesso, um `session_id` (UUID) é gerado e gravado num cookie (`shop_session-id`, val
+
+## Optional
+- [Ambiente padrão (base Kubernetes / GKE Autopilot)](infraestrutura/ambientes/producao-gke.md): Infraestrutura. Configuração de referência do repositório: um único namespace, 11 Deployments + Services de aplicação, mais o Redis in-c
+- [Variantes de implantação (componentes Kustomize)](infraestrutura/ambientes/variantes-kustomize.md): Infraestrutura. O mesmo conjunto de manifestos base pode ser combinado com "componentes" Kustomize (`kustomize/components/*`) para troca
+- [AlloyDB](infraestrutura/recursos/alloydb.md): Infraestrutura. Assim como o Spanner, não é provisionado pelo Terraform deste repositório — o overlay assume uma instância AlloyDB já ex
+- [Cluster GKE Autopilot](infraestrutura/recursos/gke-autopilot-cluster.md): Infraestrutura. O Terraform, além de criar o cluster, habilita as APIs do Google Cloud necessárias (`container`, `monitoring`, `cloudtra
+- [Memorystore (Redis gerenciado)](infraestrutura/recursos/memorystore-redis.md): Infraestrutura. Esta é a única alternativa aos três backends do `cartservice` que é efetivamente **provisionada por este próprio Terrafo
+- [redis-cart](infraestrutura/recursos/redis-cart.md): Infraestrutura. O volume é `emptyDir` — **não sobrevive a um restart do pod**; o carrinho é efetivamente descartável/não durável neste a
+- [Secret Manager (segredo do AlloyDB)](infraestrutura/recursos/secret-manager.md): Infraestrutura. Nenhum valor de segredo foi copiado para esta documentação — apenas o nome da variável que aponta para ele (`ALLOYDB_SEC
+- [Malha de serviço (Istio / Cloud Service Mesh)](infraestrutura/recursos/service-mesh-istio.md): Infraestrutura. Este é um caminho de rede **alternativo**, não cumulativo por padrão, ao `Service` `frontend-external` (`LoadBalancer`) 
+- [Cloud Spanner (backend alternativo do cartservice)](infraestrutura/recursos/spanner-cartservice.md): Infraestrutura. **Este componente Kustomize não cria a instância Spanner** — ele só aponta o serviço para uma instância que precisa exis
+- [PlaceOrder](sistemas/checkoutservice/componentes/place-order.md): Componente. Endpoint gRPC único do `checkoutservice`; orquestra todo o passo a passo do checkout (ver [sequência técnica completa](.
+- [Charge](sistemas/paymentservice/componentes/charge.md): Componente. Sem retentativa. Três validações, nesta ordem, cada uma lança uma exceção que vira erro gRPC:

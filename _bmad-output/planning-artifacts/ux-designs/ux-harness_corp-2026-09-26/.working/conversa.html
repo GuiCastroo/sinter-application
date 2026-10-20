@@ -1,0 +1,252 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sinter: Conversa guiada</title><style>
+/* Esmalte v2
+   chrome   #1F2327  canvas #2A2F34  surface #343A40  tile #3E454C  hairline #474E55
+   ink      #E8E4DB  muted  #9DA3A8
+   neon (foco, aprovado, ação) #46F28E
+   glazes   API cobalto #7EA6F4  evento lilás #B69CF0  arquivo âmbar #E2B566  conflito #EE6F7C */
+:root{
+  --chrome:#1F2327; --canvas:#2A2F34; --surface:#343A40; --tile:#3E454C; --tile-hi:#4A525A; --line:#474E55;
+  --ink:#E8E4DB; --muted:#9DA3A8; --faint:#6E757B;
+  --api:#7EA6F4; --evento:#B69CF0; --neon:#46F28E; --arquivo:#E2B566; --conflict:#EE6F7C;
+  --ui:'Avenir Next','Helvetica Neue',sans-serif; --display:Optima,'Avenir Next',sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#151719;font-family:var(--ui);color:var(--ink)}
+.note{max-width:1440px;margin:24px auto 12px;padding:0 16px;color:#C9C6BF;line-height:1.5}
+.note h1{font-family:var(--display);font-weight:500;font-size:24px;margin:0 0 4px;color:#EEE}
+.note p{margin:0;max-width:78ch}
+.app{max-width:1440px;margin:0 auto 40px;border-radius:12px;overflow:hidden;border:1px solid #2E3338;background:var(--chrome);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+
+/* barra superior */
+.top{display:flex;align-items:center;gap:18px;padding:10px 16px;border-bottom:1px solid #2E3338}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:18px;letter-spacing:.02em}
+.crumbs{font-size:14px;color:var(--muted)} .crumbs b{color:var(--ink);font-weight:500}
+.crumbs span{margin:0 6px;color:var(--faint)}
+.levels{display:flex;background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:2px;margin-left:8px}
+.levels a{font-size:13px;padding:5px 10px;border-radius:6px;color:var(--muted)}
+.levels a.on{background:var(--tile);color:var(--ink)}
+.nav{display:flex;gap:2px;margin-left:auto}
+.nav a{font-size:14px;padding:6px 10px;border-radius:6px;color:var(--muted)}
+.nav a.on{color:var(--ink);background:var(--surface)}
+.count{display:inline-block;min-width:18px;padding:0 5px;margin-left:5px;border-radius:9px;background:var(--conflict);color:#2A1215;font-size:11px;font-weight:700;text-align:center}
+button{font:inherit;font-size:13px;padding:7px 12px;border-radius:7px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+button.glaze{background:var(--neon);border-color:var(--neon);color:#0B2A17;font-weight:600;box-shadow:0 0 14px rgba(70,242,142,.35)}
+
+/* corpo */
+.body{display:grid;grid-template-columns:76px 260px 1fr 320px;height:760px}
+.canvas{position:relative;background:var(--canvas);overflow:hidden}
+.canvas svg{position:absolute;inset:0;width:100%;height:100%}
+.search{position:absolute;top:14px;left:16px;display:flex;gap:10px;align-items:center}
+.search input{font:inherit;font-size:13px;width:250px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+
+/* player de fluxo */
+.flow{position:absolute;left:16px;right:16px;bottom:14px;display:grid;grid-template-columns:auto 1fr auto;gap:6px 16px;align-items:center;background:rgba(31,35,39,.94);border:1px solid var(--line);border-radius:10px;padding:14px;backdrop-filter:blur(6px)}
+.flow h4{margin:0;font-size:14px;font-weight:600}
+.flow .sub{font-size:12px;color:var(--muted);margin:2px 0 0}
+.flow .step{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45}
+.flow .n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--neon);color:#0B2A17;font-weight:700;font-size:12px;display:grid;place-items:center;box-shadow:0 0 0 4px rgba(70,242,142,.18),0 0 12px rgba(70,242,142,.5)}
+.flow .ctrl{display:flex;gap:8px;grid-row:1 / span 2;grid-column:3}
+.flow .head{grid-column:1;grid-row:1 / span 2;padding-right:14px;border-right:1px solid var(--line)}
+.flow .step{grid-column:2}
+.flow .prog{grid-column:2;margin-top:0!important}
+.flow .prog{display:flex;gap:4px;margin-top:10px} .flow .prog i{flex:1;height:3px;border-radius:2px;background:var(--line)} .flow .prog i.d{background:var(--neon)}
+
+/* camadas e zoom */
+.layers{position:absolute;right:16px;top:14px;display:flex;gap:6px}
+.chip{font-size:12px;padding:5px 9px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+.chip.on{color:var(--ink);border-color:#5A626A}
+.zoom{position:absolute;right:16px;bottom:128px;display:flex;gap:10px;align-items:flex-end}
+.mini{width:120px;height:78px;border:1px solid var(--line);border-radius:8px;background:var(--chrome);position:relative}
+.mini i{position:absolute;border-radius:2px;background:#58616A}
+.mini .vp{position:absolute;left:14px;top:10px;width:70px;height:46px;border:1.5px solid var(--neon);border-radius:3px}
+.zbtn{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.zbtn span{width:30px;height:28px;display:grid;place-items:center;background:var(--surface);color:var(--muted);font-size:16px}
+.zbtn span+span{border-top:1px solid var(--line)}
+
+/* painel */
+.panel{background:var(--chrome);border-left:1px solid #2E3338;padding:18px;overflow:auto}
+.ph{display:flex;gap:12px;align-items:center}
+.tech{width:40px;height:40px;border-radius:10px;background:linear-gradient(#4E565E,#3A4148);display:grid;place-items:center;font-size:13px;font-weight:700;color:#C9B8F2;border:1px solid #58606A}
+.ph h3{margin:0;font-size:18px;font-weight:600} .ph p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--neon);margin-top:12px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon)}
+.ptabs{display:flex;gap:14px;border-bottom:1px solid var(--line);margin:14px 0 12px;font-size:13px}
+.ptabs a{padding:6px 0;color:var(--muted)} .ptabs a.on{color:var(--ink);border-bottom:2px solid var(--neon)}
+.resp{font-size:14px;line-height:1.5;margin:0 0 14px}
+dl{display:grid;grid-template-columns:80px 1fr;gap:7px 10px;font-size:13px;margin:0 0 16px} dt{color:var(--muted)} dd{margin:0}
+.infer{border-radius:10px;padding:12px;background:rgba(238,111,124,.07);border:1px solid rgba(238,111,124,.45)}
+.infer strong{font-size:13px} .infer p{font-size:12.5px;line-height:1.45;color:var(--muted);margin:6px 0 10px}
+.infer code{color:var(--ink);font-size:12px}
+.btns{display:flex;gap:8px}
+.src{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.5}
+.src b{color:var(--ink);font-weight:500}
+
+/* trilho de navegação à direita */
+.rail{background:#1A1D20;border-right:1px solid #2E3338;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px}
+.rail a{width:64px;padding:8px 0 6px;border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--muted);position:relative}
+.rail a svg{width:20px;height:20px}
+.rail a.on{background:var(--surface);color:var(--ink)} .rail a.on::before{content:"";position:absolute;left:-6px;top:10px;bottom:10px;width:3px;border-radius:2px;background:var(--neon);box-shadow:0 0 8px var(--neon)}
+.rail .count{position:absolute;top:2px;right:6px;margin:0}
+/* lista de sistemas */
+.side{background:var(--chrome);border-right:1px solid #2E3338;padding:16px 8px;overflow:auto}
+.side .search2{margin:0 6px 14px}
+.list{padding:0}
+.list h5{margin:0 10px 8px;font-size:12px;font-weight:600;color:var(--muted)}
+.row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:13px}
+.row .ic{width:24px;height:24px;border-radius:7px;background:#2F3439;border:1px solid #4D555C;display:grid;place-items:center;font-size:10px;font-weight:700}
+.row em{margin-left:auto;font-style:normal;font-size:11px;color:var(--muted)}
+.row.on{background:var(--surface);box-shadow:inset 0 0 0 1px rgba(70,242,142,.45)}
+.row .dot{margin-left:auto;width:7px;height:7px;border-radius:50%;background:var(--neon);box-shadow:0 0 6px var(--neon)}
+.row.inf em{color:#F2B7BE} .row.dim{opacity:.55}
+
+
+.att{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.doc{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;background:#2F3439;border:1px solid #4D555C;font-size:12.5px}
+.doc .ty{font-size:9.5px;font-weight:700;padding:2px 5px;border-radius:4px;background:#3A4148}
+.doc span{color:var(--muted);font-size:11.5px}
+.doc.proc{border-color:rgba(70,242,142,.5)}
+.composer{border-top:1px solid #353B41;padding:12px 22px 14px}
+.composer .pending{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.composer .pending .doc{background:var(--surface)}
+.composer .pending .doc b{font-weight:500}
+.composer .pending .x{color:var(--faint);margin-left:4px}
+.composer .row2{display:flex;gap:8px;align-items:center}
+.composer input{flex:1;font:inherit;font-size:14px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+.iconbtn{width:40px;height:40px;display:grid;place-items:center;padding:0;border-radius:10px}
+.iconbtn svg{width:18px;height:18px}
+.menu{position:absolute;bottom:150px;left:22px;width:360px;background:#262B30;border:1px solid var(--line);border-radius:12px;padding:6px;box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.menu a{display:flex;gap:10px;align-items:center;padding:9px 10px;border-radius:8px;font-size:13px}
+.menu a:first-child{background:var(--surface)}
+.menu .ty{font-style:normal;font-size:9.5px;font-weight:700;padding:3px 5px;border-radius:4px;background:#3A4148;color:var(--muted);min-width:30px;text-align:center}
+.menu a span{margin-left:auto;font-size:11px;color:var(--faint)}
+.conv{position:relative}
+.drop{font-size:11.5px;color:var(--faint);margin-top:8px}
+.body{grid-template-columns:76px 250px 1fr 380px}
+.conv{background:var(--canvas);display:flex;flex-direction:column;overflow:hidden}
+.chead{display:flex;align-items:center;gap:14px;padding:14px 22px;border-bottom:1px solid #353B41}
+.chead h2{margin:0;font-size:17px;font-weight:600}
+.chead .who{margin-left:auto;display:flex;align-items:center}
+.av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;border:2px solid var(--canvas);margin-left:-8px}
+.thread{flex:1;overflow:auto;padding:20px 22px;display:flex;flex-direction:column;gap:16px}
+.msg{display:flex;gap:12px;max-width:760px}
+.msg .body2{flex:1}
+.msg .name{font-size:12.5px;color:var(--muted);margin-bottom:4px}
+.msg .name b{color:var(--ink);font-weight:600;margin-right:6px}
+.msg p{margin:0;font-size:14px;line-height:1.55}
+.agent .av{background:linear-gradient(#56E59A,#2FBF6F);color:#0B2A17;border-color:transparent}
+.bubble{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.agent .bubble{background:#2C3337;border-color:#3E4A44}
+.cite{display:flex;gap:10px;align-items:flex-start;margin-top:10px;background:rgba(238,111,124,.07);border:1px solid rgba(238,111,124,.45);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45}
+.cite b{display:block}
+.cite span{color:var(--muted)}
+.cite i{font-style:normal;flex:none;font-size:11px;font-weight:700;padding:3px 6px;border-radius:6px;background:#3A2A2E;color:#F2B7BE}
+.touch{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.touch span{font-size:12px;padding:4px 9px;border-radius:8px;background:#2F3439;border:1px solid #4D555C}
+.touch span.new{border-color:var(--neon);color:var(--neon)}
+.opts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.opts button{font-size:12.5px}
+.compose{border-top:1px solid #353B41;padding:14px 22px;display:flex;gap:10px;align-items:center}
+.compose input{flex:1;font:inherit;font-size:14px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+.modes{display:flex;background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:2px}
+.modes a{font-size:12.5px;padding:5px 10px;border-radius:6px;color:var(--muted)}
+.modes a.on{background:var(--tile);color:var(--ink)}
+.out{background:var(--chrome);border-left:1px solid #2E3338;padding:16px;overflow:auto}
+.out h4{margin:0 0 10px;font-size:13px;color:var(--muted);font-weight:600}
+.delta{background:var(--canvas);border:1px solid var(--line);border-radius:12px;padding:8px;margin-bottom:18px}
+.delta svg{width:100%;height:auto;display:block}
+.dl{display:flex;gap:12px;font-size:11.5px;color:var(--muted);padding:6px 4px 2px}
+.dl span{display:flex;gap:5px;align-items:center}
+.dl i{width:9px;height:9px;border-radius:2px;display:inline-block}
+.art{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:10px;border:1px solid var(--line);margin-bottom:8px;font-size:13px}
+.art .t{flex:none;width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-size:10.5px;font-weight:700;background:#2F3439;border:1px solid #4D555C}
+.art b{display:block;font-weight:600}
+.art span{color:var(--muted);font-size:12px}
+.art em{margin-left:auto;font-style:normal;font-size:11px;padding:2px 8px;border-radius:9px;white-space:nowrap}
+.art em.draft{background:rgba(226,181,102,.14);color:var(--arquivo)}
+.art em.ready{background:rgba(70,242,142,.12);color:var(--neon)}
+.side .conv-row{padding:10px;border-radius:9px;margin-bottom:4px;font-size:13px}
+.side .conv-row b{display:block;font-weight:600}
+.side .conv-row span{font-size:12px;color:var(--muted)}
+.side .conv-row.on{background:var(--surface);box-shadow:inset 0 0 0 1px rgba(70,242,142,.45)}
+</style></head><body>
+<div class="note"><h1>Conversa guiada</h1>
+<p>UJ-3: Carla (PM) e Rafael (arquiteto) desenham o parcelamento no checkout. O facilitador já conhece o domínio: cita a ADR que conflita, mostra quais sistemas mudam e, à direita, o mapa atual contra o proposto e os documentos que a conversa está produzindo. Nada vira oficial sem aprovação.</p></div>
+<div class="app">
+  <div class="top">
+    <span class="brand"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="4" cy="5" r="1.6" fill="#9DA3A8"/><circle cx="8" cy="3" r="1.2" fill="#9DA3A8"/><circle cx="3" cy="10" r="1.1" fill="#9DA3A8"/><rect x="7" y="7" width="12" height="12" rx="4" fill="#46F28E"/></svg>Sinter</span>
+    <span class="crumbs">Pagamentos<span>/</span>Conversas<span>/</span><b>Parcelamento no checkout</b></span>
+    <span class="modes" style="margin-left:auto"><a>Processo</a><a>Funcionalidade</a><a class="on">Solução</a></span>
+  </div>
+  <div class="body">
+    <nav class="rail" aria-label="Navegação">
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="6" height="5" rx="1.5"/><rect x="12" y="3" width="6" height="5" rx="1.5"/><rect x="7" y="12" width="6" height="5" rx="1.5"/><path d="M5 8v2h10V8M10 10v2"/></svg>Mapa</a>
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5h12M4 10h8M4 15h10"/></svg>Curadoria<span class="count">9</span></a>
+      <a class="on"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9l-4 3v-3H5a2 2 0 0 1-2-2z"/></svg>Conversas</a>
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="14" height="14" rx="3"/><path d="M7 10l2 2 4-4"/></svg>Tarefas</a>
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7l7-4 7 4-7 4z"/><path d="M3 11l7 4 7-4"/></svg>Catálogo</a>
+    </nav>
+    <aside class="side">
+      <div class="list"><h5>Conversas</h5></div>
+      <div class="conv-row on"><b>Parcelamento no checkout</b><span>Solução. Carla, Rafael. Agora</span></div>
+      <div class="conv-row"><b>Estorno parcial</b><span>Funcionalidade. Carla. Ontem</span></div>
+      <div class="conv-row"><b>Processo de chargeback</b><span>Processo. Rafael. 22 set</span></div>
+      <div class="conv-row"><b>Migração do tokenizer</b><span>Solução. Diego. 19 set</span></div>
+      <button class="glaze" style="width:calc(100% - 12px);margin:14px 6px 0">Nova conversa</button>
+    </aside>
+
+    <section class="conv">
+      <div class="chead"><h2>Parcelamento no checkout</h2><span class="chip">Modo solução</span>
+        <span class="who"><span class="av" style="background:#B69CF0;color:#1F1635">CA</span><span class="av" style="background:#7EA6F4;color:#10203F">RN</span><span class="av" style="background:linear-gradient(#56E59A,#2FBF6F);color:#0B2A17">S</span></span></div>
+      <div class="thread">
+        <div class="msg"><span class="av" style="background:#B69CF0;color:#1F1635;margin:0">CA</span><div class="body2"><div class="name"><b>Carla Mendes</b>PM, 10:02</div>
+          <div class="bubble"><p>Queremos parcelar em até 12x no cartão, sem juros até 6x. O cliente escolhe as parcelas no checkout. Anexei a proposta comercial e o print da tela nova.</p><div class="att"><span class="doc proc"><em class="ty" style="color:#EE6F7C;font-style:normal">PDF</em>Proposta parcelamento v3.pdf<span>8 páginas</span></span><span class="doc proc"><em class="ty" style="color:#8FD0E8;font-style:normal">PNG</em>tela-checkout-parcelas.png</span></div></div></div></div>
+        <div class="msg agent"><span class="av" style="margin:0">S</span><div class="body2"><div class="name"><b>Facilitador de solução</b>Sinter, 10:02</div><div class="bubble"><p>Li os dois anexos. Da proposta saíram <b>3 regras de negócio</b> (juros a partir de 7x, parcela mínima de R$ 20, parcelamento só no crédito). Elas entram na conversa agora e vão para a curadoria no fim.</p></div></div></div>
+
+        <div class="msg agent"><span class="av" style="margin:0">S</span><div class="body2"><div class="name"><b>Facilitador de solução</b>Sinter, 10:02</div>
+          <div class="bubble"><p>Entendi. Pelo mapa de Pagamentos, a decisão das parcelas passa por três sistemas. Antes de desenhar, um ponto de atenção:</p>
+          <div class="cite"><i>ADR-012</i><div><b>Idempotência no checkout</b><span>A chave de idempotência é calculada sobre valor e cartão. Com parcelas, o mesmo valor pode gerar duas autorizações diferentes. A chave precisa incluir o número de parcelas?</span></div></div>
+          <div class="touch"><span>checkout-api</span><span>antifraude</span><span>payments-gateway</span><span class="new">+ installment-policy</span></div></div></div></div>
+
+        <div class="msg"><span class="av" style="background:#7EA6F4;color:#10203F;margin:0">RN</span><div class="body2"><div class="name"><b>Rafael Nunes</b>Arquiteto, 10:05</div>
+          <div class="bubble"><p>Sim, inclui. E a regra de parcelas não deve ficar no checkout: cria um serviço pequeno, installment-policy, que o checkout consulta.</p></div></div></div>
+
+        <div class="msg agent"><span class="av" style="margin:0">S</span><div class="body2"><div class="name"><b>Facilitador de solução</b>Sinter, 10:05</div>
+          <div class="bubble"><p>Registrei as duas decisões. Última pergunta para fechar o contrato: o antifraude precisa saber o número de parcelas para calcular o score?</p>
+          <div class="opts"><button>Sim, enviar no POST /score</button><button>Não precisa</button><button>Perguntar ao dono do antifraude</button></div></div></div></div>
+      </div>
+      <div class="menu" role="menu" aria-label="Adicionar ao contexto"><a><em class="ty">ARQ</em>Arquivo do computador<span>PDF, DOCX, MD, imagem</span></a><a><em class="ty">DOC</em>Confluence ou Google Docs<span>link da página</span></a><a><em class="ty">REU</em>Transcrição de reunião<span>em breve</span></a><a><em class="ty">@</em>Item do domínio<span>sistema, ADR, regra</span></a><a><em class="ty">WEB</em>Link da web</a></div><div class="composer"><div class="pending"><span class="doc"><em class="ty" style="color:#8FD0E8;font-style:normal">DOCX</em><b>Regras antifraude 2025.docx</b><span>lendo…</span><span class="x">✕</span></span><span class="doc"><em class="ty" style="color:#46F28E;font-style:normal">ADR</em><b>@ADR-007 Arredondamento</b><span class="x">✕</span></span></div><div class="row2"><button class="iconbtn" aria-label="Adicionar documento ou referência"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 4v12M4 10h12"/></svg></button><input value="Responder, citar com @ ou arrastar arquivos para cá" readonly><button class="glaze">Enviar</button></div><p class="drop">Anexos entram como fonte desta conversa. O que virar conhecimento passa pela curadoria antes de ficar oficial.</p></div>
+    </section>
+
+    <aside class="out">
+      <h4>Mapa atual e proposto</h4>
+      <div class="delta">
+<svg viewBox="0 0 340 220" aria-label="Mapa atual e proposto">
+  <defs><marker id="a1" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8z" fill="#7C858D"/></marker>
+  <marker id="a2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8z" fill="#46F28E"/></marker>
+  <filter id="gl"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+  <g font-family="Avenir Next, sans-serif" font-size="11">
+  <rect x="14" y="20" width="104" height="36" rx="9" fill="#3E454C" stroke="#46F28E" stroke-width="1.5"/><text x="66" y="42" text-anchor="middle" fill="#E8E4DB">checkout-api</text>
+  <text x="66" y="68" text-anchor="middle" fill="#46F28E" font-size="10">alterado</text>
+  <rect x="218" y="20" width="110" height="36" rx="9" fill="#3E454C" stroke="#5D656C"/><text x="273" y="42" text-anchor="middle" fill="#E8E4DB">payments-gateway</text>
+  <rect x="218" y="92" width="110" height="36" rx="9" fill="#3E454C" stroke="#5D656C"/><text x="273" y="114" text-anchor="middle" fill="#E8E4DB">antifraude</text>
+  <rect x="14" y="150" width="120" height="40" rx="9" fill="#26382E" stroke="#46F28E" stroke-dasharray="4 3" filter="url(#gl)"/><text x="74" y="168" text-anchor="middle" fill="#C8FBDD">installment-policy</text><text x="74" y="182" text-anchor="middle" fill="#46F28E" font-size="10">novo</text>
+  <rect x="218" y="162" width="110" height="36" rx="9" fill="#3E454C" stroke="#5D656C"/><text x="273" y="184" text-anchor="middle" fill="#E8E4DB">ledger</text>
+  <path d="M118,38 H218" stroke="#7C858D" marker-end="url(#a1)"/><text x="168" y="32" text-anchor="middle" fill="#9DA3A8" font-size="10">POST /authorize</text>
+  <path d="M118,48 C170,48 170,110 218,110" stroke="#46F28E" fill="none" marker-end="url(#a2)"/><text x="176" y="86" text-anchor="middle" fill="#46F28E" font-size="10">+ parcelas no score</text>
+  <path d="M66,56 V150" stroke="#46F28E" stroke-dasharray="4 3" marker-end="url(#a2)"/>
+  <path d="M273,56 V162" stroke="#7C858D" marker-end="url(#a1)" opacity=".7"/><text x="266" y="146" text-anchor="end" fill="#B69CF0" font-size="10">PaymentAuthorized</text>
+  <text x="266" y="158" text-anchor="end" fill="#46F28E" font-size="10">+ campo installments</text>
+  </g>
+</svg>
+        <div class="dl"><span><i style="background:#46F28E"></i>Novo ou alterado</span><span><i style="background:#7C858D"></i>Sem mudança</span></div></div>
+      <h4>O que esta conversa está produzindo</h4>
+      <div class="art"><span class="t" style="color:#7EA6F4">ADR</span><div><b>ADR-013 Chave de idempotência com parcelas</b><span>Atualiza ADR-012</span></div><em class="ready">pronta</em></div>
+      <div class="art"><span class="t" style="color:#46F28E">SYS</span><div><b>installment-policy</b><span>Novo sistema no subdomínio Checkout</span></div><em class="ready">pronta</em></div>
+      <div class="art"><span class="t" style="color:#B69CF0">EVT</span><div><b>Contrato PaymentAuthorized</b><span>Novo campo installments</span></div><em class="draft">rascunho</em></div>
+      <div class="art"><span class="t" style="color:#E2B566">PRD</span><div><b>PRD Parcelamento no checkout</b><span>3 tarefas propostas</span></div><em class="draft">rascunho</em></div>
+      <button class="glaze" style="width:100%;margin-top:8px">Enviar para curadoria</button>
+    </aside>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,65 @@
+{
+  "expectations": [
+    {
+      "text": "Tem as 6 páginas (negócio, arquitetura, serviços, jornadas, infraestrutura, referência)",
+      "passed": true,
+      "evidence": "6 páginas"
+    },
+    {
+      "text": "Toda página abre com 'Em resumo' e tem o índice 'Nesta página'",
+      "passed": true,
+      "evidence": "todas ok"
+    },
+    {
+      "text": "Poucos arquivos: no máximo 15 Markdown escritos (fora llm/ e site/)",
+      "passed": true,
+      "evidence": "6 arquivos"
+    },
+    {
+      "text": "Negócio tem a parede do Event Storming (tabela com 🟧) e a seção 'Quem orquestra'",
+      "passed": true,
+      "evidence": "parede e quem orquestra"
+    },
+    {
+      "text": "Negócio sem jargão técnico (no máximo 3 termos como lambda, gRPC, DynamoDB)",
+      "passed": true,
+      "evidence": "2 termos técnicos"
+    },
+    {
+      "text": "Cartão para IA (llms.txt) existe e cabe em ~1.500 tokens",
+      "passed": true,
+      "evidence": "~1468 tokens"
+    },
+    {
+      "text": "80%+ das seções de serviço abrem com 'Em resumo'",
+      "passed": true,
+      "evidence": "12/12 seções"
+    },
+    {
+      "text": "Jornadas têm diagrama de sequência",
+      "passed": true,
+      "evidence": "3 diagramas"
+    },
+    {
+      "text": "Mapa dos serviços sai das tabelas 'Consome' (3+ ligações)",
+      "passed": true,
+      "evidence": "19 ligações"
+    },
+    {
+      "text": "Referência tem 'Dúvidas e perguntas'",
+      "passed": true,
+      "evidence": "presente"
+    },
+    {
+      "text": "A jornada de compra passa por checkout e payment",
+      "passed": true,
+      "evidence": "ok"
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 0,
+    "total": 11,
+    "pass_rate": 1.0
+  }
+}

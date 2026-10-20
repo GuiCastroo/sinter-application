@@ -1,0 +1,170 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sinter: CLI</title><style>
+/* Esmalte v2
+   chrome   #1F2327  canvas #2A2F34  surface #343A40  tile #3E454C  hairline #474E55
+   ink      #E8E4DB  muted  #9DA3A8
+   neon (foco, aprovado, ação) #46F28E
+   glazes   API cobalto #7EA6F4  evento lilás #B69CF0  arquivo âmbar #E2B566  conflito #EE6F7C */
+:root{
+  --chrome:#1F2327; --canvas:#2A2F34; --surface:#343A40; --tile:#3E454C; --tile-hi:#4A525A; --line:#474E55;
+  --ink:#E8E4DB; --muted:#9DA3A8; --faint:#6E757B;
+  --api:#7EA6F4; --evento:#B69CF0; --neon:#46F28E; --arquivo:#E2B566; --conflict:#EE6F7C;
+  --ui:'Avenir Next','Helvetica Neue',sans-serif; --display:Optima,'Avenir Next',sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#151719;font-family:var(--ui);color:var(--ink)}
+.note{max-width:1440px;margin:24px auto 12px;padding:0 16px;color:#C9C6BF;line-height:1.5}
+.note h1{font-family:var(--display);font-weight:500;font-size:24px;margin:0 0 4px;color:#EEE}
+.note p{margin:0;max-width:78ch}
+.app{max-width:1440px;margin:0 auto 40px;border-radius:12px;overflow:hidden;border:1px solid #2E3338;background:var(--chrome);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+
+/* barra superior */
+.top{display:flex;align-items:center;gap:18px;padding:10px 16px;border-bottom:1px solid #2E3338}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:18px;letter-spacing:.02em}
+.crumbs{font-size:14px;color:var(--muted)} .crumbs b{color:var(--ink);font-weight:500}
+.crumbs span{margin:0 6px;color:var(--faint)}
+.levels{display:flex;background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:2px;margin-left:8px}
+.levels a{font-size:13px;padding:5px 10px;border-radius:6px;color:var(--muted)}
+.levels a.on{background:var(--tile);color:var(--ink)}
+.nav{display:flex;gap:2px;margin-left:auto}
+.nav a{font-size:14px;padding:6px 10px;border-radius:6px;color:var(--muted)}
+.nav a.on{color:var(--ink);background:var(--surface)}
+.count{display:inline-block;min-width:18px;padding:0 5px;margin-left:5px;border-radius:9px;background:var(--conflict);color:#2A1215;font-size:11px;font-weight:700;text-align:center}
+button{font:inherit;font-size:13px;padding:7px 12px;border-radius:7px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+button.glaze{background:var(--neon);border-color:var(--neon);color:#0B2A17;font-weight:600;box-shadow:0 0 14px rgba(70,242,142,.35)}
+
+/* corpo */
+.body{display:grid;grid-template-columns:76px 260px 1fr 320px;height:760px}
+.canvas{position:relative;background:var(--canvas);overflow:hidden}
+.canvas svg{position:absolute;inset:0;width:100%;height:100%}
+.search{position:absolute;top:14px;left:16px;display:flex;gap:10px;align-items:center}
+.search input{font:inherit;font-size:13px;width:250px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+
+/* player de fluxo */
+.flow{position:absolute;left:16px;right:16px;bottom:14px;display:grid;grid-template-columns:auto 1fr auto;gap:6px 16px;align-items:center;background:rgba(31,35,39,.94);border:1px solid var(--line);border-radius:10px;padding:14px;backdrop-filter:blur(6px)}
+.flow h4{margin:0;font-size:14px;font-weight:600}
+.flow .sub{font-size:12px;color:var(--muted);margin:2px 0 0}
+.flow .step{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45}
+.flow .n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--neon);color:#0B2A17;font-weight:700;font-size:12px;display:grid;place-items:center;box-shadow:0 0 0 4px rgba(70,242,142,.18),0 0 12px rgba(70,242,142,.5)}
+.flow .ctrl{display:flex;gap:8px;grid-row:1 / span 2;grid-column:3}
+.flow .head{grid-column:1;grid-row:1 / span 2;padding-right:14px;border-right:1px solid var(--line)}
+.flow .step{grid-column:2}
+.flow .prog{grid-column:2;margin-top:0!important}
+.flow .prog{display:flex;gap:4px;margin-top:10px} .flow .prog i{flex:1;height:3px;border-radius:2px;background:var(--line)} .flow .prog i.d{background:var(--neon)}
+
+/* camadas e zoom */
+.layers{position:absolute;right:16px;top:14px;display:flex;gap:6px}
+.chip{font-size:12px;padding:5px 9px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+.chip.on{color:var(--ink);border-color:#5A626A}
+.zoom{position:absolute;right:16px;bottom:128px;display:flex;gap:10px;align-items:flex-end}
+.mini{width:120px;height:78px;border:1px solid var(--line);border-radius:8px;background:var(--chrome);position:relative}
+.mini i{position:absolute;border-radius:2px;background:#58616A}
+.mini .vp{position:absolute;left:14px;top:10px;width:70px;height:46px;border:1.5px solid var(--neon);border-radius:3px}
+.zbtn{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.zbtn span{width:30px;height:28px;display:grid;place-items:center;background:var(--surface);color:var(--muted);font-size:16px}
+.zbtn span+span{border-top:1px solid var(--line)}
+
+/* painel */
+.panel{background:var(--chrome);border-left:1px solid #2E3338;padding:18px;overflow:auto}
+.ph{display:flex;gap:12px;align-items:center}
+.tech{width:40px;height:40px;border-radius:10px;background:linear-gradient(#4E565E,#3A4148);display:grid;place-items:center;font-size:13px;font-weight:700;color:#C9B8F2;border:1px solid #58606A}
+.ph h3{margin:0;font-size:18px;font-weight:600} .ph p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--neon);margin-top:12px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon)}
+.ptabs{display:flex;gap:14px;border-bottom:1px solid var(--line);margin:14px 0 12px;font-size:13px}
+.ptabs a{padding:6px 0;color:var(--muted)} .ptabs a.on{color:var(--ink);border-bottom:2px solid var(--neon)}
+.resp{font-size:14px;line-height:1.5;margin:0 0 14px}
+dl{display:grid;grid-template-columns:80px 1fr;gap:7px 10px;font-size:13px;margin:0 0 16px} dt{color:var(--muted)} dd{margin:0}
+.infer{border-radius:10px;padding:12px;background:rgba(238,111,124,.07);border:1px solid rgba(238,111,124,.45)}
+.infer strong{font-size:13px} .infer p{font-size:12.5px;line-height:1.45;color:var(--muted);margin:6px 0 10px}
+.infer code{color:var(--ink);font-size:12px}
+.btns{display:flex;gap:8px}
+.src{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.5}
+.src b{color:var(--ink);font-weight:500}
+
+/* trilho de navegação à direita */
+.rail{background:#1A1D20;border-right:1px solid #2E3338;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px}
+.rail a{width:64px;padding:8px 0 6px;border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--muted);position:relative}
+.rail a svg{width:20px;height:20px}
+.rail a.on{background:var(--surface);color:var(--ink)} .rail a.on::before{content:"";position:absolute;left:-6px;top:10px;bottom:10px;width:3px;border-radius:2px;background:var(--neon);box-shadow:0 0 8px var(--neon)}
+.rail .count{position:absolute;top:2px;right:6px;margin:0}
+/* lista de sistemas */
+.side{background:var(--chrome);border-right:1px solid #2E3338;padding:16px 8px;overflow:auto}
+.side .search2{margin:0 6px 14px}
+.list{padding:0}
+.list h5{margin:0 10px 8px;font-size:12px;font-weight:600;color:var(--muted)}
+.row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:13px}
+.row .ic{width:24px;height:24px;border-radius:7px;background:#2F3439;border:1px solid #4D555C;display:grid;place-items:center;font-size:10px;font-weight:700}
+.row em{margin-left:auto;font-style:normal;font-size:11px;color:var(--muted)}
+.row.on{background:var(--surface);box-shadow:inset 0 0 0 1px rgba(70,242,142,.45)}
+.row .dot{margin-left:auto;width:7px;height:7px;border-radius:50%;background:var(--neon);box-shadow:0 0 6px var(--neon)}
+.row.inf em{color:#F2B7BE} .row.dim{opacity:.55}
+
+body{background:#151719}
+.term{max-width:1100px;margin:0 auto 40px;border-radius:12px;overflow:hidden;border:1px solid #2E3338;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.tbar{background:#23272B;padding:10px 14px;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.tbar i{width:11px;height:11px;border-radius:50%;background:#474E55;display:inline-block}
+.tbar span{margin-left:10px}
+pre{margin:0;background:#1A1D20;color:#D6D2CA;font-family:Menlo,'SF Mono',monospace;font-size:13px;line-height:1.7;padding:18px 20px;white-space:pre-wrap}
+.p{color:#46F28E}.c{color:#E8E4DB;font-weight:600}.m{color:#8D949A}.ok{color:#46F28E}.w{color:#E2B566}.b{color:#7EA6F4}.v{color:#B69CF0}.r{color:#EE6F7C}
+.caption{max-width:1100px;margin:0 auto 10px;padding:0 4px;color:#C9C6BF;font-size:14px}
+.caption b{color:#EEE}
+</style></head><body>
+<div class="note"><h1>CLI do dev</h1>
+<p>UJ-4 e UJ-5: a Bia recebe o pacote da tarefa e o Diego cria um serviço que já nasce com o .sinter/. A CLI usa as mesmas cores do app: neon para o que foi aplicado, âmbar para o que pede atenção. Toda saída tem versão em JSON para agentes (--json).</p></div>
+
+<p class="caption"><b>Bia puxa a tarefa</b> no checkout-api</p>
+<div class="term"><div class="tbar"><i></i><i></i><i></i><span>bia@mac: ~/code/checkout-api</span></div>
+<pre><span class="p">❯</span> <span class="c">sinter task pull PAG-231</span>
+
+  <span class="c">PAG-231 Parcelamento no checkout</span>   <span class="m">domínio Pagamentos</span>
+
+  Camadas
+  <span class="ok">●</span> Negócio   Carla Mendes     aprovada   <span class="m">3 regras, 1 PRD</span>
+  <span class="ok">●</span> Solução   Rafael Nunes     aprovada   <span class="m">ADR-013, installment-policy, 2 contratos</span>
+  <span class="ok">●</span> Repo      Diego Almeida    aprovada   <span class="m">2 padrões, 1 nota</span>
+
+  Gravado em .sinter/
+  <span class="ok">+</span> tasks/PAG-231.md
+  <span class="ok">+</span> context/neighbors/installment-policy.md
+  <span class="w">~</span> context/neighbors/antifraude.md          <span class="m">POST /score + installments</span>
+  <span class="w">~</span> context/business-rules.md               <span class="m">+3 regras</span>
+  <span class="w">~</span> context/decisions.md                    <span class="m">+ADR-013</span>
+
+  Exports regerados: <span class="b">AGENTS.md</span>, <span class="b">CLAUDE.md</span>, <span class="b">.cursor/rules</span>, <span class="b">.github/copilot-instructions.md</span>
+  Contexto da tarefa: <span class="c">3,7 mil</span> de 5 mil tokens
+
+  <span class="ok">Pronto.</span> Peça ao seu agente: <span class="c">implemente a PAG-231 seguindo .sinter/flows/nova-feature.md</span>
+
+<span class="p">❯</span> <span class="c">sinter status</span>
+
+  .sinter/ sincronizado com o domínio Pagamentos   <span class="m">há 1 min</span>
+  <span class="w">!</span> CLAUDE.md foi editado à mão; a próxima exportação sobrescreve. Mova a edição para .sinter/standards/
+</pre></div>
+
+<p class="caption" style="margin-top:28px"><b>Diego cria um serviço novo</b></p>
+<div class="term"><div class="tbar"><i></i><i></i><i></i><span>diego@mac: ~/code</span></div>
+<pre><span class="p">❯</span> <span class="c">sinter init --domain pagamentos --name installment-policy</span>
+
+  Novo sistema no subdomínio <span class="v">Checkout</span>, definido na ADR-013
+
+  Vizinhos previstos
+  <span class="m">←</span> checkout-api        chama GET /installments/options
+  <span class="m">→</span> ledger              publica InstallmentPlanCreated   <span class="w">contrato em rascunho</span>
+
+  <span class="ok">Criado</span> installment-policy/
+  ├─ .sinter/
+  │  ├─ sinter.yaml
+  │  ├─ context/domain.md, neighbors/ (2), business-rules.md, decisions.md
+  │  ├─ standards/          <span class="m">Kotlin, padrões da empresa</span>
+  │  ├─ skills/             <span class="m">6 do catálogo: dev-kotlin, testes-de-contrato, adr-reader…</span>
+  │  ├─ agents/             <span class="m">tech-lead, dev</span>
+  │  └─ flows/              <span class="m">nova-feature.md, bugfix.md</span>
+  ├─ AGENTS.md
+  ├─ CLAUDE.md
+  ├─ .cursor/rules/
+  └─ .github/copilot-instructions.md
+
+  <span class="ok">Pronto em 4 s.</span> O repo foi registrado no mapa de Pagamentos como <span class="w">aguardando primeiro commit</span>.
+</pre></div>
+</body></html>

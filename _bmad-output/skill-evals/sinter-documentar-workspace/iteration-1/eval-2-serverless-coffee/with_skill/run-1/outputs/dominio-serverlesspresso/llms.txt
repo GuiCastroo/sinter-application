@@ -1,0 +1,101 @@
+# Serverlesspresso
+
+> Serverlesspresso é o backend serverless de um estande de café pop-up (mostrado pela primeira vez no AWS re:Invent 2021): recebe o pedido de bebida de um cliente via QR code, orquestra o ciclo de vida do pedido até a entrega pelo barista e m
+
+Documentação no padrão Sinter: 6 camadas (negócio → infraestrutura). Cada item tem id estável, proveniência e ligações `realiza`/`realizado-por`. Leia primeiro `llm/contexto.md`; consulte `llm/grafo.json` para navegar ligações.
+
+## 1. Negócio
+- [Vender café sob demanda em um evento pop-up](capacidades/vender-cafe-sob-demanda.md): A empresa consegue operar um balcão de café pop-up onde o cliente pede pelo celular via QR code, entra numa fila com capacidade limitada, e 
+- [Pedido de café](fluxos/pedido-de-cafe.md): Do momento em que o cliente escaneia o QR code no balcão até o barista entregar (ou cancelar) a bebida, mantendo o cliente informado em temp
+
+## 3. Subdomínio
+- [Pedido de café: sequência técnica](fluxos/pedido-de-cafe.sequencia.md): Realiza as etapas do [fluxo macro](./pedido-de-cafe.md). Dois Step Functions cooperam via **EventBridge (assíncrono)** e **Task Tokens (`wai
+- [Subdomínio Configuração da loja](subdominios/configuracao-da-loja.md): Mantém o cardápio do evento, o estado "aberto/fechado" da loja e o limite de bebidas por token, e avisa o resto do sistema quando essa confi
+- [Subdomínio Extensões](subdominios/extensoes.md): Add-ons opcionais que demonstram a extensibilidade da arquitetura orientada a eventos: cada um só cria novas regras do EventBridge sobre o b
+- [Subdomínio Núcleo e identidade](subdominios/nucleo-e-identidade.md): Recursos fundacionais que todos os outros subdomínios usam: o barramento de eventos, a autenticação sem senha do cliente (Cognito com desafi
+- [Subdomínio Pedido](subdominios/pedido.md): Do QR code escaneado pelo cliente até a bebida entregue: validação de token, verificação de capacidade, orquestração via Step Functions, per
+
+## 4. Sistema
+- [ConfigService.ConfigChanged](sistemas/config-service/contratos/config-service-config-changed.md): {
+- [config-service](sistemas/config-service/ficha.md): Fonte de verdade do cardápio do evento e do estado "loja aberta/fechada"; avisa o resto do sistema quando essa configuração muda.
+- [counting-service](sistemas/counting-service/ficha.md): **Sistema parcialmente órfão.** A tabela `CountingTable` (`serverlesspresso-counting-table`) é real e usada — mas na pilha consolidada (`01-
+- [extensao-event-player](sistemas/extensao-event-player/ficha.md): Step Functions que reproduz uma sequência gravada de eventos reais do Serverlesspresso (um em cada ~5 s, ao longo de ~15 minutos), útil para
+- [extensao-order-robot](sistemas/extensao-order-robot/ficha.md): Duas state machines que simulam, respectivamente, um "robô cliente" fazendo pedidos em lote e um "robô barista" preparando-os automaticament
+- [extensao-persist-metrics-dynamodb](sistemas/extensao-persist-metrics-dynamodb/ficha.md): Exemplo de extensão "EventBridge → SQS → Lambda → DynamoDB": uma regra roteia `OrderManager.WaitingCompletion` para uma fila SQS, que alimen
+- [extensao-wait-times](sistemas/extensao-wait-times/ficha.md): Calcula o tempo médio de preparo por tipo de bebida a partir dos eventos de início (`OrderManager.WaitingCompletion`) e fim (`OrderProcessor
+- [metrics-service](sistemas/metrics-service/ficha.md): Publica métricas customizadas no CloudWatch a partir de 4 eventos do domínio, para observar o funcionamento do balcão (quantos pedidos, quan
+- [nucleo-serverlesspresso](sistemas/nucleo-serverlesspresso/ficha.md): Pilha fundacional (`00-baseCore`): cria o barramento de eventos, o fluxo de autenticação sem senha do Cognito (login por SMS com código de 6
+- [order-journey-service](sistemas/order-journey-service/ficha.md): Grava **todos** os eventos do domínio (não só os do pedido) em uma tabela própria e, quando um pedido termina, monta uma página HTML com a l
+- [OrderManager.MakeOrder](sistemas/order-manager-service/contratos/order-manager-make-order.md): {
+- [OrderManager.Order{eventId}-COMPLETED / OrderManager.Order{eventId}-CANCELLED](sistemas/order-manager-service/contratos/order-manager-order-state-changed.md): {
+- [OrderManager.WaitingCompletion](sistemas/order-manager-service/contratos/order-manager-waiting-completion.md): {
+- [order-manager-service](sistemas/order-manager-service/ficha.md): Guarda o estado de cada pedido (`serverlesspresso-order-table`) e expõe a API que o app do cliente e o app do barista usam para montar, reiv
+- [OrderProcessor.orderFinished](sistemas/order-processing-service/contratos/order-processor-order-finished.md): {
+- [OrderProcessor.OrderTimeOut](sistemas/order-processing-service/contratos/order-processor-order-timeout.md): {
+- [OrderProcessor.WaitingCompletion](sistemas/order-processing-service/contratos/order-processor-waiting-completion.md): {
+- [OrderProcessor.WorkflowStarted](sistemas/order-processing-service/contratos/order-processor-workflow-started.md): {
+- [order-processing-service](sistemas/order-processing-service/ficha.md): Orquestra o pedido do lado do cliente: confere se a loja está aberta e se há capacidade, aguarda o cliente montar o pedido, gera o número do
+- [publisher-service](sistemas/publisher-service/ficha.md): Ponte entre o EventBridge e o AWS IoT Core: republica os eventos de negócio como mensagens MQTT em tópicos que os três apps (cliente, barist
+- [Validator.NewOrder](sistemas/validator-service/contratos/validator-new-order.md): {
+- [validator-service](sistemas/validator-service/ficha.md): Emite o token de acesso (QR code) por janela de tempo e valida o token escaneado pelo cliente no balcão, iniciando o pedido.
+
+## Transversal
+- [ADR-001 Preferir integrações diretas de serviço a "lambdas de cola" (proposto, sem documento original)](decisoes/ADR-001-integracoes-diretas-sem-lambda-glue.md): Status: proposta (inferida do código; **não existe ADR no repositório** — este documento é uma reconstrução, marcado `inferred`) — Data: des
+- [Barista](glossario/barista.md): Ator humano (ou simulado pela extensão `OrderRobotExtension`/`backends/5-order-manager/robot/`) que reivindica (`make`/`unmake`), prepara e 
+- [Bucket (de tokens)](glossario/bucket-de-tokens.md): Registro em `serverlesspresso-validator` que representa uma janela de tempo fixa (5 minutos, `TIME_INTERVAL`) durante a qual um único código
+- [eventId](glossario/eventid.md): Identificador do "evento pop-up" físico (ex.: um dia específico do balcão em um re:Invent ou conferência). É a partição usada em quase todas
+- [Task Token](glossario/task-token.md): Identificador opaco que o AWS Step Functions gera quando uma execução usa o padrão `waitForTaskToken`. O `order-processing-service` gera um 
+- [Orquestração por Task Token entre duas state machines](padroes/orquestracao-por-task-token-entre-duas-state-machines.md): Como o domínio conecta um processo de longa duração (o pedido, minutos a horas) com ações humanas assíncronas (cliente monta o pedido, baris
+- [Capacidade máxima de pedidos simultâneos](regras-de-negocio/capacidade-maxima-concorrente.md): No máximo **20 pedidos** podem estar em andamento ao mesmo tempo (execuções `RUNNING` da `order-processor-state-machine`); um 21º pedido é r
+- [Limite de tokens por janela de tempo](regras-de-negocio/limite-de-tokens-por-janela.md): A cada janela de 5 minutos, só um número limitado de bebidas pode ser resgatado por token (`ConfigTable.drinksPerBarcode`, valor configuráve
+- [Timeout do barista para concluir o pedido](regras-de-negocio/timeout-barista-preparo.md): Depois que o pedido entra na fila com um número, o barista tem **15 minutos** (`HeartbeatSeconds: 900` no state `Emit - Awaiting Completion 
+- [Timeout do cliente para enviar o pedido](regras-de-negocio/timeout-cliente-envio-pedido.md): Depois de escanear o QR code, o cliente tem **5 minutos** (`HeartbeatSeconds: 300` no state `Emit - Workflow Started TT`) para montar e envi
+
+## Optional
+- [Ambiente "consolidado" (pilha 01-appCore)](infraestrutura/ambientes/consolidado-01-appcore.md): Infraestrutura. Segunda e última pilha do caminho de implantação documentado no README raiz ("Install microservices"). Reúne, em um únic
+- [Ambiente "core" (pilha 00-baseCore)](infraestrutura/ambientes/core-00-basecore.md): Infraestrutura. Primeira pilha a ser implantada (README raiz, seção "Installing the backend"), sempre na região `us-east-1` por instruçã
+- [Ambiente "módulos standalone" (backends/*/template.yaml)](infraestrutura/ambientes/modulos-standalone-backends.md): Infraestrutura. **Achado, não instrução oficial de deploy.** Além da pilha consolidada `01-appCore`, três diretórios de `backends/` têm 
+- [DynamoDB "serverlesspresso-config-table"](infraestrutura/recursos/res-ddb-config-table.md): Infraestrutura. 
+- [DynamoDB "serverlesspresso-counting-table"](infraestrutura/recursos/res-ddb-counting-table.md): Infraestrutura. 
+- [DynamoDB "OrderJourneyEventsTable"](infraestrutura/recursos/res-ddb-order-journey-events-table.md): Infraestrutura. 
+- [DynamoDB "serverlesspresso-order-table"](infraestrutura/recursos/res-ddb-order-table.md): Infraestrutura. 
+- [DynamoDB "serverlesspresso-validator"](infraestrutura/recursos/res-ddb-validator-table.md): Infraestrutura. 
+- [EventBridge bus "Serverlesspresso"](infraestrutura/recursos/res-event-bus-serverlesspresso.md): Infraestrutura. 
+- [API Gateway do validator-service](infraestrutura/recursos/res-http-api-validator.md): Infraestrutura. 
+- [Cognito Identity Pool "ServerlesspressoIdentityPool"](infraestrutura/recursos/res-identity-pool-cognito.md): Infraestrutura. 
+- [AWS IoT Core (realtime messaging)](infraestrutura/recursos/res-iot-core-realtime.md): Infraestrutura. 
+- [S3 bucket "serverlesspresso-order-journey-{region}-{accountId}"](infraestrutura/recursos/res-journey-bucket-s3.md): Infraestrutura. 
+- [CloudFront "JourneyCloudFront"](infraestrutura/recursos/res-journey-cloudfront.md): Infraestrutura. 
+- [SQS "MetricsQueue"](infraestrutura/recursos/res-metrics-queue-sqs.md): Infraestrutura. 
+- [DynamoDB "serverlesspresso-metrics-table"](infraestrutura/recursos/res-metrics-table-dynamodb.md): Infraestrutura. 
+- [API Gateway REST "ServerlesspressoConfigServiceRestApi"](infraestrutura/recursos/res-rest-api-config.md): Infraestrutura. 
+- [API Gateway REST "ServerlesspressoOrdermanagerRestApi"](infraestrutura/recursos/res-rest-api-order-manager.md): Infraestrutura. 
+- [Cognito User Pool "ServerlesspressoUserPool"](infraestrutura/recursos/res-user-pool-cognito.md): Infraestrutura. 
+- [config-changed](sistemas/config-service/componentes/config-changed.md): Componente. Republica no EventBridge qualquer alteração gravada em `ConfigTable` (cardápio, loja aberta/fechada).
+- [fill-databases-custom-resource](sistemas/config-service/componentes/fill-databases-custom-resource.md): Componente. Custom Resource do CloudFormation que popula `ConfigTable` (cardápio inicial) e `CountingTable` (contador zerado) toda v
+- [rest-api-config](sistemas/config-service/componentes/rest-api-config.md): Componente. Rotas de leitura e escrita da configuração da loja, todas em integração direta do API Gateway com o DynamoDB (sem lambda
+- [get-order-id](sistemas/counting-service/componentes/get-order-id.md): Componente. Incrementa e devolve o contador de pedidos.
+- [reset-order-id](sistemas/counting-service/componentes/reset-order-id.md): Componente. Zera o contador de pedidos.
+- [order-manager-order-cancelled-metric](sistemas/metrics-service/componentes/order-manager-order-cancelled-metric.md): Componente. Registra no CloudWatch pedidos cancelados pelo barista.
+- [order-manager-waiting-completion-metric](sistemas/metrics-service/componentes/order-manager-waiting-completion-metric.md): Componente. Registra no CloudWatch cada pedido que entrou na fila do barista.
+- [order-processor-order-timeout-metric](sistemas/metrics-service/componentes/order-processor-order-timeout-metric.md): Componente. Registra no CloudWatch pedidos perdidos por timeout (cliente ou barista).
+- [validator-new-order-metric](sistemas/metrics-service/componentes/validator-new-order-metric.md): Componente. Registra no CloudWatch cada novo pedido validado.
+- [create-auth-challenge](sistemas/nucleo-serverlesspresso/componentes/create-auth-challenge.md): Componente. Gera o código de 6 dígitos e envia por SMS via SNS.
+- [define-auth-challenge](sistemas/nucleo-serverlesspresso/componentes/define-auth-challenge.md): Componente. Decide o próximo passo do login sem senha: emitir o desafio customizado, aceitar, ou falhar após tentativas demais.
+- [get-iot-endpoint](sistemas/nucleo-serverlesspresso/componentes/get-iot-endpoint.md): Componente. Custom Resource que descobre o endpoint de dados do AWS IoT Core da conta, para o `publisher-service` publicar mensagens
+- [pre-sign-up](sistemas/nucleo-serverlesspresso/componentes/pre-sign-up.md): Componente. Confirma automaticamente o cadastro do cliente por telefone, sem exigir verificação manual.
+- [verify-auth-challenge-response](sistemas/nucleo-serverlesspresso/componentes/verify-auth-challenge-response.md): Componente. Confere se o código de 6 dígitos digitado pelo usuário bate com o gerado.
+- [generate-html](sistemas/order-journey-service/componentes/generate-html.md): Componente. Monta o HTML da linha do tempo do pedido (imagens, mensagens amigáveis de cada evento, botão de compartilhar no Twitter/
+- [order-journey-state-machine](sistemas/order-journey-service/componentes/order-journey-state-machine.md): Componente. Grava cada evento do domínio como uma linha na tabela de jornada; ao ver `OrderProcessor.orderFinished`, busca todo o hi
+- [order-manager-state-machine](sistemas/order-manager-service/componentes/order-manager-state-machine.md): Componente. Decide, pelo campo `action` recebido, se está tratando o envio do pedido pelo cliente, a reivindicação/liberação pelo ba
+- [order-timed-out](sistemas/order-manager-service/componentes/order-timed-out.md): Componente. Marca o pedido como cancelado quando o cliente ou o barista estouram o tempo limite no `order-processing-service`.
+- [rest-api-orders](sistemas/order-manager-service/componentes/rest-api-orders.md): Componente. As 3 rotas da API de pedidos usadas pelos apps de cliente e barista. **Nenhuma delas passa por uma lambda** — são integr
+- [sanitize-order](sistemas/order-manager-service/componentes/sanitize-order.md): Componente. Confere se a bebida pedida e seus modificadores existem no cardápio vigente antes de gravar o pedido.
+- [waiting-completion](sistemas/order-manager-service/componentes/waiting-completion.md): Componente. Grava o número do pedido e o novo Task Token (o que vai destravar o barista) e avisa o resto do sistema que o pedido est
+- [workflow-started](sistemas/order-manager-service/componentes/workflow-started.md): Componente. Cria o registro inicial do pedido assim que o `order-processing-service` sinaliza que está esperando o cliente montar a 
+- [order-processor-state-machine](sistemas/order-processing-service/componentes/order-processor-state-machine.md): Componente. State machine (Standard) que controla todo o ciclo de vida do pedido do lado do cliente até a entrada na fila do barista
+- [publisher-admin](sistemas/publisher-service/componentes/publisher-admin.md): Componente. Republica eventos de `OrderManager.*`, `OrderProcessor.*`, `Validator.*` e `ConfigService.*` no tópico MQTT do painel ad
+- [publisher-config](sistemas/publisher-service/componentes/publisher-config.md): Componente. Republica `ConfigService.ConfigChanged` no tópico MQTT de configuração, avisando os apps quando o cardápio ou o status d
+- [publisher-user](sistemas/publisher-service/componentes/publisher-user.md): Componente. Republica eventos de `OrderManager.*` e `OrderProcessor.*` no tópico MQTT pessoal do cliente dono do pedido.
+- [get-qr-code](sistemas/validator-service/componentes/get-qr-code.md): Componente. Gera ou recupera o "bucket" de tokens da janela de 5 minutos atual e devolve o código para o app do cliente exibir como 
+- [verify-qr-code](sistemas/validator-service/componentes/verify-qr-code.md): Componente. Confere o token escaneado contra o bucket da janela atual; se válido, gera o `orderId` e publica `Validator.NewOrder`, i

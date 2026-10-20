@@ -1,0 +1,113 @@
+# arquivo: domains/pagv/subdomains/sub-pagv-conciliacao.yaml
+# ----------------------------------------------------------------------------
+# SUBDOMÍNIO — com legado em modernização
+#
+# O subdomínio tem OS MESMOS BLOCOS do domínio (só não tem id-domínio, área
+# e a configuração do Sinter). Tudo o que o domínio declara vale aqui por
+# herança; aqui entra só o que é DESTA parte.
+# ----------------------------------------------------------------------------
+apiVersion: sinter.dev/v1
+kind: Subdomain
+metadata:
+  id: sub-pagv-conciliacao
+  name: Conciliação
+  domain: dom-pagv
+  status: approved
+  owners: [time-conciliacao]
+spec:
+  # --- O que a IA lê primeiro ------------------------------------------------
+  purpose: "Confere, todo dia, o que foi vendido contra o que o adquirente pagou."
+  does:
+    - Importa o arquivo diário do adquirente
+    - Aponta divergências para o financeiro
+  doesNot:
+    - Corrigir a divergência (é o financeiro que decide)
+  unknowns:
+    - Horário-limite real do arquivo do adquirente (docs dizem 6h, operação diz 8h)
+
+  glossary:
+    - term: Tolerância de centavos
+      definition: "Diferença de até R$ 0,05 por transação aceita sem investigação (ADR-PAGV-003)."
+
+  # --- APLICAÇÕES (cada uma com os N repos que a compõem) --------------------
+  applications:
+    - id: app-pagv-concil-batch
+      name: Batch de conciliação (CONC0100)
+      lifecycle: modernizing
+      aliases: [CONC0100, job-concil-diario]
+      repositories:
+        - repo: repo-mainframe-pagv
+          path: "cobol/CONC*"
+          role: batch
+          platform: mainframe
+          docs:                      # links que apontam para DENTRO do repo
+            - { title: "JCL da cadeia noturna", type: link, url: "https://git.acme.local/mainframe/pagv/-/tree/main/jcl/CONC" }
+      docs:
+        - { title: "Documentação do CONC0100 (gerada)", type: gerado, path: docs/conciliacao/conc0100.md }
+
+    - id: app-pagv-conciliacao
+      name: Conciliação Service
+      lifecycle: modern
+      aliases: [conciliacao-service, api.interna/conciliacao]
+      repositories:
+        - repo: repo-conciliacao-service
+          role: api
+          platform: java
+          docs:
+            - { title: "README do serviço", type: link, url: "https://git.acme.local/pagv/conciliacao/-/blob/main/README.md" }
+            - { title: "Contrato OpenAPI", type: arquitetura, url: "https://git.acme.local/pagv/conciliacao/-/blob/main/openapi.yaml" }
+
+  # --- REGRAS, JORNADAS E FRONTEIRAS desta parte -----------------------------
+  rules:                         # regra = 1 frase; a explicação fica na página .md deste nível
+    - id: rule-pagv-conciliacao-d-mais-1
+      statement: "As vendas de um dia são conciliadas até as 07:00 do dia seguinte."
+      exceptions: ["Feriado bancário: D+2"]
+  boundaries:
+    in:
+      - { from: ext-adquirente,       what: "arquivo diário de pagamentos (SFTP)" }
+      - { from: sub-pagv-autorizacao, what: "vendas capturadas no dia" }
+    out:
+      - { to: dom-financeiro,         what: "relatório de divergências" }
+
+  # --- OPERAÇÃO desta parte (o resto herda do domínio) -----------------------
+  operation:
+    batchWindows: ["02:00–07:00 conciliação do dia anterior"]
+    criticality: alta
+
+  # --- MODERNIZAÇÃO desta parte ----------------------------------------------
+  modernization:
+    goal: "Trocar o batch COBOL pela app-pagv-conciliacao, em paralelo por 3 meses"
+    decision: ADR-PAGV-004
+
+  # --- CONHECIMENTO desta parte (soma com o herdado do domínio) --------------
+  regulations: [reg-bcb-arranjos-pagamento]      # só esta parte é regida por isso
+  standards:   [std-arquivos-sftp]               # padrão que só a conciliação usa
+  decisions:                     # ADR = resumo aqui; o texto completo fica na página .md deste nível
+    - id: ADR-PAGV-003
+      title: "Tolerância de centavos na conciliação"
+      date: 2026-08-14
+      context: "Arredondamentos do adquirente geram divergências de centavos todo dia."
+      decision: "Divergência até R$ 0,05 por transação é aceita automaticamente."
+      consequences: ["Relatório separa divergências toleradas das reais"]
+      evidence:
+        - { source: doc-pagv-ata-2026-08-14-tolerancia, locator: "docs/conciliacao/ata-2026-08-14-tolerancia.md#decisoes", extraction: human }
+  docs:
+    - { title: "Runbook da conciliação", type: runbook, path: docs/conciliacao/runbook.md }
+    - { title: "Layout do arquivo do adquirente", type: arquitetura, url: "https://wiki.acme.local/pagv/conciliacao/layout-arquivo" }
+    - { ref: doc-pagv-ata-2026-10-03 }          # doc do domínio citado aqui também (sem repetir)
+    - { title: "Pauta da daily de conciliação", type: pauta, url: "https://wiki.acme.local/pagv/conciliacao/daily" }
+    - { id: doc-pagv-ata-2026-08-14-tolerancia, title: "Ata — tolerância de centavos", type: ata, path: docs/conciliacao/ata-2026-08-14-tolerancia.md, date: 2026-08-14 }
+
+# ----------------------------------------------------------------------------
+#   $ sinter get sub-pagv-conciliacao --level 1
+#   Conciliação · dom-pagv
+#   Aplicações:
+#     app-pagv-concil-batch   modernizing   repo-mainframe-pagv (mainframe)
+#     app-pagv-conciliacao    modern        repo-conciliacao-service (java)
+#   Regras: rule-pagv-conciliacao-d-mais-1 · rule-pagv-estorno-ate-90-dias* · rule-pagv-nunca-guardar-cartao*
+#   Conhecimento (próprio + herdado do domínio, * = herdado):
+#     regulações: reg-bcb-arranjos-pagamento · reg-lgpd* · reg-bcb-pag-inst*
+#     padrões:    std-arquivos-sftp · std-api-rest* · std-eventos-kafka*
+#     decisões:   ADR-PAGV-004 · ADR-PAGV-003 · ADR-PAGV-001*
+#     docs:       runbook 1 · arquitetura 1 · ata 2 · pauta 1 · negócio 2* · gerado 1*
+# ----------------------------------------------------------------------------

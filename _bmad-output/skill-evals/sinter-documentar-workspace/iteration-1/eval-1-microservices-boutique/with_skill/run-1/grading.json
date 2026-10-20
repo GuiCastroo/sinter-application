@@ -1,0 +1,55 @@
+{
+  "expectations": [
+    {
+      "text": "Usa as gavetas do padrão (5+ de: capacidades, fluxos, sistemas, infraestrutura, subdominios, glossario, regras-de-negocio, decisoes, padroes)",
+      "passed": true,
+      "evidence": "gavetas encontradas: ['capacidades', 'decisoes', 'fluxos', 'glossario', 'infraestrutura', 'padroes', 'regras-de-negocio', 'sistemas', 'subdominios']"
+    },
+    {
+      "text": "80%+ dos itens têm cabeçalho YAML com proveniência e tipo de extração",
+      "passed": true,
+      "evidence": "47/47 itens com proveniência (100%)"
+    },
+    {
+      "text": "Itens nascem como proposta (status: proposed) e nenhum como approved",
+      "passed": true,
+      "evidence": "proposed=47, approved=0"
+    },
+    {
+      "text": "Itens ligam camadas com realiza / realizado-por",
+      "passed": true,
+      "evidence": "47 itens com realiza/realizado-por"
+    },
+    {
+      "text": "Tem ao menos um diagrama de sequência Mermaid",
+      "passed": true,
+      "evidence": "2 diagramas de sequência"
+    },
+    {
+      "text": "Tem RELATORIO.md com perguntas para as pessoas",
+      "passed": true,
+      "evidence": "RELATORIO.md com perguntas"
+    },
+    {
+      "text": "Marca inferências na camada de negócio (extraction: inferred em capacidades ou fluxos)",
+      "passed": true,
+      "evidence": "4 itens de negócio marcados como inferidos"
+    },
+    {
+      "text": "Documenta infraestrutura como itens próprios (1+ arquivo em infraestrutura/recursos)",
+      "passed": true,
+      "evidence": "7 recursos de infraestrutura"
+    },
+    {
+      "text": "A sequência de compra passa por checkoutservice e paymentservice",
+      "passed": true,
+      "evidence": "sequência com checkout e payment"
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 0,
+    "total": 9,
+    "pass_rate": 1.0
+  }
+}

@@ -1,0 +1,166 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sinter: Grafo do domínio</title><style>
+/* Esmalte v2
+   chrome   #1F2327  canvas #2A2F34  surface #343A40  tile #3E454C  hairline #474E55
+   ink      #E8E4DB  muted  #9DA3A8
+   neon (foco, aprovado, ação) #46F28E
+   glazes   API cobalto #7EA6F4  evento lilás #B69CF0  arquivo âmbar #E2B566  conflito #EE6F7C */
+:root{
+  --chrome:#1F2327; --canvas:#2A2F34; --surface:#343A40; --tile:#3E454C; --tile-hi:#4A525A; --line:#474E55;
+  --ink:#E8E4DB; --muted:#9DA3A8; --faint:#6E757B;
+  --api:#7EA6F4; --evento:#B69CF0; --neon:#46F28E; --arquivo:#E2B566; --conflict:#EE6F7C;
+  --ui:'Avenir Next','Helvetica Neue',sans-serif; --display:Optima,'Avenir Next',sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#151719;font-family:var(--ui);color:var(--ink)}
+.note{max-width:1440px;margin:24px auto 12px;padding:0 16px;color:#C9C6BF;line-height:1.5}
+.note h1{font-family:var(--display);font-weight:500;font-size:24px;margin:0 0 4px;color:#EEE}
+.note p{margin:0;max-width:78ch}
+.app{max-width:1440px;margin:0 auto 40px;border-radius:12px;overflow:hidden;border:1px solid #2E3338;background:var(--chrome);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+
+/* barra superior */
+.top{display:flex;align-items:center;gap:18px;padding:10px 16px;border-bottom:1px solid #2E3338}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:18px;letter-spacing:.02em}
+.crumbs{font-size:14px;color:var(--muted)} .crumbs b{color:var(--ink);font-weight:500}
+.crumbs span{margin:0 6px;color:var(--faint)}
+.levels{display:flex;background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:2px;margin-left:8px}
+.levels a{font-size:13px;padding:5px 10px;border-radius:6px;color:var(--muted)}
+.levels a.on{background:var(--tile);color:var(--ink)}
+.nav{display:flex;gap:2px;margin-left:auto}
+.nav a{font-size:14px;padding:6px 10px;border-radius:6px;color:var(--muted)}
+.nav a.on{color:var(--ink);background:var(--surface)}
+.count{display:inline-block;min-width:18px;padding:0 5px;margin-left:5px;border-radius:9px;background:var(--conflict);color:#2A1215;font-size:11px;font-weight:700;text-align:center}
+button{font:inherit;font-size:13px;padding:7px 12px;border-radius:7px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+button.glaze{background:var(--neon);border-color:var(--neon);color:#0B2A17;font-weight:600;box-shadow:0 0 14px rgba(70,242,142,.35)}
+
+/* corpo */
+.body{display:grid;grid-template-columns:76px 260px 1fr 320px;height:760px}
+.canvas{position:relative;background:var(--canvas);overflow:hidden}
+.canvas svg{position:absolute;inset:0;width:100%;height:100%}
+.search{position:absolute;top:14px;left:16px;display:flex;gap:10px;align-items:center}
+.search input{font:inherit;font-size:13px;width:250px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+
+/* player de fluxo */
+.flow{position:absolute;left:16px;right:16px;bottom:14px;display:grid;grid-template-columns:auto 1fr auto;gap:6px 16px;align-items:center;background:rgba(31,35,39,.94);border:1px solid var(--line);border-radius:10px;padding:14px;backdrop-filter:blur(6px)}
+.flow h4{margin:0;font-size:14px;font-weight:600}
+.flow .sub{font-size:12px;color:var(--muted);margin:2px 0 0}
+.flow .step{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45}
+.flow .n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--neon);color:#0B2A17;font-weight:700;font-size:12px;display:grid;place-items:center;box-shadow:0 0 0 4px rgba(70,242,142,.18),0 0 12px rgba(70,242,142,.5)}
+.flow .ctrl{display:flex;gap:8px;grid-row:1 / span 2;grid-column:3}
+.flow .head{grid-column:1;grid-row:1 / span 2;padding-right:14px;border-right:1px solid var(--line)}
+.flow .step{grid-column:2}
+.flow .prog{grid-column:2;margin-top:0!important}
+.flow .prog{display:flex;gap:4px;margin-top:10px} .flow .prog i{flex:1;height:3px;border-radius:2px;background:var(--line)} .flow .prog i.d{background:var(--neon)}
+
+/* camadas e zoom */
+.layers{position:absolute;right:16px;top:14px;display:flex;gap:6px}
+.chip{font-size:12px;padding:5px 9px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+.chip.on{color:var(--ink);border-color:#5A626A}
+.zoom{position:absolute;right:16px;bottom:128px;display:flex;gap:10px;align-items:flex-end}
+.mini{width:120px;height:78px;border:1px solid var(--line);border-radius:8px;background:var(--chrome);position:relative}
+.mini i{position:absolute;border-radius:2px;background:#58616A}
+.mini .vp{position:absolute;left:14px;top:10px;width:70px;height:46px;border:1.5px solid var(--neon);border-radius:3px}
+.zbtn{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.zbtn span{width:30px;height:28px;display:grid;place-items:center;background:var(--surface);color:var(--muted);font-size:16px}
+.zbtn span+span{border-top:1px solid var(--line)}
+
+/* painel */
+.panel{background:var(--chrome);border-left:1px solid #2E3338;padding:18px;overflow:auto}
+.ph{display:flex;gap:12px;align-items:center}
+.tech{width:40px;height:40px;border-radius:10px;background:linear-gradient(#4E565E,#3A4148);display:grid;place-items:center;font-size:13px;font-weight:700;color:#C9B8F2;border:1px solid #58606A}
+.ph h3{margin:0;font-size:18px;font-weight:600} .ph p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--neon);margin-top:12px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon)}
+.ptabs{display:flex;gap:14px;border-bottom:1px solid var(--line);margin:14px 0 12px;font-size:13px}
+.ptabs a{padding:6px 0;color:var(--muted)} .ptabs a.on{color:var(--ink);border-bottom:2px solid var(--neon)}
+.resp{font-size:14px;line-height:1.5;margin:0 0 14px}
+dl{display:grid;grid-template-columns:80px 1fr;gap:7px 10px;font-size:13px;margin:0 0 16px} dt{color:var(--muted)} dd{margin:0}
+.infer{border-radius:10px;padding:12px;background:rgba(238,111,124,.07);border:1px solid rgba(238,111,124,.45)}
+.infer strong{font-size:13px} .infer p{font-size:12.5px;line-height:1.45;color:var(--muted);margin:6px 0 10px}
+.infer code{color:var(--ink);font-size:12px}
+.btns{display:flex;gap:8px}
+.src{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.5}
+.src b{color:var(--ink);font-weight:500}
+
+/* trilho de navegação à direita */
+.rail{background:#1A1D20;border-right:1px solid #2E3338;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px}
+.rail a{width:64px;padding:8px 0 6px;border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--muted);position:relative}
+.rail a svg{width:20px;height:20px}
+.rail a.on{background:var(--surface);color:var(--ink)} .rail a.on::before{content:"";position:absolute;left:-6px;top:10px;bottom:10px;width:3px;border-radius:2px;background:var(--neon);box-shadow:0 0 8px var(--neon)}
+.rail .count{position:absolute;top:2px;right:6px;margin:0}
+/* lista de sistemas */
+.side{background:var(--chrome);border-right:1px solid #2E3338;padding:16px 8px;overflow:auto}
+.side .search2{margin:0 6px 14px}
+.list{padding:0}
+.list h5{margin:0 10px 8px;font-size:12px;font-weight:600;color:var(--muted)}
+.row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:13px}
+.row .ic{width:24px;height:24px;border-radius:7px;background:#2F3439;border:1px solid #4D555C;display:grid;place-items:center;font-size:10px;font-weight:700}
+.row em{margin-left:auto;font-style:normal;font-size:11px;color:var(--muted)}
+.row.on{background:var(--surface);box-shadow:inset 0 0 0 1px rgba(70,242,142,.45)}
+.row .dot{margin-left:auto;width:7px;height:7px;border-radius:50%;background:var(--neon);box-shadow:0 0 6px var(--neon)}
+.row.inf em{color:#F2B7BE} .row.dim{opacity:.55}
+
+.levels a{text-decoration:none}
+.body{grid-template-columns:76px 260px 1fr 320px}
+.canvas svg text{font-family:'Avenir Next','Helvetica Neue',sans-serif}
+.legend2{position:absolute;left:16px;bottom:16px;display:flex;gap:14px;align-items:center;font-size:12px;color:var(--muted);background:rgba(31,35,39,.9);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.legend2 span{display:flex;align-items:center;gap:6px}
+.legend2 i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.stat{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 18px}
+.stat div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px}
+.stat b{display:block;font-family:var(--display);font-size:24px;font-weight:500}
+.stat span{font-size:12px;color:var(--muted)}
+.stat .ok b{color:var(--neon)} .stat .bad b{color:#F2B7BE}
+.hub{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px solid #2E3338}
+.hub em{font-style:normal;color:var(--muted);font-size:12px}
+.sel{background:var(--surface);border:1px solid var(--neon);border-radius:12px;padding:12px;box-shadow:0 0 18px rgba(70,242,142,.15)}
+.sel .k{display:block;font-size:11.5px;color:var(--neon);margin-bottom:8px}
+.sel .ph h3{font-size:16px}
+.tip{position:absolute;background:rgba(31,35,39,.96);border:1px solid var(--neon);border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.45;box-shadow:0 0 18px rgba(70,242,142,.2);width:220px}
+.tip b{font-size:13.5px}
+.tip p{margin:4px 0 8px;color:var(--muted)}
+</style></head><body>
+<div class="note"><h1>Grafo do domínio</h1>
+<p>Nível Domínio: os 34 sistemas de Pagamentos como constelação, agrupados por subdomínio. O tamanho da esfera é o número de integrações; linhas cinza cruzam subdomínios; partículas vermelhas são integrações inferidas; contornos tracejados são sistemas sem acesso. Clicar em um subdomínio aproxima para o nível Sistema.</p></div>
+<div class="app">
+  <div class="top">
+    <span class="brand"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="4" cy="5" r="1.6" fill="#9DA3A8"/><circle cx="8" cy="3" r="1.2" fill="#9DA3A8"/><circle cx="3" cy="10" r="1.1" fill="#9DA3A8"/><rect x="7" y="7" width="12" height="12" rx="4" fill="#46F28E"/></svg>Sinter</span>
+    <span class="crumbs"><b>Pagamentos</b></span>
+    <span class="levels"><a>Empresa</a><a class="on">Domínio</a><a>Sistema</a><a>Componente</a></span>
+    <span class="levels" style="margin-left:auto"><a href="mundo.html">Mundo</a><a class="on" href="grafo.html">Grafo</a><a href="caixas.html">Caixas</a></span>
+    <button>Compartilhar</button>
+  </div>
+  <div class="body">
+    <nav class="rail" aria-label="Navegação">
+      <a class="on"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="6" height="5" rx="1.5"/><rect x="12" y="3" width="6" height="5" rx="1.5"/><rect x="7" y="12" width="6" height="5" rx="1.5"/><path d="M5 8v2h10V8M10 10v2"/></svg>Mapa</a>
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5h12M4 10h8M4 15h10"/></svg>Curadoria<span class="count">9</span></a>
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9l-4 3v-3H5a2 2 0 0 1-2-2z"/></svg>Conversas</a>
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="14" height="14" rx="3"/><path d="M7 10l2 2 4-4"/></svg>Tarefas</a>
+      <a><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7l7-4 7 4-7 4z"/><path d="M3 11l7 4 7-4"/></svg>Catálogo</a>
+    </nav>
+    <aside class="side">
+      <div class="list"><h5>Subdomínios</h5><div class="row on"><span class="ic" style="color:#C9B8F2">●</span>Checkout<em>4 sistemas</em></div><div class="row"><span class="ic" style="color:#7EA6F4">●</span>Autorização<em>5 sistemas</em></div><div class="row"><span class="ic" style="color:#E2B566">●</span>Contabilidade<em>6 sistemas</em></div><div class="row"><span class="ic" style="color:#B69CF0">●</span>Comunicação<em>3 sistemas</em></div><div class="row"><span class="ic" style="color:#8FD0E8">●</span>Assinaturas<em>7 sistemas</em></div><div class="row"><span class="ic" style="color:#F0B27A">●</span>Conciliação<em>5 sistemas</em></div><div class="row"><span class="ic" style="color:#9FD9B0">●</span>Cobrança<em>4 sistemas</em></div></div>
+    </aside>
+    <div class="canvas">
+      <svg viewBox="150 90 860 620" preserveAspectRatio="xMidYMid meet" aria-label="Visão Domínio: 34 sistemas de Pagamentos"><defs><filter id="blur"><feGaussianBlur stdDeviation="28"/></filter><filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#353B41"/></pattern><radialGradient id="sph-Checkout" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".55"/><stop offset=".35" stop-color="#C9B8F2"/><stop offset="1" stop-color="#2A2F34"/></radialGradient><radialGradient id="sph-Autorizacao" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".55"/><stop offset=".35" stop-color="#7EA6F4"/><stop offset="1" stop-color="#2A2F34"/></radialGradient><radialGradient id="sph-Contabilidade" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".55"/><stop offset=".35" stop-color="#E2B566"/><stop offset="1" stop-color="#2A2F34"/></radialGradient><radialGradient id="sph-Comunicacao" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".55"/><stop offset=".35" stop-color="#B69CF0"/><stop offset="1" stop-color="#2A2F34"/></radialGradient><radialGradient id="sph-Assinaturas" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".55"/><stop offset=".35" stop-color="#8FD0E8"/><stop offset="1" stop-color="#2A2F34"/></radialGradient><radialGradient id="sph-Conciliacao" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".55"/><stop offset=".35" stop-color="#F0B27A"/><stop offset="1" stop-color="#2A2F34"/></radialGradient><radialGradient id="sph-Cobranca" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".55"/><stop offset=".35" stop-color="#9FD9B0"/><stop offset="1" stop-color="#2A2F34"/></radialGradient><radialGradient id="sph-focus" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".7"/><stop offset=".35" stop-color="#46F28E"/><stop offset="1" stop-color="#11402A"/></radialGradient></defs><rect width="1060" height="720" fill="url(#dots)"/><circle cx="330" cy="250" r="110" fill="#C9B8F2" opacity=".07" filter="url(#blur)"/><circle cx="330" cy="250" r="104" fill="none" stroke="#C9B8F2" stroke-opacity=".18" stroke-dasharray="2 5"/><circle cx="560" cy="190" r="120" fill="#7EA6F4" opacity=".07" filter="url(#blur)"/><circle cx="560" cy="190" r="114" fill="none" stroke="#7EA6F4" stroke-opacity=".18" stroke-dasharray="2 5"/><circle cx="640" cy="430" r="125" fill="#E2B566" opacity=".07" filter="url(#blur)"/><circle cx="640" cy="430" r="119" fill="none" stroke="#E2B566" stroke-opacity=".18" stroke-dasharray="2 5"/><circle cx="230" cy="470" r="95" fill="#B69CF0" opacity=".07" filter="url(#blur)"/><circle cx="230" cy="470" r="89" fill="none" stroke="#B69CF0" stroke-opacity=".18" stroke-dasharray="2 5"/><circle cx="860" cy="250" r="125" fill="#8FD0E8" opacity=".07" filter="url(#blur)"/><circle cx="860" cy="250" r="119" fill="none" stroke="#8FD0E8" stroke-opacity=".18" stroke-dasharray="2 5"/><circle cx="430" cy="610" r="110" fill="#F0B27A" opacity=".07" filter="url(#blur)"/><circle cx="430" cy="610" r="104" fill="none" stroke="#F0B27A" stroke-opacity=".18" stroke-dasharray="2 5"/><circle cx="880" cy="560" r="100" fill="#9FD9B0" opacity=".07" filter="url(#blur)"/><circle cx="880" cy="560" r="94" fill="none" stroke="#9FD9B0" stroke-opacity=".18" stroke-dasharray="2 5"/><path d="M340.5,249.7 Q465.2,254.6 572.0,190.1" fill="none" stroke="#46F28E" stroke-opacity=".9" stroke-width="1.8" filter="url(#glow)"/><path d="M340.5,249.7 Q457.2,288.9 576.2,257.3" fill="none" stroke="#46F28E" stroke-opacity=".9" stroke-width="1.8" filter="url(#glow)"/><path d="M340.5,249.7 Q324.0,281.2 327.6,316.5" fill="none" stroke="#46F28E" stroke-opacity=".9" stroke-width="1.8" filter="url(#glow)"/><path d="M331.7,217.1 Q331.2,234.7 340.5,249.7" fill="none" stroke="#46F28E" stroke-opacity=".9" stroke-width="1.8" filter="url(#glow)"/><path d="M282.4,251.0 Q311.6,259.1 340.5,249.7" fill="none" stroke="#46F28E" stroke-opacity=".9" stroke-width="1.8" filter="url(#glow)"/><path d="M572.0,190.1 Q546.9,200.8 531.8,223.5" fill="none" stroke="#7EA6F4" stroke-opacity=".45" stroke-width="1.1"/><path d="M572.0,190.1 Q537.4,165.4 495.0,163.8" fill="none" stroke="#7EA6F4" stroke-opacity=".45" stroke-width="1.1"/><path d="M576.2,257.3 Q588.6,209.4 572.6,162.6" fill="none" stroke="#7EA6F4" stroke-opacity=".45" stroke-width="1.1"/><path d="M572.0,190.1 Q575.6,323.9 652.2,433.6" fill="none" stroke="#7C858D" stroke-opacity=".35" stroke-width="1.1"/><path d="M652.2,433.6 Q631.1,442.7 618.5,461.9" fill="none" stroke="#E2B566" stroke-opacity=".45" stroke-width="1.1"/><path d="M652.2,433.6 Q615.9,430.0 583.5,446.9" fill="none" stroke="#E2B566" stroke-opacity=".45" stroke-width="1.1"/><path d="M652.2,433.6 Q645.0,464.3 656.0,493.9" fill="none" stroke="#E2B566" stroke-opacity=".45" stroke-width="1.1" stroke-dasharray="3 4"/><path d="M652.2,433.6 Q656.7,417.0 651.3,400.7" fill="none" stroke="#E2B566" stroke-opacity=".45" stroke-width="1.1"/><path d="M652.2,433.6 Q636.6,411.5 611.5,401.6" fill="none" stroke="#E2B566" stroke-opacity=".45" stroke-width="1.1" stroke-dasharray="3 4"/><path d="M652.2,433.6 Q500.2,478.2 397.8,599.0" fill="none" stroke="#7C858D" stroke-opacity=".35" stroke-width="1.1"/><path d="M440.5,609.4 Q431.1,629.7 434.5,651.8" fill="none" stroke="#F0B27A" stroke-opacity=".45" stroke-width="1.1"/><path d="M440.5,609.4 Q572.7,553.3 652.2,433.6" fill="none" stroke="#7C858D" stroke-opacity=".35" stroke-width="1.1"/><path d="M370.8,631.8 Q421.7,614.0 454.4,571.1" fill="none" stroke="#F0B27A" stroke-opacity=".45" stroke-width="1.1" stroke-dasharray="3 4"/><path d="M370.8,631.8 Q541.3,574.9 652.2,433.6" fill="none" stroke="#7C858D" stroke-opacity=".35" stroke-width="1.1"/><path d="M397.8,599.0 Q417.6,610.6 440.5,609.4" fill="none" stroke="#F0B27A" stroke-opacity=".45" stroke-width="1.1"/><path d="M872.7,250.0 Q874.4,275.7 890.0,296.1" fill="none" stroke="#8FD0E8" stroke-opacity=".45" stroke-width="1.1"/><path d="M872.7,250.0 Q849.8,289.2 852.3,334.5" fill="none" stroke="#8FD0E8" stroke-opacity=".45" stroke-width="1.1"/><path d="M852.3,334.5 Q829.4,287.9 784.7,261.5" fill="none" stroke="#8FD0E8" stroke-opacity=".45" stroke-width="1.1"/><path d="M872.7,250.0 Q890.8,219.5 889.1,184.0" fill="none" stroke="#8FD0E8" stroke-opacity=".45" stroke-width="1.1"/><path d="M852.3,334.5 Q733.8,220.3 572.0,190.1" fill="none" stroke="#7C858D" stroke-opacity=".35" stroke-width="1.1"/><path d="M820.4,224.4 Q842.7,245.1 872.7,250.0" fill="none" stroke="#8FD0E8" stroke-opacity=".45" stroke-width="1.1"/><path d="M784.7,261.5 Q458.0,300.9 206.9,513.6" fill="none" stroke="#7C858D" stroke-opacity=".35" stroke-width="1.1"/><path d="M888.6,562.6 Q789.8,462.6 652.2,433.6" fill="none" stroke="#7C858D" stroke-opacity=".35" stroke-width="1.1"/><path d="M888.6,562.6 Q881.9,572.1 881.5,583.8" fill="none" stroke="#9FD9B0" stroke-opacity=".45" stroke-width="1.1"/><path d="M888.6,562.6 Q859.7,550.3 828.8,556.0" fill="none" stroke="#9FD9B0" stroke-opacity=".45" stroke-width="1.1"/><path d="M876.6,535.8 Q878.6,551.0 888.6,562.6" fill="none" stroke="#9FD9B0" stroke-opacity=".45" stroke-width="1.1"/><path d="M238.2,469.8 Q216.0,487.0 206.9,513.6" fill="none" stroke="#B69CF0" stroke-opacity=".45" stroke-width="1.1"/><path d="M238.2,469.8 Q229.3,447.2 209.3,433.3" fill="none" stroke="#B69CF0" stroke-opacity=".45" stroke-width="1.1"/><path d="M852.3,334.5 Q836.2,454.0 888.6,562.6" fill="none" stroke="#7C858D" stroke-opacity=".35" stroke-width="1.1"/><circle cx="327.5" cy="267.1" r="1.8" fill="#EE6F7C" opacity=".75"/><circle cx="314.7" cy="275.4" r="1.1" fill="#EE6F7C" opacity=".75"/><circle cx="303.9" cy="294.1" r="1.2" fill="#EE6F7C" opacity=".75"/><circle cx="298.3" cy="305.9" r="1.2" fill="#EE6F7C" opacity=".75"/><circle cx="290.7" cy="318.3" r="1.6" fill="#EE6F7C" opacity=".75"/><circle cx="277.4" cy="335.9" r="1.2" fill="#EE6F7C" opacity=".75"/><circle cx="271.0" cy="355.9" r="1.8" fill="#EE6F7C" opacity=".75"/><circle cx="264.3" cy="371.1" r="1.2" fill="#EE6F7C" opacity=".75"/><circle cx="258.8" cy="387.0" r="1.6" fill="#EE6F7C" opacity=".75"/><circle cx="250.8" cy="404.6" r="1.2" fill="#EE6F7C" opacity=".75"/><circle cx="247.1" cy="419.7" r="1.3" fill="#EE6F7C" opacity=".75"/><circle cx="243.1" cy="431.2" r="1.1" fill="#EE6F7C" opacity=".75"/><circle cx="241.8" cy="450.0" r="1.6" fill="#EE6F7C" opacity=".75"/><circle cx="870.4" cy="246.0" r="2.0" fill="#EE6F7C" opacity=".75"/><circle cx="869.9" cy="243.4" r="1.9" fill="#EE6F7C" opacity=".75"/><circle cx="865.9" cy="236.6" r="1.9" fill="#EE6F7C" opacity=".75"/><circle cx="869.3" cy="234.1" r="1.2" fill="#EE6F7C" opacity=".75"/><circle cx="866.9" cy="236.3" r="1.2" fill="#EE6F7C" opacity=".75"/><circle cx="866.6" cy="232.7" r="1.6" fill="#EE6F7C" opacity=".75"/><circle cx="860.3" cy="223.4" r="1.0" fill="#EE6F7C" opacity=".75"/><circle cx="862.4" cy="221.5" r="1.7" fill="#EE6F7C" opacity=".75"/><circle cx="854.4" cy="223.3" r="1.6" fill="#EE6F7C" opacity=".75"/><circle cx="852.3" cy="215.3" r="1.7" fill="#EE6F7C" opacity=".75"/><circle cx="847.9" cy="213.0" r="1.6" fill="#EE6F7C" opacity=".75"/><circle cx="851.4" cy="213.5" r="1.3" fill="#EE6F7C" opacity=".75"/><circle cx="849.1" cy="207.7" r="1.0" fill="#EE6F7C" opacity=".75"/><circle cx="340.5" cy="249.7" r="28.2" fill="none" stroke="#46F28E" stroke-opacity=".4"/><circle cx="340.5" cy="249.7" r="19.2" fill="url(#sph-focus)" filter="url(#glow)"/><text x="340.5" y="292.9" text-anchor="middle" font-size="12.5" font-weight="600" fill="#46F28E">checkout-api</text><circle cx="327.6" cy="316.5" r="8.2" fill="url(#sph-Checkout)"/><circle cx="282.4" cy="251.0" r="8.2" fill="url(#sph-Checkout)"/><circle cx="331.7" cy="217.1" r="8.2" fill="url(#sph-Checkout)"/><circle cx="572.0" cy="190.1" r="17.0" fill="url(#sph-Autorizacao)"/><text x="572.0" y="221.1" text-anchor="middle" font-size="11.5" font-weight="500" fill="#C9C6BF">payments-gateway</text><circle cx="576.2" cy="257.3" r="10.4" fill="url(#sph-Autorizacao)"/><circle cx="531.8" cy="223.5" r="8.2" fill="url(#sph-Autorizacao)"/><circle cx="495.0" cy="163.8" r="8.2" fill="url(#sph-Autorizacao)"/><circle cx="572.6" cy="162.6" r="8.2" fill="url(#sph-Autorizacao)"/><circle cx="652.2" cy="433.6" r="22.0" fill="url(#sph-Contabilidade)"/><text x="652.2" y="469.6" text-anchor="middle" font-size="11.5" font-weight="500" fill="#C9C6BF">ledger</text><circle cx="656.0" cy="493.9" r="8.2" fill="none" stroke="#6E757B" stroke-dasharray="3 3"/><text x="656.0" y="516.1" text-anchor="middle" font-size="11.5" font-weight="500" fill="#C9C6BF">billing-batch</text><circle cx="618.5" cy="461.9" r="8.2" fill="url(#sph-Contabilidade)"/><circle cx="583.5" cy="446.9" r="8.2" fill="url(#sph-Contabilidade)"/><circle cx="611.5" cy="401.6" r="8.2" fill="none" stroke="#6E757B" stroke-dasharray="3 3"/><text x="611.5" y="423.8" text-anchor="middle" font-size="11.5" font-weight="500" fill="#C9C6BF">journal-export</text><circle cx="651.3" cy="400.7" r="8.2" fill="url(#sph-Contabilidade)"/><circle cx="238.2" cy="469.8" r="12.6" fill="url(#sph-Comunicacao)"/><text x="238.2" y="496.4" text-anchor="middle" font-size="11.5" font-weight="500" fill="#C9C6BF">notificacoes</text><circle cx="206.9" cy="513.6" r="10.4" fill="url(#sph-Comunicacao)"/><circle cx="209.3" cy="433.3" r="8.2" fill="url(#sph-Comunicacao)"/><circle cx="872.7" cy="250.0" r="17.0" fill="url(#sph-Assinaturas)"/><text x="872.7" y="281.0" text-anchor="middle" font-size="11.5" font-weight="500" fill="#C9C6BF">subscriptions</text><circle cx="890.0" cy="296.1" r="8.2" fill="url(#sph-Assinaturas)"/><circle cx="852.3" cy="334.5" r="14.8" fill="url(#sph-Assinaturas)"/><text x="852.3" y="363.3" text-anchor="middle" font-size="11.5" font-weight="500" fill="#C9C6BF">renewals</text><circle cx="784.7" cy="261.5" r="10.4" fill="url(#sph-Assinaturas)"/><circle cx="820.4" cy="224.4" r="8.2" fill="url(#sph-Assinaturas)"/><circle cx="842.8" cy="207.7" r="8.2" fill="url(#sph-Assinaturas)"/><text x="842.8" y="229.9" text-anchor="middle" font-size="11.5" font-weight="500" fill="#C9C6BF">coupons</text><circle cx="889.1" cy="184.0" r="8.2" fill="url(#sph-Assinaturas)"/><circle cx="440.5" cy="609.4" r="12.6" fill="url(#sph-Conciliacao)"/><circle cx="434.5" cy="651.8" r="8.2" fill="url(#sph-Conciliacao)"/><circle cx="370.8" cy="631.8" r="10.4" fill="url(#sph-Conciliacao)"/><circle cx="397.8" cy="599.0" r="10.4" fill="url(#sph-Conciliacao)"/><circle cx="454.4" cy="571.1" r="8.2" fill="none" stroke="#6E757B" stroke-dasharray="3 3"/><text x="454.4" y="593.3" text-anchor="middle" font-size="11.5" font-weight="500" fill="#C9C6BF">disputes</text><circle cx="888.6" cy="562.6" r="17.0" fill="url(#sph-Cobranca)"/><text x="888.6" y="593.6" text-anchor="middle" font-size="11.5" font-weight="500" fill="#C9C6BF">invoices</text><circle cx="881.5" cy="583.8" r="8.2" fill="url(#sph-Cobranca)"/><circle cx="828.8" cy="556.0" r="8.2" fill="url(#sph-Cobranca)"/><circle cx="876.6" cy="535.8" r="8.2" fill="url(#sph-Cobranca)"/><text x="330" y="136" text-anchor="middle" font-size="14" font-weight="600" fill="#C9B8F2" style="font-family:Optima,Avenir Next,sans-serif">Checkout</text><text x="330" y="152" text-anchor="middle" font-size="11" fill="#8D949A">4 sistemas</text><text x="560" y="66" text-anchor="middle" font-size="14" font-weight="600" fill="#7EA6F4" style="font-family:Optima,Avenir Next,sans-serif">Autorização</text><text x="560" y="82" text-anchor="middle" font-size="11" fill="#8D949A">5 sistemas</text><text x="640" y="301" text-anchor="middle" font-size="14" font-weight="600" fill="#E2B566" style="font-family:Optima,Avenir Next,sans-serif">Contabilidade</text><text x="640" y="317" text-anchor="middle" font-size="11" fill="#8D949A">6 sistemas</text><text x="230" y="371" text-anchor="middle" font-size="14" font-weight="600" fill="#B69CF0" style="font-family:Optima,Avenir Next,sans-serif">Comunicação</text><text x="230" y="387" text-anchor="middle" font-size="11" fill="#8D949A">3 sistemas</text><text x="860" y="121" text-anchor="middle" font-size="14" font-weight="600" fill="#8FD0E8" style="font-family:Optima,Avenir Next,sans-serif">Assinaturas</text><text x="860" y="137" text-anchor="middle" font-size="11" fill="#8D949A">7 sistemas</text><text x="430" y="496" text-anchor="middle" font-size="14" font-weight="600" fill="#F0B27A" style="font-family:Optima,Avenir Next,sans-serif">Conciliação</text><text x="430" y="512" text-anchor="middle" font-size="11" fill="#8D949A">5 sistemas</text><text x="880" y="456" text-anchor="middle" font-size="14" font-weight="600" fill="#9FD9B0" style="font-family:Optima,Avenir Next,sans-serif">Cobrança</text><text x="880" y="472" text-anchor="middle" font-size="11" fill="#8D949A">4 sistemas</text></svg>
+      <div class="search"><input value="Buscar sistema, contrato ou regra" readonly></div>
+      <div class="layers"><span class="chip on">Subdomínios</span><span class="chip on">Status</span><span class="chip">Donos</span><span class="chip">Fluxos</span></div>
+      <div class="legend2"><span><i style="background:#46F28E;box-shadow:0 0 6px #46F28E"></i>Em foco</span><span><i style="background:#7C858D"></i>Entre subdomínios</span><span><i style="background:#EE6F7C"></i>Inferida</span><span><i style="border:1px dashed #6E757B"></i>Sem acesso</span></div>
+    </div>
+    <aside class="panel">
+      <div class="sel"><span class="k">Selecionado</span><div class="ph"><span class="tech">Kt</span><div><h3>checkout-api</h3><p>Checkout. 6 integrações: 4 aprovadas, 1 inferida.</p></div></div><button class="glaze" style="width:100%;margin-top:10px">Abrir no nível Sistema</button></div>
+      <div class="ph" style="margin-top:18px"><span class="tech" style="color:#46F28E">Pg</span><div><h3>Pagamentos</h3><p>Dono do domínio: Rafael Nunes</p></div></div>
+      <div class="stat" style="margin-top:12px">
+        <div><b>34</b><span>sistemas</span></div><div><b>212</b><span>integrações</span></div>
+        <div class="ok"><b>88%</b><span>aprovado</span></div><div class="bad"><b>9</b><span>conflitos abertos</span></div>
+      </div>
+      <h5 style="margin:0 0 6px;font-size:12px;color:var(--muted);font-weight:600">Mais conectados</h5>
+      <div class="hub">ledger<em>10 integrações</em></div>
+      <div class="hub">payments-gateway<em>6 integrações</em></div>
+      <div class="hub">checkout-api<em>6 integrações</em></div>
+      <div class="hub">subscriptions<em>5 integrações</em></div>
+      <div class="infer" style="margin-top:16px"><strong>3 sistemas sem acesso</strong><p>billing-batch, journal-export e disputes não aparecem no .sinter/ dos vizinhos até alguém com acesso conectar a fonte.</p><div class="btns"><button class="glaze">Pedir acesso</button></div></div>
+    </aside>
+  </div>
+</div>
+</body></html>

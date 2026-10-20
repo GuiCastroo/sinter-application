@@ -1,0 +1,250 @@
+{
+  "versao": 3,
+  "dominio": "Clínica Veterinária",
+  "semantica": "Aresta de dependência: consumidor → fornecedor; tipo preserva evento, dado, callback, API e inicialização. Não representa cronologia de execução.",
+  "servicos": [
+    {
+      "id": "customers-service",
+      "nome": "customers-service",
+      "estado": "ativo",
+      "origem": "3-servicos.md#customers-service",
+      "resumo": "dono do sistema de registro de donos (`Owner`) e pets (`Pet`); é a fonte de verdade que os outros serviços (gateway e IA) consultam para saber quem é o dono e quais pets ele tem."
+    },
+    {
+      "id": "visits-service",
+      "nome": "visits-service",
+      "estado": "ativo",
+      "origem": "3-servicos.md#visits-service",
+      "resumo": "registra o histórico de visitas de um pet (data + descrição). Não sabe quem é o dono nem o tipo do pet — só guarda o `petId`."
+    },
+    {
+      "id": "vets-service",
+      "nome": "vets-service",
+      "estado": "ativo",
+      "origem": "3-servicos.md#vets-service",
+      "resumo": "cadastro de veterinários e suas especialidades; lista é cacheada em memória (`@Cacheable(\"vets\")`) porque muda pouco e é lida com frequência."
+    },
+    {
+      "id": "genai-service",
+      "nome": "genai-service",
+      "estado": "ativo",
+      "origem": "3-servicos.md#genai-service",
+      "resumo": "expõe um chatbot (Spring AI) que responde perguntas sobre donos, pets e veterinários e pode criar donos/pets por conta própria, chamando `customers-service` diretamente e usando uma base vetorial pré-carregada dos veterinários para busca semântica."
+    },
+    {
+      "id": "api-gateway",
+      "nome": "api-gateway",
+      "estado": "ativo",
+      "origem": "3-servicos.md#api-gateway",
+      "resumo": "porta de entrada única: serve o front-end AngularJS estático, roteia `/api/**` para os serviços de negócio e é o único ponto que agrega dados de dois serviços (dono + visitas) numa mesma resposta."
+    },
+    {
+      "id": "config-server",
+      "nome": "config-server",
+      "estado": "ativo",
+      "origem": "3-servicos.md#config-server",
+      "resumo": "entrega configuração centralizada a todos os outros serviços na subida, lendo de um repositório Git externo (ou de um diretório local no perfil `native`)."
+    },
+    {
+      "id": "discovery-server",
+      "nome": "discovery-server",
+      "estado": "ativo",
+      "origem": "3-servicos.md#discovery-server",
+      "resumo": "registro de serviços via Eureka; todo serviço de aplicação se registra aqui e descobre os outros pelo nome lógico (`lb://customers-service`, etc.)."
+    },
+    {
+      "id": "admin-server",
+      "nome": "admin-server",
+      "estado": "ativo",
+      "origem": "3-servicos.md#admin-server",
+      "resumo": "painel de operação (Spring Boot Admin) para visualizar saúde e métricas dos outros serviços registrados no Eureka."
+    }
+  ],
+  "jornadas": [
+    {
+      "id": "cadastrar-dono-e-pet",
+      "nome": "Cadastrar dono e pet",
+      "participantes": [
+        "customers-service"
+      ],
+      "origem": "4-jornadas.md#cadastrar-dono-e-pet"
+    },
+    {
+      "id": "registrar-uma-visita",
+      "nome": "Registrar uma visita",
+      "participantes": [
+        "visits-service"
+      ],
+      "origem": "4-jornadas.md#registrar-uma-visita"
+    },
+    {
+      "id": "consultar-a-ficha-do-dono",
+      "nome": "Consultar a ficha do dono",
+      "participantes": [
+        "api-gateway",
+        "customers-service",
+        "visits-service"
+      ],
+      "origem": "4-jornadas.md#consultar-a-ficha-do-dono"
+    },
+    {
+      "id": "consultar-veterinários",
+      "nome": "Consultar veterinários",
+      "participantes": [
+        "api-gateway",
+        "vets-service"
+      ],
+      "origem": "4-jornadas.md#consultar-veterinários"
+    },
+    {
+      "id": "conversar-com-o-assistente-de-ia",
+      "nome": "Conversar com o assistente de IA",
+      "participantes": [
+        "api-gateway",
+        "genai-service",
+        "customers-service"
+      ],
+      "origem": "4-jornadas.md#conversar-com-o-assistente-de-ia"
+    }
+  ],
+  "relacoes": [
+    {
+      "de": "genai-service",
+      "para": "customers-service",
+      "contrato": "GET /owners, POST /owners, POST /owners/{id}/pets",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#genai-service"
+    },
+    {
+      "de": "genai-service",
+      "para": "vets-service",
+      "contrato": "GET /vets",
+      "tipo": "inicializacao",
+      "tipo_declarado": "inicializacao",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#genai-service"
+    },
+    {
+      "de": "genai-service",
+      "para": "OpenAI / Azure OpenAI 🩷",
+      "contrato": "Chat completions + tool calling",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": false,
+      "estado_origem": "ativo",
+      "estado_destino": "externo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#genai-service"
+    },
+    {
+      "de": "api-gateway",
+      "para": "customers-service",
+      "contrato": "GET /owners/{ownerId}",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#api-gateway"
+    },
+    {
+      "de": "api-gateway",
+      "para": "visits-service",
+      "contrato": "GET /pets/visits?petId=...",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#api-gateway"
+    },
+    {
+      "de": "api-gateway",
+      "para": "vets-service",
+      "contrato": "Proxy transparente via Spring Cloud Gateway",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#api-gateway"
+    },
+    {
+      "de": "api-gateway",
+      "para": "genai-service",
+      "contrato": "Proxy transparente via Spring Cloud Gateway",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#api-gateway"
+    },
+    {
+      "de": "config-server",
+      "para": "Repositório Git spring-petclinic-microservices-config 🩷",
+      "contrato": "Git clone/pull",
+      "tipo": "configuracao",
+      "tipo_declarado": "configuracao",
+      "interno": false,
+      "estado_origem": "ativo",
+      "estado_destino": "externo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#config-server"
+    }
+  ],
+  "jornada_usa_servico": [
+    {
+      "jornada": "cadastrar-dono-e-pet",
+      "servico": "customers-service"
+    },
+    {
+      "jornada": "registrar-uma-visita",
+      "servico": "visits-service"
+    },
+    {
+      "jornada": "consultar-a-ficha-do-dono",
+      "servico": "api-gateway"
+    },
+    {
+      "jornada": "consultar-a-ficha-do-dono",
+      "servico": "customers-service"
+    },
+    {
+      "jornada": "consultar-a-ficha-do-dono",
+      "servico": "visits-service"
+    },
+    {
+      "jornada": "consultar-veterinários",
+      "servico": "api-gateway"
+    },
+    {
+      "jornada": "consultar-veterinários",
+      "servico": "vets-service"
+    },
+    {
+      "jornada": "conversar-com-o-assistente-de-ia",
+      "servico": "api-gateway"
+    },
+    {
+      "jornada": "conversar-com-o-assistente-de-ia",
+      "servico": "genai-service"
+    },
+    {
+      "jornada": "conversar-com-o-assistente-de-ia",
+      "servico": "customers-service"
+    }
+  ]
+}

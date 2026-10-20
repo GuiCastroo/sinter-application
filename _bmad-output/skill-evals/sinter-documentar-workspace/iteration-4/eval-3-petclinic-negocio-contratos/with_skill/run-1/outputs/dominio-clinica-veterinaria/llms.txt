@@ -1,0 +1,40 @@
+# Clínica Veterinária
+
+cadastro de uma clínica veterinária — donos, pets, veterinários e o histórico de visitas de cada pet — com um assistente de IA que responde perguntas e cadastra dono/pet por conversa. Não há agendamento com confirmação, cobrança nem prontuário clínico.
+
+## Onde procurar
+
+- [Negócio](1-negocio.md)
+- [Arquitetura](2-arquitetura.md)
+- [Serviços](3-servicos.md)
+- [Jornadas](4-jornadas.md)
+- [Infraestrutura](5-infraestrutura.md)
+- [Referência](6-referencia.md)
+
+## Serviços
+
+- [customers-service](3-servicos.md#customers-service)
+- [visits-service](3-servicos.md#visits-service)
+- [vets-service](3-servicos.md#vets-service)
+- [genai-service](3-servicos.md#genai-service)
+- [api-gateway](3-servicos.md#api-gateway)
+- [config-server](3-servicos.md#config-server)
+- [discovery-server](3-servicos.md#discovery-server)
+- [admin-server](3-servicos.md#admin-server)
+
+## Jornadas
+
+- [Cadastrar dono e pet](4-jornadas.md#cadastrar-dono-e-pet)
+- [Registrar uma visita](4-jornadas.md#registrar-uma-visita)
+- [Consultar a ficha do dono](4-jornadas.md#consultar-a-ficha-do-dono)
+- [Consultar veterinários](4-jornadas.md#consultar-veterinários)
+- [Conversar com o assistente de IA](4-jornadas.md#conversar-com-o-assistente-de-ia)
+
+## Ainda não se sabe
+
+- **Responsável pelo domínio:** **PM/negócio:** este domínio deve ganhar agendamento com confirmação de horário e cobrança, ou isso fica fora de escopo permanentemente? Quais indicadores de negócio importam (retenção de donos, volume de visitas, uso do assistente de IA)? Existe distinção de papéis de usuário (recepção vs. veterinário vs. dono) a modelar? [Origem Q01](6-referencia.md#perguntas-para-decisão)
+- **Responsável pelo domínio:** **Arquiteto:** o `genai-service` deveria continuar chamando `customers-service` direto, ou passar a sempre passar pelo `api-gateway` por consistência de observabilidade/segurança? Em produção, os bancos MySQL de `customers-service`, `vets-service` e `visits-service` são instâncias separadas ou compartilham a mesma instância (mesmo nome de banco `petclinic`)? [Origem Q02](6-referencia.md#perguntas-para-decisão)
+- **Responsável pelo domínio:** **Tech lead:** qual é o TTL real do cache de veterinários? Qual o comportamento real do `config: import: optional:configserver:...` quando o Config Server está fora do ar (a app sobe com quais defaults)? Existe CI/CD de deploy automatizado além do workflow de build/teste do GitHub Actions? [Origem Q03](6-referencia.md#perguntas-para-decisão)
+- **Tech lead:** Qual é a capacidade efetiva do ChatMemory injetado? `.order(10)` define a ordem do advisor e não comprova uma janela de dez mensagens. [Origem Q04](6-referencia.md#perguntas-para-decisão)
+
+[Resumos explicativos](llm/resumos.md) · [Grafo tipado](llm/grafo.json)

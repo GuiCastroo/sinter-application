@@ -1,0 +1,415 @@
+{
+  "versao": 3,
+  "dominio": "Serverlesspresso",
+  "semantica": "Aresta de dependência: consumidor → fornecedor; tipo preserva evento, dado, callback, API e inicialização. Não representa cronologia de execução.",
+  "servicos": [
+    {
+      "id": "00-baseCore",
+      "nome": "00-baseCore",
+      "estado": "ativo",
+      "origem": "3-servicos.md#00-basecore",
+      "resumo": "stack fundacional: cria o event bus `Serverlesspresso`, o Cognito User Pool com login por SMS (sem senha) e o endpoint IoT usado para tempo real. Todo o resto depende dela."
+    },
+    {
+      "id": "validator-service",
+      "nome": "validator-service (backends/9-validator)",
+      "estado": "ativo",
+      "origem": "3-servicos.md#validator-service-backends9-validator",
+      "resumo": "é o portão de entrada do pedido: gera um QR code com token limitado por janela de 5 minutos e, quando o cliente escaneia, valida o token e dispara `Validator.NewOrder` — o evento que dá partida em tudo."
+    },
+    {
+      "id": "config-service",
+      "nome": "config-service (backends/2-config-service)",
+      "estado": "ativo",
+      "origem": "3-servicos.md#config-service-backends2-config-service",
+      "resumo": "guarda a configuração de cada evento pop-up (loja aberta/fechada, cardápio, limites) numa única tabela e propaga qualquer mudança para o resto do domínio via EventBridge."
+    },
+    {
+      "id": "order-processor",
+      "nome": "order-processor (backends/4-order-processing)",
+      "estado": "ativo",
+      "origem": "3-servicos.md#order-processor-backends4-order-processing",
+      "resumo": "a máquina de estado que carrega o pedido do início ao fim. Não tem lambda própria: fala direto com DynamoDB e EventBridge, e pausa duas vezes esperando uma ação humana (cliente escolher a bebida, barista concluir), usando o padrão *waitForTaskToken*."
+    },
+    {
+      "id": "order-manager",
+      "nome": "order-manager (backends/5-order-manager)",
+      "estado": "ativo",
+      "origem": "3-servicos.md#order-manager-backends5-order-manager",
+      "resumo": "a segunda máquina de estado: recebe, via API Gateway, a bebida escolhida pelo cliente e as ações do barista (assumir, liberar, concluir, cancelar), grava tudo na tabela de pedidos e é quem efetivamente \"acorda\" o order-processor com `SendTaskSuccess`."
+    },
+    {
+      "id": "publisher-service",
+      "nome": "publisher-service (backends/6-publisher-service)",
+      "estado": "ativo",
+      "origem": "3-servicos.md#publisher-service-backends6-publisher-service",
+      "resumo": "três lambdas puramente \"escuta o bus, publica no IoT\" — é assim que os 3 frontends recebem atualização em tempo real sem dar polling nas APIs."
+    },
+    {
+      "id": "order-journey-service",
+      "nome": "order-journey-service (backends/8-order-journey)",
+      "estado": "ativo",
+      "origem": "3-servicos.md#order-journey-service-backends8-order-journey",
+      "resumo": "não orquestra nada — é um espectador que grava *todo* evento do domínio numa tabela própria e, quando vê o pedido terminar, monta um recibo em HTML e publica no S3/CloudFront."
+    },
+    {
+      "id": "metrics-service",
+      "nome": "metrics-service (backends/7-metrics-service)",
+      "estado": "opcional",
+      "origem": "3-servicos.md#metrics-service-backends7-metrics-service",
+      "resumo": "stack separada, opcional: quatro lambdas que só transformam evento em métrica do CloudWatch, para dashboards operacionais."
+    },
+    {
+      "id": "counting-service",
+      "nome": "counting-service (backends/1-counting-service, não usado)",
+      "estado": "inativo",
+      "origem": "3-servicos.md#counting-service-backends1-counting-service-não-usado",
+      "resumo": "código presente no repositório (`getOrderId.js`, `resetOrderId.js`), mas sem `template.yaml` e sem nenhuma referência em outra stack. A geração do número do pedido hoje acontece dentro do próprio `order-processor` (estado `Generate Order Number`)."
+    },
+    {
+      "id": "EventPlayer",
+      "nome": "EventPlayer (extensions/EventPlayer)",
+      "estado": "opcional",
+      "origem": "3-servicos.md#eventplayer-extensionseventplayer",
+      "resumo": "Step Functions que reproduz ~15 minutos de eventos reais no bus, para testar extensões sem precisar operar a loja de verdade."
+    },
+    {
+      "id": "OrderRobotExtension",
+      "nome": "OrderRobotExtension (extensions/OrderRobotExtension)",
+      "estado": "opcional",
+      "origem": "3-servicos.md#orderrobotextension-extensionsorderrobotextension",
+      "resumo": "duas máquinas de estado (`orderBot`, `baristaBot`) que simulam clientes e baristas em massa (parâmetro `orders`) — é a origem do campo `robot` nas linhas da `OrderTable`."
+    },
+    {
+      "id": "PersistOrderMetricsToDynamoDB",
+      "nome": "PersistOrderMetricsToDynamoDB (extensions/PersistOrderMetricsToDynamoDB)",
+      "estado": "opcional",
+      "origem": "3-servicos.md#persistordermetricstodynamodb-extensionspersistordermetricstodynamodb",
+      "resumo": "fila SQS + Lambda + DynamoDB dedicados a guardar histórico de `OrderManager.WaitingCompletion` para análise posterior (a fila absorve picos de eventos)."
+    },
+    {
+      "id": "WaitTimes",
+      "nome": "WaitTimes (extensions/WaitTimes)",
+      "estado": "opcional",
+      "origem": "3-servicos.md#waittimes-extensionswaittimes",
+      "resumo": "único componente em CDK/TypeScript do repositório; escuta pedido enviado/concluído e calcula o tempo médio de espera por bebida."
+    }
+  ],
+  "jornadas": [
+    {
+      "id": "pedir-um-café",
+      "nome": "Pedir um café",
+      "participantes": [
+        "validator-service",
+        "config-service",
+        "order-processor",
+        "order-manager",
+        "publisher-service",
+        "order-journey-service",
+        "metrics-service"
+      ],
+      "origem": "4-jornadas.md#pedir-um-café"
+    },
+    {
+      "id": "configurar-o-evento",
+      "nome": "Configurar o evento",
+      "participantes": [
+        "config-service",
+        "publisher-service"
+      ],
+      "origem": "4-jornadas.md#configurar-o-evento"
+    }
+  ],
+  "relacoes": [
+    {
+      "de": "validator-service",
+      "para": "config-service",
+      "contrato": "ConfigTable (leitura direta)",
+      "tipo": "acessa_dado",
+      "tipo_declarado": "acessa_dado",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#validator-service-backends9-validator"
+    },
+    {
+      "de": "order-processor",
+      "para": "config-service",
+      "contrato": "ConfigTable.GetItem (storeOpen)",
+      "tipo": "acessa_dado",
+      "tipo_declarado": "acessa_dado",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#order-processor-backends4-order-processing"
+    },
+    {
+      "de": "order-processor",
+      "para": "CountingTable",
+      "contrato": "CountingTable.UpdateItem (gera o número do pedido, lógica reimplementada inline no ASL — ver nota abaixo)",
+      "tipo": "acessa_dado",
+      "tipo_declarado": "acessa_dado",
+      "interno": false,
+      "estado_origem": "ativo",
+      "estado_destino": "externo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#order-processor-backends4-order-processing"
+    },
+    {
+      "de": "order-processor",
+      "para": "order-manager",
+      "contrato": "SendTaskSuccess recebido",
+      "tipo": "callback",
+      "tipo_declarado": "callback",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#order-processor-backends4-order-processing"
+    },
+    {
+      "de": "order-manager",
+      "para": "order-processor",
+      "contrato": "TaskToken gravado por evento, resumido via SendTaskSuccess",
+      "tipo": "callback",
+      "tipo_declarado": "callback",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#order-manager-backends5-order-manager"
+    },
+    {
+      "de": "order-manager",
+      "para": "config-service",
+      "contrato": "ConfigTable.GetItem (cardápio)",
+      "tipo": "acessa_dado",
+      "tipo_declarado": "acessa_dado",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#order-manager-backends5-order-manager"
+    },
+    {
+      "de": "publisher-service",
+      "para": "order-processor",
+      "contrato": "Eventos por prefixo de detail-type (OrderProcessor.*)",
+      "tipo": "consome_evento",
+      "tipo_declarado": "consome_evento",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#publisher-service-backends6-publisher-service"
+    },
+    {
+      "de": "publisher-service",
+      "para": "order-manager",
+      "contrato": "Eventos por prefixo de detail-type (OrderManager.*)",
+      "tipo": "consome_evento",
+      "tipo_declarado": "consome_evento",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#publisher-service-backends6-publisher-service"
+    },
+    {
+      "de": "publisher-service",
+      "para": "validator-service",
+      "contrato": "Eventos por prefixo de detail-type (Validator.*)",
+      "tipo": "consome_evento",
+      "tipo_declarado": "consome_evento",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#publisher-service-backends6-publisher-service"
+    },
+    {
+      "de": "publisher-service",
+      "para": "config-service",
+      "contrato": "Eventos por prefixo de detail-type (ConfigService.*)",
+      "tipo": "consome_evento",
+      "tipo_declarado": "consome_evento",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#publisher-service-backends6-publisher-service"
+    },
+    {
+      "de": "order-journey-service",
+      "para": "validator-service",
+      "contrato": "Qualquer evento (sem filtro de detail-type)",
+      "tipo": "consome_evento",
+      "tipo_declarado": "consome_evento",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#order-journey-service-backends8-order-journey"
+    },
+    {
+      "de": "order-journey-service",
+      "para": "config-service",
+      "contrato": "Qualquer evento (sem filtro de detail-type)",
+      "tipo": "consome_evento",
+      "tipo_declarado": "consome_evento",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#order-journey-service-backends8-order-journey"
+    },
+    {
+      "de": "order-journey-service",
+      "para": "order-processor",
+      "contrato": "Qualquer evento (sem filtro de detail-type)",
+      "tipo": "consome_evento",
+      "tipo_declarado": "consome_evento",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#order-journey-service-backends8-order-journey"
+    },
+    {
+      "de": "order-journey-service",
+      "para": "order-manager",
+      "contrato": "Qualquer evento (sem filtro de detail-type)",
+      "tipo": "consome_evento",
+      "tipo_declarado": "consome_evento",
+      "interno": true,
+      "estado_origem": "ativo",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#order-journey-service-backends8-order-journey"
+    },
+    {
+      "de": "metrics-service",
+      "para": "validator-service",
+      "contrato": "Validator.NewOrder",
+      "tipo": "consome_evento",
+      "tipo_declarado": "consome_evento",
+      "interno": true,
+      "estado_origem": "opcional",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#metrics-service-backends7-metrics-service"
+    },
+    {
+      "de": "metrics-service",
+      "para": "order-manager",
+      "contrato": "OrderManager.OrderCancelled*, OrderManager.WaitingCompletion",
+      "tipo": "consome_evento",
+      "tipo_declarado": "consome_evento",
+      "interno": true,
+      "estado_origem": "opcional",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#metrics-service-backends7-metrics-service"
+    },
+    {
+      "de": "metrics-service",
+      "para": "order-processor",
+      "contrato": "OrderProcessor.OrderTimeOut",
+      "tipo": "consome_evento",
+      "tipo_declarado": "consome_evento",
+      "interno": true,
+      "estado_origem": "opcional",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#metrics-service-backends7-metrics-service"
+    },
+    {
+      "de": "OrderRobotExtension",
+      "para": "validator-service",
+      "contrato": "Chama a mesma API que um cliente real chamaria *(a confirmar, não lido em detalhe)*",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "opcional",
+      "estado_destino": "ativo",
+      "evidencia": "a confirmar",
+      "origem": "3-servicos.md#orderrobotextension-extensionsorderrobotextension"
+    },
+    {
+      "de": "OrderRobotExtension",
+      "para": "order-manager",
+      "contrato": "Chama a mesma API que um barista real chamaria *(a confirmar, não lido em detalhe)*",
+      "tipo": "chama_api",
+      "tipo_declarado": "chama_api",
+      "interno": true,
+      "estado_origem": "opcional",
+      "estado_destino": "ativo",
+      "evidencia": "a confirmar",
+      "origem": "3-servicos.md#orderrobotextension-extensionsorderrobotextension"
+    },
+    {
+      "de": "PersistOrderMetricsToDynamoDB",
+      "para": "order-manager",
+      "contrato": "OrderManager.WaitingCompletion via EventBridge → SQS",
+      "tipo": "consome_evento",
+      "tipo_declarado": "consome_evento",
+      "interno": true,
+      "estado_origem": "opcional",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#persistordermetricstodynamodb-extensionspersistordermetricstodynamodb"
+    },
+    {
+      "de": "WaitTimes",
+      "para": "order-manager",
+      "contrato": "Eventos de pedido enviado e concluído",
+      "tipo": "consome_evento",
+      "tipo_declarado": "consome_evento",
+      "interno": true,
+      "estado_origem": "opcional",
+      "estado_destino": "ativo",
+      "evidencia": "declarada",
+      "origem": "3-servicos.md#waittimes-extensionswaittimes"
+    }
+  ],
+  "jornada_usa_servico": [
+    {
+      "jornada": "pedir-um-café",
+      "servico": "validator-service"
+    },
+    {
+      "jornada": "pedir-um-café",
+      "servico": "config-service"
+    },
+    {
+      "jornada": "pedir-um-café",
+      "servico": "order-processor"
+    },
+    {
+      "jornada": "pedir-um-café",
+      "servico": "order-manager"
+    },
+    {
+      "jornada": "pedir-um-café",
+      "servico": "publisher-service"
+    },
+    {
+      "jornada": "pedir-um-café",
+      "servico": "order-journey-service"
+    },
+    {
+      "jornada": "pedir-um-café",
+      "servico": "metrics-service"
+    },
+    {
+      "jornada": "configurar-o-evento",
+      "servico": "config-service"
+    },
+    {
+      "jornada": "configurar-o-evento",
+      "servico": "publisher-service"
+    }
+  ]
+}

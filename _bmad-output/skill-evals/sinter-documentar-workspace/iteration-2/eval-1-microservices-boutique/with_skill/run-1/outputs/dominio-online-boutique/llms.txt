@@ -1,0 +1,64 @@
+# Online Boutique
+
+> loja online de decoração e vestuário onde qualquer visitante, sem cadastro, navega o catálogo, monta um carrinho e finaliza a compra informando endereço e cartão. A loja precifica na moeda escolhida, cobra, organiza o envio e confirma por email, em um só passo. Existe como vitrine de referência para construir e-commerce em microsserviços, não para vender de verdade *(a confirmar — ver "Por que existe")*.
+
+Documentação em 6 páginas. Leia este cartão primeiro; abra só a seção de que precisar. Resumos de tudo em `llm/resumos.md`; ligações em `llm/grafo.json`.
+
+## Fronteira
+- **Faz:** Mostra e busca catálogo de produtos; Monta carrinho por sessão (cookie); Cobra, calcula frete e confirma o pedido em um fluxo só; Converte preços entre moedas; Sugere produtos e anúncios
+- **Não faz:** Login ou conta de cliente; Gestão de estoque; Cobrança e frete reais (simulados); Câmbio em tempo real (README sugere, código não faz); Histórico ou "meus pedidos"
+- **Não sabemos:** Se há plano de autenticação; Se a falta de estoque é intencional; Se algum dia plugam gateway/transportadora reais; Por que README e código divergem; Se o pedido é descartado de propósito
+
+## Serviços
+- [frontend](3-servicos.md#frontend): Experiência do cliente — Site que serve HTML e chama todos os outros serviços em nome do navegador
+- [cartservice](3-servicos.md#cartservice): Carrinho — Guarda os itens do carrinho de cada usuário em Redis
+- [productcatalogservice](3-servicos.md#productcatalogservice): Catálogo — Lista, busca e detalha produtos a partir de um arquivo JSON (ou AlloyDB opcional)
+- [currencyservice](3-servicos.md#currencyservice): Precificação — Converte valores monetários entre moedas usando taxas estáticas
+- [shippingservice](3-servicos.md#shippingservice): Frete — Cota o frete e "envia" o pedido (mock, sem transportadora real)
+- [checkoutservice](3-servicos.md#checkoutservice): Checkout — Orquestra carrinho, preço, frete, pagamento e email para fechar o pedido
+- [paymentservice](3-servicos.md#paymentservice): Pagamento — Valida o cartão e "cobra" (mock, sem gateway real)
+- [emailservice](3-servicos.md#emailservice): Notificação — Renderiza e "envia" o email de confirmação (mock, sem SMTP real)
+- [recommendationservice](3-servicos.md#recommendationservice): Descoberta — Sugere produtos aleatórios que não estão no carrinho
+- [adservice](3-servicos.md#adservice): Descoberta — Sugere anúncios estáticos por categoria
+- [shoppingassistantservice](3-servicos.md#shoppingassistantservice): Descoberta — Assistente com IA generativa (RAG) — opcional, via Kustomize
+- [loadgenerator](3-servicos.md#loadgenerator): Suporte — Gera tráfego sintético simulando clientes reais
+
+## Jornadas
+- [Comprar um produto](4-jornadas.md#comprar-um-produto): Do clique em "comprar" ao email de confirmação — checkoutservice (orquestrador síncrono)
+- [Navegar e montar o carrinho](4-jornadas.md#navegar-e-montar-o-carrinho): Ver produtos, buscar, adicionar ao carrinho — Sem orquestrador — cada tela chama os serviços que precisa
+- [Pedir ajuda ao assistente de compras](4-jornadas.md#): Enviar foto de um ambiente e receber sugestão de produtos — shoppingassistantservice (opcional)
+
+## Quem orquestra
+- Comprar um produto — Um serviço orquestrador (checkoutservice) — Chama carrinho, catálogo, câmbio, frete, pagamento e email em sequência, dentro da mesma requisição — sem mot…
+- Navegar e montar o carrinho — Ninguém — coreografia simples — Cada tela do site busca só o que precisa, sem fluxo maior por trás
+- Pedir ajuda ao assistente — O próprio assistente (shoppingassistantservice) — Chama IA generativa e busca de produtos por conta própria, sem envolver o resto do domínio
+
+## Regras que mandam
+- Bandeiras de cartão aceitas — Visa e Mastercard apenas
+- Cartão vencido é recusado — Mês/ano de validade deve ser posterior ao atual
+- Custo de frete — Fixo: US$ 8.99 por pedido com item, US$ 0 se vazio
+- Falha ao notificar o cliente por email — Não desfaz nem impede a compra
+- Identidade do cliente — Um cookie de sessão — não existe conta nem senha
+
+## Entra e sai
+- Entra — Navegação, escolha de produtos, dados de endereço/cartão — Cliente (navegador)
+- Entra — Tráfego sintético para testes/demo — 🩷 loadgenerator
+- Sai — Preço final, confirmação do pedido, rastreio — Cliente (navegador)
+- Sai *(opcional)* — Foto do ambiente e pergunta — 🩷 Gemini (Google AI) — só se o assistente estiver habilitado
+- Sai *(opcional)* — Métricas, traces e profiling — 🩷 Google Cloud Operations — só se habilitado
+
+## Ainda não se sabe
+- Conflitos entre fontes:
+- README.md do repositório diz que o currencyservice "usa valores reais buscados do Banco
+- Segredos (só localização, nenhum valor copiado):
+- kustomize/components/shopping-assistant/shoppingassistantservice.yaml linha ~51: variável
+
+## Onde procurar
+- [Negócio](1-negocio.md): loja online de decoração e vestuário onde qualquer visitante, sem cadastro, navega o catálogo, monta um carrinho e finaliza a compra inform…
+- [Arquitetura](2-arquitetura.md): 11 microsserviços poliglotas (Go, Java, Node.js, Python, C#) que conversam quase exclusivamente por gRPC síncrono, definidos em um único co…
+- [Serviços](3-servicos.md): 11 microsserviços (mais um 12º opcional, o assistente de compras) conversam quase só por gRPC síncrono, seguindo os contratos únicos de `pr…
+- [Jornadas](4-jornadas.md): a jornada central é a compra: o cliente navega sem login, monta um carrinho e fecha o pedido em uma única chamada síncrona orquestrada pelo…
+
+## Optional
+- [Infraestrutura](5-infraestrutura.md): roda em qualquer cluster Kubernetes (o "golden path" é um `kind` local ou GKE Autopilot via Terraform). Cada serviço é um `Deployment` + `S…
+- [Referência](6-referencia.md): glossário, regras e decisões consolidadas das outras páginas, mais um guia rápido para rodar o projeto localmente e uma lista de dúvidas po…

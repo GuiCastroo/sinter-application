@@ -1,0 +1,1747 @@
+{
+ "dominio": "Serverlesspresso",
+ "nos": [
+  {
+   "id": "dom-serverlesspresso",
+   "kind": "domain",
+   "camada": 2,
+   "status": "proposed",
+   "titulo": "Domínio Serverlesspresso",
+   "caminho": "README.md",
+   "origem": "misto",
+   "conflito": false
+  },
+  {
+   "id": "cap-vender-cafe-sob-demanda",
+   "kind": "capability",
+   "camada": 1,
+   "status": "proposed",
+   "titulo": "Vender café sob demanda em um evento pop-up",
+   "caminho": "capacidades/vender-cafe-sob-demanda.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "dec-001-integracoes-diretas-sem-lambda-glue",
+   "kind": "decision",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "ADR-001 Preferir integrações diretas de serviço a \"lambdas de cola\" (proposto, sem documento original)",
+   "caminho": "decisoes/ADR-001-integracoes-diretas-sem-lambda-glue.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "flow-pedido-de-cafe",
+   "kind": "flow",
+   "camada": 1,
+   "status": "proposed",
+   "titulo": "Pedido de café",
+   "caminho": "fluxos/pedido-de-cafe.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "flow-pedido-de-cafe-sequencia",
+   "kind": "flow",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Pedido de café: sequência técnica",
+   "caminho": "fluxos/pedido-de-cafe.sequencia.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "term-barista",
+   "kind": "term",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Barista",
+   "caminho": "glossario/barista.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "term-bucket-de-tokens",
+   "kind": "term",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Bucket (de tokens)",
+   "caminho": "glossario/bucket-de-tokens.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "term-eventid",
+   "kind": "term",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "eventId",
+   "caminho": "glossario/eventid.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "term-task-token",
+   "kind": "term",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Task Token",
+   "caminho": "glossario/task-token.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "env-consolidado-01-appcore",
+   "kind": "environment",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Ambiente \"consolidado\" (pilha 01-appCore)",
+   "caminho": "infraestrutura/ambientes/consolidado-01-appcore.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "env-core-00-basecore",
+   "kind": "environment",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Ambiente \"core\" (pilha 00-baseCore)",
+   "caminho": "infraestrutura/ambientes/core-00-basecore.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "env-modulos-standalone-backends",
+   "kind": "environment",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Ambiente \"módulos standalone\" (backends/*/template.yaml)",
+   "caminho": "infraestrutura/ambientes/modulos-standalone-backends.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "res-ddb-config-table",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "DynamoDB \"serverlesspresso-config-table\"",
+   "caminho": "infraestrutura/recursos/res-ddb-config-table.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-ddb-counting-table",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "DynamoDB \"serverlesspresso-counting-table\"",
+   "caminho": "infraestrutura/recursos/res-ddb-counting-table.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-ddb-order-journey-events-table",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "DynamoDB \"OrderJourneyEventsTable\"",
+   "caminho": "infraestrutura/recursos/res-ddb-order-journey-events-table.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-ddb-order-table",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "DynamoDB \"serverlesspresso-order-table\"",
+   "caminho": "infraestrutura/recursos/res-ddb-order-table.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-ddb-validator-table",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "DynamoDB \"serverlesspresso-validator\"",
+   "caminho": "infraestrutura/recursos/res-ddb-validator-table.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-event-bus-serverlesspresso",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "EventBridge bus \"Serverlesspresso\"",
+   "caminho": "infraestrutura/recursos/res-event-bus-serverlesspresso.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-http-api-validator",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "API Gateway do validator-service",
+   "caminho": "infraestrutura/recursos/res-http-api-validator.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-identity-pool-cognito",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Cognito Identity Pool \"ServerlesspressoIdentityPool\"",
+   "caminho": "infraestrutura/recursos/res-identity-pool-cognito.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-iot-core-realtime",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "AWS IoT Core (realtime messaging)",
+   "caminho": "infraestrutura/recursos/res-iot-core-realtime.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-journey-bucket-s3",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "S3 bucket \"serverlesspresso-order-journey-{region}-{accountId}\"",
+   "caminho": "infraestrutura/recursos/res-journey-bucket-s3.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-journey-cloudfront",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "CloudFront \"JourneyCloudFront\"",
+   "caminho": "infraestrutura/recursos/res-journey-cloudfront.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-metrics-queue-sqs",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "SQS \"MetricsQueue\"",
+   "caminho": "infraestrutura/recursos/res-metrics-queue-sqs.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-metrics-table-dynamodb",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "DynamoDB \"serverlesspresso-metrics-table\"",
+   "caminho": "infraestrutura/recursos/res-metrics-table-dynamodb.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-rest-api-config",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "API Gateway REST \"ServerlesspressoConfigServiceRestApi\"",
+   "caminho": "infraestrutura/recursos/res-rest-api-config.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-rest-api-order-manager",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "API Gateway REST \"ServerlesspressoOrdermanagerRestApi\"",
+   "caminho": "infraestrutura/recursos/res-rest-api-order-manager.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "res-user-pool-cognito",
+   "kind": "resource",
+   "camada": 6,
+   "status": "proposed",
+   "titulo": "Cognito User Pool \"ServerlesspressoUserPool\"",
+   "caminho": "infraestrutura/recursos/res-user-pool-cognito.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "std-orquestracao-por-task-token",
+   "kind": "standard",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Orquestração por Task Token entre duas state machines",
+   "caminho": "padroes/orquestracao-por-task-token-entre-duas-state-machines.md",
+   "origem": "inferido",
+   "conflito": false
+  },
+  {
+   "id": "rule-capacidade-maxima-concorrente",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Capacidade máxima de pedidos simultâneos",
+   "caminho": "regras-de-negocio/capacidade-maxima-concorrente.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "rule-limite-de-tokens-por-janela",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Limite de tokens por janela de tempo",
+   "caminho": "regras-de-negocio/limite-de-tokens-por-janela.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "rule-timeout-barista-preparo",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Timeout do barista para concluir o pedido",
+   "caminho": "regras-de-negocio/timeout-barista-preparo.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "rule-timeout-cliente-envio-pedido",
+   "kind": "rule",
+   "camada": 0,
+   "status": "proposed",
+   "titulo": "Timeout do cliente para enviar o pedido",
+   "caminho": "regras-de-negocio/timeout-cliente-envio-pedido.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-config-changed",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "config-changed",
+   "caminho": "sistemas/config-service/componentes/config-changed.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-config-fill-databases",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "fill-databases-custom-resource",
+   "caminho": "sistemas/config-service/componentes/fill-databases-custom-resource.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-config-rest-api",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "rest-api-config",
+   "caminho": "sistemas/config-service/componentes/rest-api-config.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-config-service-config-changed",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "ConfigService.ConfigChanged",
+   "caminho": "sistemas/config-service/contratos/config-service-config-changed.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-config-service",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "config-service",
+   "caminho": "sistemas/config-service/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-counting-get-order-id",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "get-order-id",
+   "caminho": "sistemas/counting-service/componentes/get-order-id.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-counting-reset-order-id",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "reset-order-id",
+   "caminho": "sistemas/counting-service/componentes/reset-order-id.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-counting-service",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "counting-service",
+   "caminho": "sistemas/counting-service/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-ext-event-player",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "extensao-event-player",
+   "caminho": "sistemas/extensao-event-player/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-ext-order-robot",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "extensao-order-robot",
+   "caminho": "sistemas/extensao-order-robot/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-ext-persist-metrics-dynamodb",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "extensao-persist-metrics-dynamodb",
+   "caminho": "sistemas/extensao-persist-metrics-dynamodb/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-ext-wait-times",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "extensao-wait-times",
+   "caminho": "sistemas/extensao-wait-times/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-metrics-order-manager-cancelled",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "order-manager-order-cancelled-metric",
+   "caminho": "sistemas/metrics-service/componentes/order-manager-order-cancelled-metric.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-metrics-order-manager-waiting-completion",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "order-manager-waiting-completion-metric",
+   "caminho": "sistemas/metrics-service/componentes/order-manager-waiting-completion-metric.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-metrics-order-processor-timeout",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "order-processor-order-timeout-metric",
+   "caminho": "sistemas/metrics-service/componentes/order-processor-order-timeout-metric.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-metrics-validator-new-order",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "validator-new-order-metric",
+   "caminho": "sistemas/metrics-service/componentes/validator-new-order-metric.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-metrics-service",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "metrics-service",
+   "caminho": "sistemas/metrics-service/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-nucleo-create-auth-challenge",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "create-auth-challenge",
+   "caminho": "sistemas/nucleo-serverlesspresso/componentes/create-auth-challenge.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-nucleo-define-auth-challenge",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "define-auth-challenge",
+   "caminho": "sistemas/nucleo-serverlesspresso/componentes/define-auth-challenge.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-nucleo-get-iot-endpoint",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "get-iot-endpoint",
+   "caminho": "sistemas/nucleo-serverlesspresso/componentes/get-iot-endpoint.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-nucleo-pre-sign-up",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "pre-sign-up",
+   "caminho": "sistemas/nucleo-serverlesspresso/componentes/pre-sign-up.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-nucleo-verify-auth-challenge",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "verify-auth-challenge-response",
+   "caminho": "sistemas/nucleo-serverlesspresso/componentes/verify-auth-challenge-response.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-nucleo-serverlesspresso",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "nucleo-serverlesspresso",
+   "caminho": "sistemas/nucleo-serverlesspresso/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-order-journey-generate-html",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "generate-html",
+   "caminho": "sistemas/order-journey-service/componentes/generate-html.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-order-journey-state-machine",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "order-journey-state-machine",
+   "caminho": "sistemas/order-journey-service/componentes/order-journey-state-machine.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-order-journey-service",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "order-journey-service",
+   "caminho": "sistemas/order-journey-service/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-order-manager-state-machine",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "order-manager-state-machine",
+   "caminho": "sistemas/order-manager-service/componentes/order-manager-state-machine.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-order-manager-order-timed-out",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "order-timed-out",
+   "caminho": "sistemas/order-manager-service/componentes/order-timed-out.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-order-manager-rest-api-orders",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "rest-api-orders",
+   "caminho": "sistemas/order-manager-service/componentes/rest-api-orders.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-order-manager-sanitize-order",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "sanitize-order",
+   "caminho": "sistemas/order-manager-service/componentes/sanitize-order.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-order-manager-waiting-completion",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "waiting-completion",
+   "caminho": "sistemas/order-manager-service/componentes/waiting-completion.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-order-manager-workflow-started",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "workflow-started",
+   "caminho": "sistemas/order-manager-service/componentes/workflow-started.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-order-manager-make-order",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "OrderManager.MakeOrder",
+   "caminho": "sistemas/order-manager-service/contratos/order-manager-make-order.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-order-manager-order-state-changed",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "OrderManager.Order{eventId}-COMPLETED / OrderManager.Order{eventId}-CANCELLED",
+   "caminho": "sistemas/order-manager-service/contratos/order-manager-order-state-changed.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-order-manager-waiting-completion",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "OrderManager.WaitingCompletion",
+   "caminho": "sistemas/order-manager-service/contratos/order-manager-waiting-completion.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-order-manager-service",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "order-manager-service",
+   "caminho": "sistemas/order-manager-service/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-order-processor-state-machine",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "order-processor-state-machine",
+   "caminho": "sistemas/order-processing-service/componentes/order-processor-state-machine.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-order-processor-order-finished",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "OrderProcessor.orderFinished",
+   "caminho": "sistemas/order-processing-service/contratos/order-processor-order-finished.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-order-processor-order-timeout",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "OrderProcessor.OrderTimeOut",
+   "caminho": "sistemas/order-processing-service/contratos/order-processor-order-timeout.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-order-processor-waiting-completion",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "OrderProcessor.WaitingCompletion",
+   "caminho": "sistemas/order-processing-service/contratos/order-processor-waiting-completion.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-order-processor-workflow-started",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "OrderProcessor.WorkflowStarted",
+   "caminho": "sistemas/order-processing-service/contratos/order-processor-workflow-started.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-order-processing-service",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "order-processing-service",
+   "caminho": "sistemas/order-processing-service/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-publisher-admin",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "publisher-admin",
+   "caminho": "sistemas/publisher-service/componentes/publisher-admin.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-publisher-config",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "publisher-config",
+   "caminho": "sistemas/publisher-service/componentes/publisher-config.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-publisher-user",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "publisher-user",
+   "caminho": "sistemas/publisher-service/componentes/publisher-user.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-publisher-service",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "publisher-service",
+   "caminho": "sistemas/publisher-service/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-validator-get-qr-code",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "get-qr-code",
+   "caminho": "sistemas/validator-service/componentes/get-qr-code.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "cmp-validator-verify-qr-code",
+   "kind": "component",
+   "camada": 5,
+   "status": "proposed",
+   "titulo": "verify-qr-code",
+   "caminho": "sistemas/validator-service/componentes/verify-qr-code.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "ctr-validator-new-order",
+   "kind": "contract",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "Validator.NewOrder",
+   "caminho": "sistemas/validator-service/contratos/validator-new-order.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sys-validator-service",
+   "kind": "system",
+   "camada": 4,
+   "status": "proposed",
+   "titulo": "validator-service",
+   "caminho": "sistemas/validator-service/ficha.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sub-configuracao-da-loja",
+   "kind": "subdomain",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Subdomínio Configuração da loja",
+   "caminho": "subdominios/configuracao-da-loja.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sub-extensoes",
+   "kind": "subdomain",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Subdomínio Extensões",
+   "caminho": "subdominios/extensoes.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sub-nucleo-e-identidade",
+   "kind": "subdomain",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Subdomínio Núcleo e identidade",
+   "caminho": "subdominios/nucleo-e-identidade.md",
+   "origem": "extraído",
+   "conflito": false
+  },
+  {
+   "id": "sub-pedido",
+   "kind": "subdomain",
+   "camada": 3,
+   "status": "proposed",
+   "titulo": "Subdomínio Pedido",
+   "caminho": "subdominios/pedido.md",
+   "origem": "inferido",
+   "conflito": false
+  }
+ ],
+ "arestas": [
+  {
+   "de": "dom-serverlesspresso",
+   "para": "cap-vender-cafe-sob-demanda",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-nucleo-e-identidade",
+   "para": "dom-serverlesspresso",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-configuracao-da-loja",
+   "para": "dom-serverlesspresso",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-pedido",
+   "para": "dom-serverlesspresso",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-extensoes",
+   "para": "dom-serverlesspresso",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "flow-pedido-de-cafe",
+   "para": "cap-vender-cafe-sob-demanda",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-pedido",
+   "para": "cap-vender-cafe-sob-demanda",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sub-configuracao-da-loja",
+   "para": "cap-vender-cafe-sob-demanda",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-order-manager-service",
+   "para": "dec-001-integracoes-diretas-sem-lambda-glue",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-config-service",
+   "para": "dec-001-integracoes-diretas-sem-lambda-glue",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-order-processing-service",
+   "para": "dec-001-integracoes-diretas-sem-lambda-glue",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-order-journey-service",
+   "para": "dec-001-integracoes-diretas-sem-lambda-glue",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "flow-pedido-de-cafe-sequencia",
+   "para": "flow-pedido-de-cafe",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-validator-service",
+   "para": "flow-pedido-de-cafe-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-order-processing-service",
+   "para": "flow-pedido-de-cafe-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-order-manager-service",
+   "para": "flow-pedido-de-cafe-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-config-service",
+   "para": "flow-pedido-de-cafe-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-publisher-service",
+   "para": "flow-pedido-de-cafe-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-order-journey-service",
+   "para": "flow-pedido-de-cafe-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-counting-service",
+   "para": "flow-pedido-de-cafe-sequencia",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "env-consolidado-01-appcore",
+   "para": "sys-config-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "env-consolidado-01-appcore",
+   "para": "sys-validator-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "env-consolidado-01-appcore",
+   "para": "sys-order-processing-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "env-consolidado-01-appcore",
+   "para": "sys-order-manager-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "env-consolidado-01-appcore",
+   "para": "sys-publisher-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "env-consolidado-01-appcore",
+   "para": "sys-order-journey-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "env-consolidado-01-appcore",
+   "para": "sys-counting-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "env-core-00-basecore",
+   "para": "sys-nucleo-serverlesspresso",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "env-modulos-standalone-backends",
+   "para": "sys-metrics-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "env-modulos-standalone-backends",
+   "para": "sys-order-journey-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "env-modulos-standalone-backends",
+   "para": "sys-validator-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-config-table",
+   "para": "sys-config-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-counting-table",
+   "para": "sys-counting-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-order-journey-events-table",
+   "para": "sys-order-journey-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-order-table",
+   "para": "sys-order-manager-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-validator-table",
+   "para": "sys-validator-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-event-bus-serverlesspresso",
+   "para": "sys-nucleo-serverlesspresso",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-http-api-validator",
+   "para": "sys-validator-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-identity-pool-cognito",
+   "para": "sys-nucleo-serverlesspresso",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-iot-core-realtime",
+   "para": "sys-nucleo-serverlesspresso",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-journey-bucket-s3",
+   "para": "sys-order-journey-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-journey-cloudfront",
+   "para": "sys-order-journey-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-metrics-queue-sqs",
+   "para": "sys-ext-persist-metrics-dynamodb",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-metrics-table-dynamodb",
+   "para": "sys-ext-persist-metrics-dynamodb",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-rest-api-config",
+   "para": "sys-config-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-rest-api-order-manager",
+   "para": "sys-order-manager-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-user-pool-cognito",
+   "para": "sys-nucleo-serverlesspresso",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-order-processing-service",
+   "para": "std-orquestracao-por-task-token",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-order-manager-service",
+   "para": "std-orquestracao-por-task-token",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "rule-capacidade-maxima-concorrente",
+   "para": "flow-pedido-de-cafe",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-order-processor-state-machine",
+   "para": "rule-capacidade-maxima-concorrente",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "rule-limite-de-tokens-por-janela",
+   "para": "flow-pedido-de-cafe",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-validator-get-qr-code",
+   "para": "rule-limite-de-tokens-por-janela",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-validator-verify-qr-code",
+   "para": "rule-limite-de-tokens-por-janela",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "rule-timeout-barista-preparo",
+   "para": "flow-pedido-de-cafe",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-order-processor-state-machine",
+   "para": "rule-timeout-barista-preparo",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "rule-timeout-cliente-envio-pedido",
+   "para": "flow-pedido-de-cafe",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-order-processor-state-machine",
+   "para": "rule-timeout-cliente-envio-pedido",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-config-changed",
+   "para": "sys-config-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-config-table",
+   "para": "cmp-config-changed",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-event-bus-serverlesspresso",
+   "para": "cmp-config-changed",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-config-fill-databases",
+   "para": "sys-config-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-config-table",
+   "para": "cmp-config-fill-databases",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-counting-table",
+   "para": "cmp-config-fill-databases",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-config-rest-api",
+   "para": "sys-config-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-config-table",
+   "para": "cmp-config-rest-api",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-rest-api-config",
+   "para": "cmp-config-rest-api",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-config-service-config-changed",
+   "para": "sys-config-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-config-service",
+   "para": "sub-configuracao-da-loja",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-counting-get-order-id",
+   "para": "sys-counting-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-counting-table",
+   "para": "cmp-counting-get-order-id",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-counting-reset-order-id",
+   "para": "sys-counting-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-counting-table",
+   "para": "cmp-counting-reset-order-id",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-counting-service",
+   "para": "sub-pedido",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-ext-event-player",
+   "para": "sub-extensoes",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-ext-order-robot",
+   "para": "sub-extensoes",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-ext-persist-metrics-dynamodb",
+   "para": "sub-extensoes",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-ext-wait-times",
+   "para": "sub-extensoes",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-metrics-order-manager-cancelled",
+   "para": "sys-metrics-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-metrics-order-manager-waiting-completion",
+   "para": "sys-metrics-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-metrics-order-processor-timeout",
+   "para": "sys-metrics-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-metrics-validator-new-order",
+   "para": "sys-metrics-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-metrics-service",
+   "para": "sub-pedido",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-nucleo-create-auth-challenge",
+   "para": "sys-nucleo-serverlesspresso",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-user-pool-cognito",
+   "para": "cmp-nucleo-create-auth-challenge",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-nucleo-define-auth-challenge",
+   "para": "sys-nucleo-serverlesspresso",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-user-pool-cognito",
+   "para": "cmp-nucleo-define-auth-challenge",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-nucleo-get-iot-endpoint",
+   "para": "sys-nucleo-serverlesspresso",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-nucleo-pre-sign-up",
+   "para": "sys-nucleo-serverlesspresso",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-user-pool-cognito",
+   "para": "cmp-nucleo-pre-sign-up",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-nucleo-verify-auth-challenge",
+   "para": "sys-nucleo-serverlesspresso",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-user-pool-cognito",
+   "para": "cmp-nucleo-verify-auth-challenge",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-nucleo-serverlesspresso",
+   "para": "sub-nucleo-e-identidade",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-order-journey-generate-html",
+   "para": "sys-order-journey-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-journey-bucket-s3",
+   "para": "cmp-order-journey-generate-html",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-order-journey-state-machine",
+   "para": "sys-order-journey-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-order-journey-events-table",
+   "para": "cmp-order-journey-state-machine",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-order-journey-generate-html",
+   "para": "cmp-order-journey-state-machine",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-order-journey-service",
+   "para": "sub-pedido",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-order-manager-state-machine",
+   "para": "sys-order-manager-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-order-manager-sanitize-order",
+   "para": "cmp-order-manager-state-machine",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-order-table",
+   "para": "cmp-order-manager-state-machine",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-order-manager-order-timed-out",
+   "para": "sys-order-manager-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-order-table",
+   "para": "cmp-order-manager-order-timed-out",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-order-manager-rest-api-orders",
+   "para": "sys-order-manager-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-order-table",
+   "para": "cmp-order-manager-rest-api-orders",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-order-manager-state-machine",
+   "para": "cmp-order-manager-rest-api-orders",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-rest-api-order-manager",
+   "para": "cmp-order-manager-rest-api-orders",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-order-manager-sanitize-order",
+   "para": "sys-order-manager-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-order-manager-waiting-completion",
+   "para": "sys-order-manager-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-order-table",
+   "para": "cmp-order-manager-waiting-completion",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-event-bus-serverlesspresso",
+   "para": "cmp-order-manager-waiting-completion",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-order-manager-workflow-started",
+   "para": "sys-order-manager-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-order-table",
+   "para": "cmp-order-manager-workflow-started",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-order-manager-make-order",
+   "para": "sys-order-manager-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-order-manager-order-state-changed",
+   "para": "sys-order-manager-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-order-manager-waiting-completion",
+   "para": "sys-order-manager-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-order-manager-service",
+   "para": "sub-pedido",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-order-processor-state-machine",
+   "para": "sys-order-processing-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-config-table",
+   "para": "cmp-order-processor-state-machine",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-counting-table",
+   "para": "cmp-order-processor-state-machine",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-event-bus-serverlesspresso",
+   "para": "cmp-order-processor-state-machine",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-order-processor-order-finished",
+   "para": "sys-order-processing-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-order-processor-order-timeout",
+   "para": "sys-order-processing-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-order-processor-waiting-completion",
+   "para": "sys-order-processing-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-order-processor-workflow-started",
+   "para": "sys-order-processing-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-order-processing-service",
+   "para": "sub-pedido",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-config-table",
+   "para": "sys-order-processing-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-counting-table",
+   "para": "sys-order-processing-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-event-bus-serverlesspresso",
+   "para": "sys-order-processing-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-publisher-admin",
+   "para": "sys-publisher-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-iot-core-realtime",
+   "para": "cmp-publisher-admin",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-publisher-config",
+   "para": "sys-publisher-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-iot-core-realtime",
+   "para": "cmp-publisher-config",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-publisher-user",
+   "para": "sys-publisher-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-iot-core-realtime",
+   "para": "cmp-publisher-user",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-publisher-service",
+   "para": "sub-pedido",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-iot-core-realtime",
+   "para": "sys-publisher-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-validator-get-qr-code",
+   "para": "sys-validator-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-validator-table",
+   "para": "cmp-validator-get-qr-code",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "cmp-validator-verify-qr-code",
+   "para": "sys-validator-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-ddb-validator-table",
+   "para": "cmp-validator-verify-qr-code",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "res-event-bus-serverlesspresso",
+   "para": "cmp-validator-verify-qr-code",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "ctr-validator-new-order",
+   "para": "sys-validator-service",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  },
+  {
+   "de": "sys-validator-service",
+   "para": "sub-pedido",
+   "tipo": "realiza",
+   "alvo_documentado": true
+  }
+ ]
+}

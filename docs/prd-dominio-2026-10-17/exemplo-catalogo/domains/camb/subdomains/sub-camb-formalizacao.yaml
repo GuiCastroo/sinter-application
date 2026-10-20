@@ -1,0 +1,51 @@
+# arquivo: domains/camb/subdomains/sub-camb-formalizacao.yaml
+# Subdomínio com os mesmos blocos do domínio; aqui só o que é DESTA parte (o resto é herdado de dom-camb).
+apiVersion: sinter.dev/v1
+kind: Subdomain
+metadata:
+  id: sub-camb-formalizacao
+  name: Formalização
+  domain: dom-camb
+  status: approved
+  owners: [time-contratacao]
+spec:
+  # --- O que a IA lê primeiro ------------------------------------------------
+  purpose: "Registra o aceite do cliente e os termos da operação."
+  does:
+    - "Gera e guarda o aceite"
+    - "Mostra o contrato ao cliente"
+  doesNot: []
+  unknowns: []
+
+  # --- APLICAÇÕES (cada uma com os N repos que a compõem) --------------------
+  applications:
+    - id: app-camb-formalizacao
+      name: Formalização
+      lifecycle: modern
+      repositories:
+        - repo: repo-camb-mfe-contratar
+          role: frontend
+          platform: react
+        - repo: repo-camb-bff
+          role: bff
+          platform: node
+        - repo: repo-camb-formalizacao
+          role: api
+          platform: java
+
+  # --- REGRAS, JORNADAS E FRONTEIRAS desta parte -----------------------------
+  rules:                         # regra = 1 frase; a explicação fica na página .md deste nível
+    - id: rule-camb-aceite-obrigatorio
+      statement: "Nenhuma operação segue sem o aceite registrado do cliente."
+      regulations: [reg-bcb-cambio]
+  boundaries:
+    in:
+      - { from: sub-camb-cotacao, what: "cotação aceita" }
+    out:
+      - { to: sub-camb-boletagem, what: "operação formalizada" }
+
+  # --- CONHECIMENTO desta parte (o do domínio já vale aqui; não repetir) ------
+  regulations: []
+  standards:   []
+  docs:
+    - { title: "Modelo de contrato de câmbio PF", type: negocio, path: docs/formalizacao/contrato-pf.md }

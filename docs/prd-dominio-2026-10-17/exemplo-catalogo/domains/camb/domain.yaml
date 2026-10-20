@@ -1,0 +1,105 @@
+# arquivo: domains/camb/domain.yaml
+# ----------------------------------------------------------------------------
+# DOMÍNIO — Câmbio (dados fictícios, a partir do Exemplo.drawio.xml)
+# ----------------------------------------------------------------------------
+apiVersion: sinter.dev/v1
+kind: Domain
+metadata:
+  id: dom-camb
+  name: Câmbio
+  domainId: CAMB                 # o "id-dominio" (ex-sigla)
+  area: area-cambio
+  status: approved
+  owners: [time-cambio]
+spec:
+  parent: org-acme
+
+  purpose: >
+    Permite que clientes comprem e enviem moeda estrangeira, da cotação
+    até a liquidação e o reporte ao Banco Central.
+  does:
+    - Cota moeda estrangeira para PF e PJ
+    - Contrata, liquida e envia a ordem ao exterior (SWIFT)
+    - Reporta as operações ao Bacen e monitora PLD
+  doesNot:
+    - Conta corrente do cliente (é do domínio Contas)
+    - Cadastro do cliente (só consulta; é do domínio Cliente)
+  unknowns:
+    - A jornada PJ ainda não foi mapeada (só existe a PF); não supor que funciona igual
+
+  # SUMÁRIO dos subdomínios, na ordem da jornada (o validate confere que bate
+  # com os arquivos em subdomains/ que dizem domain: dom-camb)
+  subdomains:
+    - sub-camb-cotacao
+    - sub-camb-limite
+    - sub-camb-dados-cliente
+    - sub-camb-formalizacao
+    - sub-camb-boletagem
+    - sub-camb-enriquecimento
+    - sub-camb-validacao
+    - sub-camb-carteira
+    - sub-camb-liquidacao
+    - sub-camb-pld
+
+  # Repos: calculados a partir das aplicações de cada subdomínio (não escritos aqui).
+
+  rules:                         # regra = 1 frase; a explicação fica na página .md deste nível
+    - id: rule-camb-nao-liquidar-sem-validacao
+      statement: "Nenhuma operação é liquidada sem ter passado pela Validação."
+      regulations: [reg-bcb-cambio]
+    - id: rule-camb-reportar-bacen-d0
+      statement: "Toda operação contratada é registrada no Banco Central no mesmo dia."
+      regulations: [reg-bcb-cambio]
+  mainJourneys: [jor-camb-enviar-moeda-pf]
+
+  # Fronteiras do domínio: CALCULADAS a partir dos subdomínios. Hoje dariam:
+  #   entra: dom-cliente, dom-credito, ext-provedor-taxas, ext-swift
+  #   sai:   dom-contas, dom-contabilidade, ext-swift, ext-bacen, ext-coaf
+
+  operation:
+    hours: "dias úteis, 9h–17h (horário de Brasília) — fora disso não há cotação"
+    batchWindows: ["18:00–23:00 registro no Bacen e carteira"]
+    criticality: critica
+    volume: "~40 mil operações/dia"
+
+  modernization:
+    goal: "Tirar boletagem e liquidação do mainframe (datas em cada subdomínio)"
+    decision: ADR-CAMB-002
+
+  # Glossário DO DOMÍNIO (herdado pelos subdomínios; não redefinir abaixo)
+  glossary:
+    - term: Boleta
+      definition: "Registro formal de uma operação de câmbio, com número único."
+      synonyms: [contrato de câmbio]
+      notToConfuseWith: "Boleto bancário (meio de pagamento)"
+    - term: Spread
+      definition: "Diferença entre a taxa de mercado e a taxa cobrada do cliente."
+    - term: Liquidação
+      definition: "Entrega efetiva das moedas: débito em reais e envio da moeda estrangeira."
+      notToConfuseWith: "Liquidação financeira de boleto"
+
+  regulations: [reg-bcb-cambio, reg-pld, reg-lgpd]
+  standards:   [std-api-rest]
+  decisions:                     # ADR = resumo aqui; o texto completo fica na página .md deste nível
+    - id: ADR-CAMB-001
+      title: "Cotação calculada em tempo real"
+      date: 2026-02-01
+      context: "Tabelas de cotação atualizadas a cada hora geravam perda em mercado volátil."
+      decision: "Calcular a cotação na hora, a partir das taxas de mercado, com validade de 30 segundos."
+      consequences: ["Dependência do provedor de taxas em tempo real"]
+    - id: ADR-CAMB-002
+      title: "Tirar boletagem e liquidação do mainframe"
+      date: 2026-09-30
+      context: "Boletagem e liquidação no mainframe limitam o horário de operação e a evolução."
+      decision: "Migrar primeiro a liquidação (LIQ0100) até 2027 e depois a boletagem até 2028."
+      consequences: ["Carteira continua no mainframe sem plano"]
+      evidence:
+        - { source: doc-camb-ata-2026-09-30-corte, locator: "docs/liquidacao/ata-2026-09-30-corte.md#decisoes", extraction: human }
+  docs:
+    - { title: "Manual de operações de câmbio", type: negocio, url: "https://wiki.acme.local/camb/manual" }
+    - { title: "Desenho da jornada Enviar moeda", type: arquitetura, path: docs/arquitetura/enviar-moeda.drawio }
+    - { title: "Pauta do comitê de câmbio", type: pauta, url: "https://wiki.acme.local/camb/comite" }
+
+  nextTaskNumber: 1
+  nextAdrNumber: 3
+  delivery: pr

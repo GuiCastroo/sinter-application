@@ -1,0 +1,503 @@
+{
+  "metadata": {
+    "skill_name": "sinter-documentar",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-09-26T18:17:54Z",
+    "evals_run": [
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 11,
+        "total": 11,
+        "time_seconds": 998.6,
+        "tokens": 179218,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Tem as 6 p\u00e1ginas (neg\u00f3cio, arquitetura, servi\u00e7os, jornadas, infraestrutura, refer\u00eancia)",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Toda p\u00e1gina abre com 'Em resumo' e tem o \u00edndice 'Nesta p\u00e1gina'",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Poucos arquivos: no m\u00e1ximo 15 Markdown escritos (fora llm/ e site/)",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Neg\u00f3cio tem a parede do Event Storming (tabela com \ud83d\udfe7) e a se\u00e7\u00e3o 'Quem orquestra'",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Neg\u00f3cio sem jarg\u00e3o t\u00e9cnico (no m\u00e1ximo 3 termos como lambda, gRPC, DynamoDB)",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Cart\u00e3o para IA (llms.txt) existe e cabe em ~1.500 tokens",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "80%+ das se\u00e7\u00f5es de servi\u00e7o abrem com 'Em resumo'",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Jornadas t\u00eam diagrama de sequ\u00eancia",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Mapa dos servi\u00e7os sai das tabelas 'Consome' (3+ liga\u00e7\u00f5es)",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Refer\u00eancia tem 'D\u00favidas e perguntas'",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "A jornada de compra passa por checkout e payment",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 11,
+        "total": 11,
+        "time_seconds": 1128.0,
+        "tokens": 260182,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Tem as 6 p\u00e1ginas (neg\u00f3cio, arquitetura, servi\u00e7os, jornadas, infraestrutura, refer\u00eancia)",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Toda p\u00e1gina abre com 'Em resumo' e tem o \u00edndice 'Nesta p\u00e1gina'",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Poucos arquivos: no m\u00e1ximo 15 Markdown escritos (fora llm/ e site/)",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Neg\u00f3cio tem a parede do Event Storming (tabela com \ud83d\udfe7) e a se\u00e7\u00e3o 'Quem orquestra'",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Neg\u00f3cio sem jarg\u00e3o t\u00e9cnico (no m\u00e1ximo 3 termos como lambda, gRPC, DynamoDB)",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Cart\u00e3o para IA (llms.txt) existe e cabe em ~1.500 tokens",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "80%+ das se\u00e7\u00f5es de servi\u00e7o abrem com 'Em resumo'",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Jornadas t\u00eam diagrama de sequ\u00eancia",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Mapa dos servi\u00e7os sai das tabelas 'Consome' (3+ liga\u00e7\u00f5es)",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Refer\u00eancia tem 'D\u00favidas e perguntas'",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "'Quem orquestra' cita Step Functions",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "old_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 11,
+        "total": 11,
+        "time_seconds": 1033.3,
+        "tokens": 196819,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Tem as 6 p\u00e1ginas (neg\u00f3cio, arquitetura, servi\u00e7os, jornadas, infraestrutura, refer\u00eancia)",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Toda p\u00e1gina abre com 'Em resumo' e tem o \u00edndice 'Nesta p\u00e1gina'",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Poucos arquivos: no m\u00e1ximo 15 Markdown escritos (fora llm/ e site/)",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Neg\u00f3cio tem a parede do Event Storming (tabela com \ud83d\udfe7) e a se\u00e7\u00e3o 'Quem orquestra'",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Neg\u00f3cio sem jarg\u00e3o t\u00e9cnico (no m\u00e1ximo 3 termos como lambda, gRPC, DynamoDB)",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Cart\u00e3o para IA (llms.txt) existe e cabe em ~1.500 tokens",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "80%+ das se\u00e7\u00f5es de servi\u00e7o abrem com 'Em resumo'",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Jornadas t\u00eam diagrama de sequ\u00eancia",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Mapa dos servi\u00e7os sai das tabelas 'Consome' (3+ liga\u00e7\u00f5es)",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Refer\u00eancia tem 'D\u00favidas e perguntas'",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        },
+        {
+          "text": "Modelo de dados (erDiagram) em 3+ servi\u00e7os",
+          "passed": false,
+          "evidence": "sem 1-negocio.md"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 11,
+        "failed": 0,
+        "total": 11,
+        "time_seconds": 495.1,
+        "tokens": 165283,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Tem as 6 p\u00e1ginas (neg\u00f3cio, arquitetura, servi\u00e7os, jornadas, infraestrutura, refer\u00eancia)",
+          "passed": true,
+          "evidence": "6 p\u00e1ginas"
+        },
+        {
+          "text": "Toda p\u00e1gina abre com 'Em resumo' e tem o \u00edndice 'Nesta p\u00e1gina'",
+          "passed": true,
+          "evidence": "todas ok"
+        },
+        {
+          "text": "Poucos arquivos: no m\u00e1ximo 15 Markdown escritos (fora llm/ e site/)",
+          "passed": true,
+          "evidence": "6 arquivos"
+        },
+        {
+          "text": "Neg\u00f3cio tem a parede do Event Storming (tabela com \ud83d\udfe7) e a se\u00e7\u00e3o 'Quem orquestra'",
+          "passed": true,
+          "evidence": "parede e quem orquestra"
+        },
+        {
+          "text": "Neg\u00f3cio sem jarg\u00e3o t\u00e9cnico (no m\u00e1ximo 3 termos como lambda, gRPC, DynamoDB)",
+          "passed": true,
+          "evidence": "2 termos t\u00e9cnicos"
+        },
+        {
+          "text": "Cart\u00e3o para IA (llms.txt) existe e cabe em ~1.500 tokens",
+          "passed": true,
+          "evidence": "~1468 tokens"
+        },
+        {
+          "text": "80%+ das se\u00e7\u00f5es de servi\u00e7o abrem com 'Em resumo'",
+          "passed": true,
+          "evidence": "12/12 se\u00e7\u00f5es"
+        },
+        {
+          "text": "Jornadas t\u00eam diagrama de sequ\u00eancia",
+          "passed": true,
+          "evidence": "3 diagramas"
+        },
+        {
+          "text": "Mapa dos servi\u00e7os sai das tabelas 'Consome' (3+ liga\u00e7\u00f5es)",
+          "passed": true,
+          "evidence": "19 liga\u00e7\u00f5es"
+        },
+        {
+          "text": "Refer\u00eancia tem 'D\u00favidas e perguntas'",
+          "passed": true,
+          "evidence": "presente"
+        },
+        {
+          "text": "A jornada de compra passa por checkout e payment",
+          "passed": true,
+          "evidence": "ok"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 11,
+        "failed": 0,
+        "total": 11,
+        "time_seconds": 839.9,
+        "tokens": 193341,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Tem as 6 p\u00e1ginas (neg\u00f3cio, arquitetura, servi\u00e7os, jornadas, infraestrutura, refer\u00eancia)",
+          "passed": true,
+          "evidence": "6 p\u00e1ginas"
+        },
+        {
+          "text": "Toda p\u00e1gina abre com 'Em resumo' e tem o \u00edndice 'Nesta p\u00e1gina'",
+          "passed": true,
+          "evidence": "todas ok"
+        },
+        {
+          "text": "Poucos arquivos: no m\u00e1ximo 15 Markdown escritos (fora llm/ e site/)",
+          "passed": true,
+          "evidence": "6 arquivos"
+        },
+        {
+          "text": "Neg\u00f3cio tem a parede do Event Storming (tabela com \ud83d\udfe7) e a se\u00e7\u00e3o 'Quem orquestra'",
+          "passed": true,
+          "evidence": "parede e quem orquestra"
+        },
+        {
+          "text": "Neg\u00f3cio sem jarg\u00e3o t\u00e9cnico (no m\u00e1ximo 3 termos como lambda, gRPC, DynamoDB)",
+          "passed": true,
+          "evidence": "3 termos t\u00e9cnicos"
+        },
+        {
+          "text": "Cart\u00e3o para IA (llms.txt) existe e cabe em ~1.500 tokens",
+          "passed": true,
+          "evidence": "~1384 tokens"
+        },
+        {
+          "text": "80%+ das se\u00e7\u00f5es de servi\u00e7o abrem com 'Em resumo'",
+          "passed": true,
+          "evidence": "13/13 se\u00e7\u00f5es"
+        },
+        {
+          "text": "Jornadas t\u00eam diagrama de sequ\u00eancia",
+          "passed": true,
+          "evidence": "2 diagramas"
+        },
+        {
+          "text": "Mapa dos servi\u00e7os sai das tabelas 'Consome' (3+ liga\u00e7\u00f5es)",
+          "passed": true,
+          "evidence": "22 liga\u00e7\u00f5es"
+        },
+        {
+          "text": "Refer\u00eancia tem 'D\u00favidas e perguntas'",
+          "passed": true,
+          "evidence": "presente"
+        },
+        {
+          "text": "'Quem orquestra' cita Step Functions",
+          "passed": true,
+          "evidence": "cita Step Functions"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 11,
+        "failed": 0,
+        "total": 11,
+        "time_seconds": 495.2,
+        "tokens": 146643,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Tem as 6 p\u00e1ginas (neg\u00f3cio, arquitetura, servi\u00e7os, jornadas, infraestrutura, refer\u00eancia)",
+          "passed": true,
+          "evidence": "6 p\u00e1ginas"
+        },
+        {
+          "text": "Toda p\u00e1gina abre com 'Em resumo' e tem o \u00edndice 'Nesta p\u00e1gina'",
+          "passed": true,
+          "evidence": "todas ok"
+        },
+        {
+          "text": "Poucos arquivos: no m\u00e1ximo 15 Markdown escritos (fora llm/ e site/)",
+          "passed": true,
+          "evidence": "6 arquivos"
+        },
+        {
+          "text": "Neg\u00f3cio tem a parede do Event Storming (tabela com \ud83d\udfe7) e a se\u00e7\u00e3o 'Quem orquestra'",
+          "passed": true,
+          "evidence": "parede e quem orquestra"
+        },
+        {
+          "text": "Neg\u00f3cio sem jarg\u00e3o t\u00e9cnico (no m\u00e1ximo 3 termos como lambda, gRPC, DynamoDB)",
+          "passed": true,
+          "evidence": "0 termos t\u00e9cnicos"
+        },
+        {
+          "text": "Cart\u00e3o para IA (llms.txt) existe e cabe em ~1.500 tokens",
+          "passed": true,
+          "evidence": "~1423 tokens"
+        },
+        {
+          "text": "80%+ das se\u00e7\u00f5es de servi\u00e7o abrem com 'Em resumo'",
+          "passed": true,
+          "evidence": "8/8 se\u00e7\u00f5es"
+        },
+        {
+          "text": "Jornadas t\u00eam diagrama de sequ\u00eancia",
+          "passed": true,
+          "evidence": "5 diagramas"
+        },
+        {
+          "text": "Mapa dos servi\u00e7os sai das tabelas 'Consome' (3+ liga\u00e7\u00f5es)",
+          "passed": true,
+          "evidence": "7 liga\u00e7\u00f5es"
+        },
+        {
+          "text": "Refer\u00eancia tem 'D\u00favidas e perguntas'",
+          "passed": true,
+          "evidence": "presente"
+        },
+        {
+          "text": "Modelo de dados (erDiagram) em 3+ servi\u00e7os",
+          "passed": true,
+          "evidence": "3 erDiagram"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "old_skill": {
+      "pass_rate": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "time_seconds": {
+        "mean": 1053.3,
+        "stddev": 66.9783,
+        "min": 998.6,
+        "max": 1128.0
+      },
+      "tokens": {
+        "mean": 212073.0,
+        "stddev": 42582.9275,
+        "min": 179218,
+        "max": 260182
+      }
+    },
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 610.0667,
+        "stddev": 199.0415,
+        "min": 495.1,
+        "max": 839.9
+      },
+      "tokens": {
+        "mean": 168422.3333,
+        "stddev": 23506.7514,
+        "min": 146643,
+        "max": 193341
+      }
+    },
+    "delta": {
+      "pass_rate": "-1.00",
+      "time_seconds": "+443.2",
+      "tokens": "+43651"
+    }
+  },
+  "notes": []
+}

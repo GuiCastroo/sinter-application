@@ -1,0 +1,63 @@
+# Serverlesspresso
+
+> uma cafeteria de eventos (pop-up, tipo re:Invent) em que o cliente pede café pelo celular escaneando um QR code no balcão, e o barista prepara na ordem em que os pedidos chegam. O domínio controla quem pode pedir, quantos pedidos cabem ao mesmo tempo, e acompanha cada pedido do QR code até um recibo final — sem fila física e sem dinheiro trocando de mãos no sistema.
+
+Documentação em 6 páginas. Leia este cartão primeiro; abra só a seção de que precisar. Resumos de tudo em `llm/resumos.md`; ligações em `llm/grafo.json`.
+
+## Fronteira
+- **Faz:** Libera o pedido por QR code, limitado por janela de tempo; Limita pedidos simultâneos para não afogar o barista; Acompanha o pedido do início ao recibo, em tempo real; Autentica cliente e barista por SMS (sem senha)
+- **Não faz:** Cobrança e pagamento; Controle de estoque de insumos; Entrega/logística fora do balcão; Cadastro de produto/preço fora do cardápio do evento
+- **Não sabemos:** Se há plano de cobrar pelo café no futuro; Quem decide o cardápio de cada evento (endpoint de edição não encontrado); Papéis e donos de cada serviço (sem CODEOWNERS); Se times reais rodam isto em produção ou só em workshops
+
+## Serviços
+- [00-baseCore](3-servicos.md#00-basecore): Plataforma — Event bus, login por SMS e endpoint IoT usados por todos
+- [validator-service](3-servicos.md#validator-service): Validação do pedido — Gera e valida o QR code que libera um pedido
+- [config-service](3-servicos.md#config-service): Configuração do evento — Guarda cardápio, limites e se a loja está aberta
+- [order-processor](3-servicos.md#order-processor): Processamento do pedido — Orquestra o ciclo de vida do pedido (Step Functions)
+- [order-manager](3-servicos.md#order-manager): Gestão do pedido — Recebe ações do cliente e do barista (Step Functions + API)
+- [publisher-service](3-servicos.md#publisher-service): Tempo real — Espelha eventos de negócio para os 3 frontends via IoT
+- [order-journey-service](3-servicos.md#order-journey-service): Recibo do pedido — Grava a trilha de eventos e gera o recibo em HTML
+- [metrics-service](3-servicos.md#metrics-service): Métricas — Publica métricas customizadas no CloudWatch
+- [counting-service](3-servicos.md#counting-service): — — Código de geração de número de pedido, não implantado
+- [EventPlayer](3-servicos.md#eventplayer): Extensões — Simula 15 min de eventos reais para testar extensões
+- [OrderRobotExtension](3-servicos.md#orderrobotextension): Extensões — Simula clientes e baristas em massa
+- [PersistOrderMetricsToDynamoDB](3-servicos.md#persistordermetricstodynamodb): Extensões — Histórico de tempos de espera em DynamoDB via SQS
+- [WaitTimes](3-servicos.md#waittimes): Extensões — Calcula tempo médio de espera por bebida
+
+## Jornadas
+- [Pedir um café](4-jornadas.md#pedir-um-café): QR code → bebida → preparo → recibo — Duas Step Functions cooperando por *task token*
+- [Configurar o evento](4-jornadas.md#configurar-o-evento): Admin abre a loja e define o cardápio — Coreografia por eventos, sem dono
+
+## Quem orquestra
+- Pedir um café — Duas máquinas de Step Functions cooperando — Uma toca o relógio do pedido e pausa esperando ação humana; a outra recebe a ação (via API) e "acorda" a prim…
+- Configurar o evento — Ninguém — coreografia por eventos — Mudança na tabela dispara evento, que se espalha sozinho para quem escuta
+
+## Regras que mandam
+- Pedidos simultâneos — no máximo 20
+- Tokens (QR codes) disponíveis por janela — 10 a cada 5 minutos, por evento
+- Tempo para o cliente enviar a bebida — 5 minutos
+- Tempo para o barista concluir o pedido — 15 minutos
+- Pedidos por cliente — 1 por vez *(a confirmar — valor existe na config, mas não vimos onde é checado)*
+
+## Entra e sai
+- Entra — Login por número de telefone + código SMS — 🩷 Amazon SNS (via Cognito)
+- Entra — Pedido escaneado, escolha de bebida, ações do barista — Cliente e Barista (apps não incluídos neste repositório)
+- Entra — Abertura/fechamento da loja e cardápio — Admin (app não incluído)
+- Sai — Atualização de pedido em tempo real — 🩷 AWS IoT Core → apps do cliente, barista e admin
+- Sai — Recibo do pedido — 🩷 Amazon S3 + CloudFront
+
+## Ainda não se sabe
+- Conflitos entre fontes:
+- 🟥 maxOrdersInQueue: 10 (na config do evento) vs. limite real de 20 pedidos simultâneos, fixo
+- Segredos: nenhuma chave, token ou senha em texto claro foi encontrada nos arquivos lidos
+- Código encontrado mas aparentemente não implantado *(ver também 5-infraestrutura.md):*
+
+## Onde procurar
+- [Negócio](1-negocio.md): uma cafeteria de eventos (pop-up, tipo re:Invent) em que o cliente pede café pelo celular escaneando um QR code no balcão, e o barista prep…
+- [Arquitetura](2-arquitetura.md): um único event bus do EventBridge (`Serverlesspresso`) conecta nove serviços serverless; dois deles são máquinas de Step Functions que se r…
+- [Serviços](3-servicos.md): nove serviços na stack principal (mais quatro extensões opcionais), quase todos Lambda + EventBridge; dois deles são máquinas de estado do …
+- [Jornadas](4-jornadas.md): duas jornadas. A principal é **Pedir um café**: do QR code escaneado no balcão até o recibo em HTML, orquestrada por duas máquinas de Step …
+
+## Optional
+- [Infraestrutura](5-infraestrutura.md): tudo roda em `us-east-1` só como AWS SAM/CloudFormation, sem Kubernetes nem contêineres: Lambda (Node.js 14.x quase toda), duas máquinas de…
+- [Referência](6-referencia.md): glossário, regras, decisões reconstruídas, padrões de código e um guia rápido para rodar o projeto localmente. A seção mais importante para…

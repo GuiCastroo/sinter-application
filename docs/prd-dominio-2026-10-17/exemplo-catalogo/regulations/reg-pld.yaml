@@ -1,0 +1,11 @@
+# arquivo: regulations/reg-pld.yaml  (nomes e datas ilustrativos)
+apiVersion: sinter.dev/v1
+kind: Regulation
+metadata:
+  id: reg-pld
+  name: Prevenção à lavagem de dinheiro
+  status: approved
+spec:
+  jurisdiction: BR
+  effective: { from: 2020-01-27, to: null }
+  summary: "Deveres de monitoramento e comunicação de operações suspeitas."

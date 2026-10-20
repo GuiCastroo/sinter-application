@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sinter: Esmalte v2</title>
+<style>
+/* Esmalte v2
+   chrome   #1F2327  canvas #2A2F34  surface #343A40  tile #3E454C  hairline #474E55
+   ink      #E8E4DB  muted  #9DA3A8
+   glazes   API cobalto #7EA6F4  evento celadon #8FCBA8  arquivo âmbar #E2B566  conflito #EE6F7C */
+:root{
+  --chrome:#1F2327; --canvas:#2A2F34; --surface:#343A40; --tile:#3E454C; --tile-hi:#4A525A; --line:#474E55;
+  --ink:#E8E4DB; --muted:#9DA3A8; --faint:#6E757B;
+  --api:#7EA6F4; --evento:#8FCBA8; --arquivo:#E2B566; --conflict:#EE6F7C;
+  --ui:'Avenir Next','Helvetica Neue',sans-serif; --display:Optima,'Avenir Next',sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#151719;font-family:var(--ui);color:var(--ink)}
+.note{max-width:1240px;margin:24px auto 12px;padding:0 16px;color:#C9C6BF;line-height:1.5}
+.note h1{font-family:var(--display);font-weight:500;font-size:24px;margin:0 0 4px;color:#EEE}
+.note p{margin:0;max-width:78ch}
+.app{max-width:1240px;margin:0 auto 40px;border-radius:12px;overflow:hidden;border:1px solid #2E3338;background:var(--chrome);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+
+/* barra superior */
+.top{display:flex;align-items:center;gap:18px;padding:10px 16px;border-bottom:1px solid #2E3338}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:18px;letter-spacing:.02em}
+.crumbs{font-size:14px;color:var(--muted)} .crumbs b{color:var(--ink);font-weight:500}
+.crumbs span{margin:0 6px;color:var(--faint)}
+.levels{display:flex;background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:2px;margin-left:8px}
+.levels a{font-size:13px;padding:5px 10px;border-radius:6px;color:var(--muted)}
+.levels a.on{background:var(--tile);color:var(--ink)}
+.nav{display:flex;gap:2px;margin-left:auto}
+.nav a{font-size:14px;padding:6px 10px;border-radius:6px;color:var(--muted)}
+.nav a.on{color:var(--ink);background:var(--surface)}
+.count{display:inline-block;min-width:18px;padding:0 5px;margin-left:5px;border-radius:9px;background:var(--conflict);color:#2A1215;font-size:11px;font-weight:700;text-align:center}
+button{font:inherit;font-size:13px;padding:7px 12px;border-radius:7px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+button.glaze{background:linear-gradient(#8DB1F7,#6E97E8);border-color:#6E97E8;color:#10203F;font-weight:600}
+
+/* corpo */
+.body{display:grid;grid-template-columns:1fr 340px;height:720px}
+.canvas{position:relative;background:var(--canvas);overflow:hidden}
+.canvas svg{position:absolute;inset:0;width:100%;height:100%}
+.search{position:absolute;top:14px;left:16px;display:flex;gap:10px;align-items:center}
+.search input{font:inherit;font-size:13px;width:250px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+
+/* player de fluxo */
+.flow{position:absolute;left:16px;right:170px;bottom:14px;display:grid;grid-template-columns:auto 1fr auto;gap:6px 16px;align-items:center;background:rgba(31,35,39,.94);border:1px solid var(--line);border-radius:10px;padding:14px;backdrop-filter:blur(6px)}
+.flow h4{margin:0;font-size:14px;font-weight:600}
+.flow .sub{font-size:12px;color:var(--muted);margin:2px 0 0}
+.flow .step{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45}
+.flow .n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--api);color:#10203F;font-weight:700;font-size:12px;display:grid;place-items:center;box-shadow:0 0 0 4px rgba(126,166,244,.18)}
+.flow .ctrl{display:flex;gap:8px;grid-row:1 / span 2;grid-column:3}
+.flow .head{grid-column:1;grid-row:1 / span 2;padding-right:14px;border-right:1px solid var(--line)}
+.flow .step{grid-column:2}
+.flow .prog{grid-column:2;margin-top:0!important}
+.flow .prog{display:flex;gap:4px;margin-top:10px} .flow .prog i{flex:1;height:3px;border-radius:2px;background:var(--line)} .flow .prog i.d{background:var(--api)}
+
+/* camadas e zoom */
+.layers{position:absolute;right:16px;top:14px;display:flex;gap:6px}
+.chip{font-size:12px;padding:5px 9px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+.chip.on{color:var(--ink);border-color:#5A626A}
+.zoom{position:absolute;right:16px;bottom:16px;display:flex;gap:10px;align-items:flex-end}
+.mini{width:120px;height:78px;border:1px solid var(--line);border-radius:8px;background:var(--chrome);position:relative}
+.mini i{position:absolute;border-radius:2px;background:#58616A}
+.mini .vp{position:absolute;left:14px;top:10px;width:70px;height:46px;border:1.5px solid var(--api);border-radius:3px}
+.zbtn{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.zbtn span{width:30px;height:28px;display:grid;place-items:center;background:var(--surface);color:var(--muted);font-size:16px}
+.zbtn span+span{border-top:1px solid var(--line)}
+
+/* painel */
+.panel{background:var(--chrome);border-left:1px solid #2E3338;padding:18px;overflow:hidden}
+.ph{display:flex;gap:12px;align-items:center}
+.tech{width:40px;height:40px;border-radius:10px;background:linear-gradient(#4E565E,#3A4148);display:grid;place-items:center;font-size:13px;font-weight:700;color:#C9B8F2;border:1px solid #58606A}
+.ph h3{margin:0;font-size:18px;font-weight:600} .ph p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--evento);margin-top:12px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--evento);box-shadow:0 0 6px var(--evento)}
+.ptabs{display:flex;gap:14px;border-bottom:1px solid var(--line);margin:14px 0 12px;font-size:13px}
+.ptabs a{padding:6px 0;color:var(--muted)} .ptabs a.on{color:var(--ink);border-bottom:2px solid var(--api)}
+.resp{font-size:14px;line-height:1.5;margin:0 0 14px}
+dl{display:grid;grid-template-columns:80px 1fr;gap:7px 10px;font-size:13px;margin:0 0 16px} dt{color:var(--muted)} dd{margin:0}
+.infer{border-radius:10px;padding:12px;background:rgba(238,111,124,.07);border:1px solid rgba(238,111,124,.45)}
+.infer strong{font-size:13px} .infer p{font-size:12.5px;line-height:1.45;color:var(--muted);margin:6px 0 10px}
+.infer code{color:var(--ink);font-size:12px}
+.btns{display:flex;gap:8px}
+.src{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.5}
+.src b{color:var(--ink);font-weight:500}
+</style>
+</head>
+<body>
+<div class="note">
+<h1>Esmalte v2</h1>
+<p>Mesma tela, com o acabamento que você viu no IcePanel: cartões com tecnologia, sistemas agrupados por subdomínio, o que não participa fica esmaecido, um fluxo passo a passo sobre o mapa e níveis de zoom (Domínio, Sistema, Componente). A metáfora do Esmalte continua: o aprovado é sólido e vidrado, o inferido ainda são partículas soltas.</p>
+</div>
+
+<div class="app">
+  <div class="top">
+    <span class="brand">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
+        <circle cx="4" cy="5" r="1.6" fill="#9DA3A8"/><circle cx="8" cy="3" r="1.2" fill="#9DA3A8"/><circle cx="3" cy="10" r="1.1" fill="#9DA3A8"/>
+        <rect x="7" y="7" width="12" height="12" rx="4" fill="#7EA6F4"/>
+      </svg>Sinter</span>
+    <span class="crumbs">Pagamentos<span>/</span>Checkout<span>/</span><b>checkout-api</b></span>
+    <span class="levels"><a>Domínio</a><a class="on">Sistema</a><a>Componente</a></span>
+    <nav class="nav"><a class="on">Mapa</a><a>Curadoria<span class="count">9</span></a><a>Conversas</a><a>Tarefas</a><a>Catálogo</a></nav>
+    <button>Compartilhar</button>
+  </div>
+
+  <div class="body">
+    <div class="canvas">
+      <svg viewBox="0 0 960 720" preserveAspectRatio="xMidYMid meet" aria-label="Mapa do domínio Pagamentos, fluxo Pagamento aprovado, passo 3 de 5">
+        <defs>
+          <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#394046"/></pattern>
+          <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4A525A"/><stop offset=".5" stop-color="#40474E"/><stop offset="1" stop-color="#383F45"/></linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity=".35"/></filter>
+          <marker id="ah-api" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7EA6F4"/></marker>
+          <marker id="ah-ev" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#8FCBA8"/></marker>
+          <marker id="ah-dim" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#5D656C"/></marker>
+        </defs>
+        <rect width="960" height="720" fill="url(#dots)"/>
+
+        <!-- grupos (subdomínios) -->
+        <g font-size="12" fill="#9DA3A8">
+          <rect x="150" y="96" width="290" height="250" rx="14" fill="rgba(255,255,255,.02)" stroke="#40474D" stroke-dasharray="2 4"/>
+          <text x="166" y="118">Checkout</text>
+          <rect x="500" y="96" width="300" height="250" rx="14" fill="rgba(255,255,255,.02)" stroke="#40474D" stroke-dasharray="2 4"/>
+          <text x="516" y="118">Autorização</text>
+          <rect x="150" y="400" width="290" height="250" rx="14" fill="rgba(255,255,255,.015)" stroke="#3A4046" stroke-dasharray="2 4"/>
+          <text x="166" y="422">Comunicação</text>
+          <rect x="500" y="400" width="300" height="250" rx="14" fill="rgba(255,255,255,.015)" stroke="#3A4046" stroke-dasharray="2 4"/>
+          <text x="516" y="422">Contabilidade</text>
+        </g>
+
+        <!-- arestas -->
+        <!-- 1 cliente -> checkout (feito) -->
+        <path d="M295,64 V132" stroke="#7EA6F4" stroke-width="2" fill="none" opacity=".55" marker-end="url(#ah-api)"/>
+        <!-- 7 wallet -> checkout (fora do fluxo) -->
+        <path d="M295,262 V206" stroke="#5D656C" stroke-width="1.6" fill="none" marker-end="url(#ah-dim)"/>
+        <!-- 2 checkout -> antifraude (feito) -->
+        <path d="M380,186 H470 V270 H560" stroke="#7EA6F4" stroke-width="2" fill="none" opacity=".55" marker-end="url(#ah-api)"/>
+        <!-- 3 checkout -> gateway (ATUAL) -->
+        <path d="M380,160 H560" stroke="#7EA6F4" stroke-width="3" fill="none" filter="url(#glow)" marker-end="url(#ah-api)"/>
+        <!-- 4 gateway -> adquirente (próximo) -->
+        <path d="M744,160 H832" stroke="#5D656C" stroke-width="1.8" fill="none" marker-end="url(#ah-dim)"/>
+        <!-- 5 gateway -> ledger (próximo) -->
+        <path d="M700,194 V222 H778 V478 H730" stroke="#5D656C" stroke-width="1.8" fill="none" stroke-linejoin="round" marker-end="url(#ah-dim)"/>
+        <!-- 8 ledger -> billing (fora) -->
+        <path d="M645,506 V566" stroke="#4C5359" stroke-width="1.4" stroke-dasharray="3 4" fill="none"/>
+
+        <!-- 6 inferida: partículas soltas checkout -> notificacoes -->
+        <g fill="#8FCBA8">
+          <circle cx="206" cy="175" r="1.8" opacity=".9"/><circle cx="196" cy="198" r="1.4" opacity=".7"/><circle cx="189" cy="226" r="2" opacity=".8"/>
+          <circle cx="183" cy="252" r="1.3" opacity=".6"/><circle cx="178" cy="281" r="1.9" opacity=".75"/><circle cx="176" cy="311" r="1.2" opacity=".55"/>
+          <circle cx="173" cy="340" r="1.7" opacity=".7"/><circle cx="171" cy="372" r="1.3" opacity=".55"/><circle cx="172" cy="402" r="2" opacity=".8"/>
+          <circle cx="176" cy="433" r="1.4" opacity=".6"/><circle cx="185" cy="458" r="1.8" opacity=".75"/><circle cx="196" cy="476" r="1.3" opacity=".65"/>
+          <circle cx="186" cy="214" r="1" opacity=".4"/><circle cx="165" cy="300" r="1" opacity=".35"/><circle cx="183" cy="360" r="1" opacity=".35"/><circle cx="163" cy="420" r="1.1" opacity=".4"/>
+        </g>
+
+        <!-- rótulos de arestas -->
+        <g font-size="11.5" font-family="Avenir Next, Helvetica Neue, sans-serif">
+          <rect x="306" y="80" width="98" height="22" rx="11" fill="#2A2F34" stroke="#4A5A7A"/><text x="355" y="95" text-anchor="middle" fill="#B9C9EC">POST /payments</text>
+          <rect x="422" y="136" width="102" height="22" rx="11" fill="#27324A" stroke="#7EA6F4"/><text x="473" y="151" text-anchor="middle" fill="#DCE6FB">POST /authorize</text>
+          <rect x="478" y="236" width="80" height="22" rx="11" fill="#2A2F34" stroke="#4A5A7A"/><text x="518" y="251" text-anchor="middle" fill="#B9C9EC">POST /score</text>
+          <rect x="310" y="222" width="82" height="22" rx="11" fill="#2A2F34" stroke="#4A5057"/><text x="351" y="237" text-anchor="middle" fill="#8D949A">GET /balance</text>
+          <rect x="750" y="122" width="72" height="22" rx="11" fill="#2A2F34" stroke="#4A5057"/><text x="786" y="137" text-anchor="middle" fill="#8D949A">ISO 8583</text>
+          <rect x="730" y="330" width="118" height="22" rx="11" fill="#2A2F34" stroke="#4A5057"/><text x="789" y="345" text-anchor="middle" fill="#8D949A">PaymentAuthorized</text>
+          <rect x="72" y="306" width="128" height="36" rx="10" fill="#2F2A2D" stroke="#EE6F7C" stroke-dasharray="3 3"/>
+          <text x="136" y="320" text-anchor="middle" fill="#F2B7BE">PaymentAuthorized</text><text x="136" y="334" text-anchor="middle" fill="#C98A92" font-size="10.5">inferida, confirmar</text>
+          <text x="660" y="540" fill="#6E757B">conciliação diária</text>
+        </g>
+
+        <!-- marcadores de passo do fluxo -->
+        <g font-size="11" font-weight="700" text-anchor="middle">
+          <circle cx="295" cy="118" r="10" fill="#3E454C" stroke="#7EA6F4"/><text x="295" y="122" fill="#B9C9EC">1</text>
+          <circle cx="470" cy="210" r="10" fill="#3E454C" stroke="#7EA6F4"/><text x="470" y="214" fill="#B9C9EC">2</text>
+          <circle cx="408" cy="160" r="12" fill="#7EA6F4" filter="url(#glow)"/><text x="408" y="164" fill="#10203F">3</text>
+          <circle cx="786" cy="160" r="10" fill="#343A40" stroke="#5D656C"/><text x="786" y="164" fill="#8D949A">4</text>
+          <circle cx="778" cy="400" r="10" fill="#343A40" stroke="#5D656C"/><text x="778" y="404" fill="#8D949A">5</text>
+        </g>
+
+        <!-- ator -->
+        <g filter="url(#shadow)">
+          <rect x="245" y="30" width="100" height="34" rx="17" fill="#343A40" stroke="#58606A"/>
+          <circle cx="266" cy="47" r="7" fill="none" stroke="#C9C6BF" stroke-width="1.5"/>
+          <text x="280" y="52" fill="#E8E4DB" font-size="13">Cliente</text>
+        </g>
+
+        <!-- cartões (sistemas) -->
+        <g font-family="Avenir Next, Helvetica Neue, sans-serif">
+          <!-- checkout-api: foco -->
+          <g filter="url(#shadow)">
+            <rect x="206" y="132" width="178" height="72" rx="14" fill="url(#tile)" stroke="#7EA6F4" stroke-width="2"/>
+            <rect x="200" y="126" width="190" height="84" rx="18" fill="none" stroke="#7EA6F4" stroke-opacity=".25"/>
+            <rect x="220" y="148" width="34" height="34" rx="9" fill="#2F3439" stroke="#58606A"/><text x="237" y="170" text-anchor="middle" font-size="12" font-weight="700" fill="#C9B8F2">Kt</text>
+            <text x="264" y="162" font-size="15" font-weight="600" fill="#E8E4DB">checkout-api</text>
+            <text x="264" y="180" font-size="12" fill="#9DA3A8">Kotlin, Spring Boot</text>
+            <circle cx="370" cy="146" r="4" fill="#8FCBA8"/>
+          </g>
+          <!-- wallet: esmaecido -->
+          <g opacity=".42">
+            <rect x="206" y="262" width="178" height="64" rx="14" fill="url(#tile)" stroke="#58606A"/>
+            <rect x="220" y="277" width="34" height="34" rx="9" fill="#2F3439" stroke="#58606A"/><text x="237" y="299" text-anchor="middle" font-size="12" font-weight="700" fill="#8FD0E8">Go</text>
+            <text x="264" y="291" font-size="15" font-weight="600" fill="#E8E4DB">wallet</text><text x="264" y="309" font-size="12" fill="#9DA3A8">Go, Redis</text>
+          </g>
+          <!-- payments-gateway -->
+          <g filter="url(#shadow)">
+            <rect x="560" y="128" width="184" height="66" rx="14" fill="url(#tile)" stroke="#6A737C"/>
+            <rect x="574" y="144" width="34" height="34" rx="9" fill="#2F3439" stroke="#58606A"/><text x="591" y="166" text-anchor="middle" font-size="12" font-weight="700" fill="#F0B27A">Jv</text>
+            <text x="616" y="158" font-size="14" font-weight="600" fill="#E8E4DB">payments-gateway</text><text x="618" y="176" font-size="12" fill="#9DA3A8">Java, Quarkus</text>
+            <circle cx="733" cy="141" r="4" fill="#8FCBA8"/>
+          </g>
+          <!-- antifraude -->
+          <g filter="url(#shadow)">
+            <rect x="560" y="238" width="170" height="66" rx="14" fill="url(#tile)" stroke="#6A737C"/>
+            <rect x="574" y="254" width="34" height="34" rx="9" fill="#2F3439" stroke="#58606A"/><text x="591" y="276" text-anchor="middle" font-size="12" font-weight="700" fill="#F2D06B">Py</text>
+            <text x="618" y="268" font-size="15" font-weight="600" fill="#E8E4DB">antifraude</text><text x="618" y="286" font-size="12" fill="#9DA3A8">Python, FastAPI</text>
+            <circle cx="717" cy="251" r="4" fill="#8FCBA8"/>
+          </g>
+          <!-- adquirente (externo) -->
+          <g>
+            <rect x="834" y="134" width="112" height="52" rx="12" fill="none" stroke="#6A737C" stroke-dasharray="4 3"/>
+            <text x="890" y="156" text-anchor="middle" font-size="13" fill="#C9C6BF">Adquirente</text><text x="890" y="173" text-anchor="middle" font-size="11" fill="#8D949A">sistema externo</text>
+          </g>
+          <!-- notificacoes: partícula / não confirmado -->
+          <g>
+            <rect x="206" y="476" width="178" height="64" rx="14" fill="#30353A" stroke="#58606A" stroke-dasharray="1 4" stroke-linecap="round" stroke-width="1.6"/>
+            <rect x="220" y="491" width="34" height="34" rx="9" fill="#2A2F34" stroke="#4D555C"/><text x="237" y="513" text-anchor="middle" font-size="12" font-weight="700" fill="#9FD9B0">Nd</text>
+            <text x="264" y="505" font-size="15" font-weight="600" fill="#C9C6BF">notificacoes</text><text x="264" y="523" font-size="12" fill="#8D949A">Node.js</text>
+          </g>
+          <!-- ledger -->
+          <g filter="url(#shadow)">
+            <rect x="560" y="444" width="170" height="64" rx="14" fill="url(#tile)" stroke="#6A737C"/>
+            <rect x="574" y="459" width="34" height="34" rx="9" fill="#2F3439" stroke="#58606A"/><text x="591" y="481" text-anchor="middle" font-size="12" font-weight="700" fill="#F0B27A">Jv</text>
+            <text x="618" y="473" font-size="15" font-weight="600" fill="#E8E4DB">ledger</text><text x="618" y="491" font-size="12" fill="#9DA3A8">Java, PostgreSQL</text>
+            <circle cx="717" cy="457" r="4" fill="#8FCBA8"/>
+          </g>
+          <!-- billing-batch: sem acesso -->
+          <g opacity=".6">
+            <rect x="560" y="566" width="170" height="60" rx="14" fill="none" stroke="#5D656C" stroke-dasharray="4 4"/>
+            <text x="645" y="592" text-anchor="middle" font-size="14" fill="#C9C6BF">billing-batch</text>
+            <text x="645" y="610" text-anchor="middle" font-size="11.5" fill="#8D949A">sem acesso de leitura</text>
+          </g>
+        </g>
+      </svg>
+
+      <div class="search"><input value="Buscar sistema, contrato ou regra" readonly></div>
+
+      <div class="flow" role="region" aria-label="Fluxo">
+        <div class="head"><h4>Pagamento aprovado</h4><p class="sub">ADR-012. Passo 3 de 5.</p></div>
+        <div class="step"><span class="n">3</span><span>checkout-api pede a autorização ao payments-gateway com <b>POST /authorize</b>, enviando a chave de idempotência.</span></div>
+        <div class="prog"><i class="d"></i><i class="d"></i><i class="d"></i><i></i><i></i></div>
+        <div class="ctrl"><button>Voltar</button><button class="glaze">Próximo passo</button></div>
+      </div>
+
+      <div class="layers"><span class="chip on">Tecnologia</span><span class="chip on">Status</span><span class="chip">Donos</span><span class="chip">Regras</span></div>
+
+      <div class="zoom">
+        <div class="mini" aria-hidden="true">
+          <i style="left:12px;top:12px;width:30px;height:12px"></i><i style="left:58px;top:12px;width:30px;height:12px"></i>
+          <i style="left:58px;top:30px;width:30px;height:12px"></i><i style="left:12px;top:48px;width:30px;height:12px"></i>
+          <i style="left:58px;top:52px;width:30px;height:12px"></i><i style="left:96px;top:18px;width:16px;height:10px"></i>
+          <span class="vp"></span>
+        </div>
+        <div class="zbtn"><span>+</span><span>−</span></div>
+      </div>
+    </div>
+
+    <aside class="panel">
+      <div class="ph"><span class="tech">Kt</span><div><h3>checkout-api</h3><p>Checkout, Squad Checkout</p></div></div>
+      <span class="status"><i></i>Aprovado por Rafael em 24 set</span>
+      <nav class="ptabs"><a class="on">Visão geral</a><a>Contratos</a><a>Regras</a><a>Decisões</a></nav>
+      <p class="resp">Recebe o pedido de pagamento do site e orquestra a autorização e o antifraude.</p>
+      <dl>
+        <dt>Dono</dt><dd>Diego Almeida</dd>
+        <dt>Expõe</dt><dd>POST /payments<br>GET /payments/{id}</dd>
+        <dt>Consome</dt><dd>payments-gateway, antifraude, wallet</dd>
+      </dl>
+      <div class="infer">
+        <strong>Publica PaymentAuthorized?</strong>
+        <p>Inferido de <code>NotificationPublisher.kt:42</code>. Não há contrato documentado para este evento.</p>
+        <div class="btns"><button class="glaze">Confirmar integração</button><button>Descartar</button></div>
+      </div>
+      <p class="src">Fonte: <b>checkout-api</b>, commit 8f3c21a. Confluence PAG, página "Fluxo de pagamento".</p>
+    </aside>
+  </div>
+</div>
+</body>
+</html>

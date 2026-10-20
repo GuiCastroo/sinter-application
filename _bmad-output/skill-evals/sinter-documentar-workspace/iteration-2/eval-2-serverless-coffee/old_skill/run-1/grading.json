@@ -1,0 +1,65 @@
+{
+  "expectations": [
+    {
+      "text": "Tem as 6 páginas (negócio, arquitetura, serviços, jornadas, infraestrutura, referência)",
+      "passed": false,
+      "evidence": "sem 1-negocio.md"
+    },
+    {
+      "text": "Toda página abre com 'Em resumo' e tem o índice 'Nesta página'",
+      "passed": false,
+      "evidence": "sem 1-negocio.md"
+    },
+    {
+      "text": "Poucos arquivos: no máximo 15 Markdown escritos (fora llm/ e site/)",
+      "passed": false,
+      "evidence": "sem 1-negocio.md"
+    },
+    {
+      "text": "Negócio tem a parede do Event Storming (tabela com 🟧) e a seção 'Quem orquestra'",
+      "passed": false,
+      "evidence": "sem 1-negocio.md"
+    },
+    {
+      "text": "Negócio sem jargão técnico (no máximo 3 termos como lambda, gRPC, DynamoDB)",
+      "passed": false,
+      "evidence": "sem 1-negocio.md"
+    },
+    {
+      "text": "Cartão para IA (llms.txt) existe e cabe em ~1.500 tokens",
+      "passed": false,
+      "evidence": "sem 1-negocio.md"
+    },
+    {
+      "text": "80%+ das seções de serviço abrem com 'Em resumo'",
+      "passed": false,
+      "evidence": "sem 1-negocio.md"
+    },
+    {
+      "text": "Jornadas têm diagrama de sequência",
+      "passed": false,
+      "evidence": "sem 1-negocio.md"
+    },
+    {
+      "text": "Mapa dos serviços sai das tabelas 'Consome' (3+ ligações)",
+      "passed": false,
+      "evidence": "sem 1-negocio.md"
+    },
+    {
+      "text": "Referência tem 'Dúvidas e perguntas'",
+      "passed": false,
+      "evidence": "sem 1-negocio.md"
+    },
+    {
+      "text": "'Quem orquestra' cita Step Functions",
+      "passed": false,
+      "evidence": "sem 1-negocio.md"
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 11,
+    "total": 11,
+    "pass_rate": 0.0
+  }
+}

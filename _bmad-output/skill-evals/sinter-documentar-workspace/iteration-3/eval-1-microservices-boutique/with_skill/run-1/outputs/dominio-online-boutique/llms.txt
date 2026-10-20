@@ -1,0 +1,44 @@
+# Online Boutique
+
+loja online de decoração e vestuário onde qualquer visitante, sem cadastro, navega o catálogo, monta um carrinho e finaliza a compra informando endereço e cartão. A loja precifica na moeda escolhida, cobra, organiza o envio e confirma por email, em um só passo. Existe como vitrine de referência para construir e-commerce em microsserviços, não para vender de verdade *(a confirmar — ver "Por que existe")*.
+
+## Onde procurar
+
+- [Negócio](1-negocio.md)
+- [Arquitetura](2-arquitetura.md)
+- [Serviços](3-servicos.md)
+- [Jornadas](4-jornadas.md)
+- [Infraestrutura](5-infraestrutura.md)
+- [Referência](6-referencia.md)
+
+## Serviços
+
+- [frontend](3-servicos.md#frontend)
+- [cartservice](3-servicos.md#cartservice)
+- [productcatalogservice](3-servicos.md#productcatalogservice)
+- [currencyservice](3-servicos.md#currencyservice)
+- [shippingservice](3-servicos.md#shippingservice)
+- [checkoutservice](3-servicos.md#checkoutservice)
+- [paymentservice](3-servicos.md#paymentservice)
+- [emailservice](3-servicos.md#emailservice)
+- [recommendationservice](3-servicos.md#recommendationservice)
+- [adservice](3-servicos.md#adservice)
+- [shoppingassistantservice (opcional)](3-servicos.md#shoppingassistantservice-opcional)
+- [loadgenerator](3-servicos.md#loadgenerator)
+
+## Jornadas
+
+- [Comprar um produto](4-jornadas.md#comprar-um-produto)
+- [Navegar e montar o carrinho](4-jornadas.md#navegar-e-montar-o-carrinho)
+- [Pedir ajuda ao assistente de compras (opcional)](4-jornadas.md#pedir-ajuda-ao-assistente-de-compras-opcional)
+
+## Ainda não se sabe
+
+- **PM/dono de produto:** Este domínio deve ser tratado como base para uma loja real algum dia, ou permanece só como vitrine técnica? Isso muda se vale a pena resolver as lacunas abaixo (estoque, persistência de pedido, estorno). [Origem Q01](6-referencia.md#perguntas-para-decisão)
+- **PM/dono de produto:** Faz sentido ter indicadores de negócio (conversão, ticket médio) ou isso está fora de escopo por definição? [Origem Q02](6-referencia.md#perguntas-para-decisão)
+- **arquiteto:** Quando um serviço mock (pagamento, frete, email) precisar virar integração real, o padrão esperado é manter tudo síncrono/gRPC ou introduzir eventos/filas para desacoplar o `checkoutservice` das falhas de terceiros? [Origem Q03](6-referencia.md#perguntas-para-decisão)
+- **arquiteto:** A ausência de persistência do pedido é aceitável permanentemente, ou existe um serviço de "orders" planejado que ainda não foi escrito? [Origem Q04](6-referencia.md#perguntas-para-decisão)
+- **tech lead:** Qual é o dono real de cada subdomínio (squad)? Este documento marcou todos como *(a confirmar)* porque o `CODEOWNERS` só define donos genéricos para o repositório inteiro. Nenhum times por serviço. [Origem Q05](6-referencia.md#perguntas-para-decisão)
+- **tech lead:** Existe um plano para compensar (estornar) uma cobrança quando o envio falha depois do pagamento aprovado (ver `4-jornadas.md` → "Comprar um produto")? [Origem Q06](6-referencia.md#perguntas-para-decisão)
+
+[Resumos explicativos](llm/resumos.md) · [Grafo tipado](llm/grafo.json)

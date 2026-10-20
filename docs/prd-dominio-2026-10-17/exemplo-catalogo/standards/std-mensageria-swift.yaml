@@ -1,0 +1,10 @@
+# arquivo: standards/std-mensageria-swift.yaml
+apiVersion: sinter.dev/v1
+kind: Standard
+metadata:
+  id: std-mensageria-swift
+  name: Mensageria SWIFT
+  status: approved
+spec:
+  summary: "Mensagens SWIFT seguem o padrão ISO 20022 adotado pela empresa."
+  appliesTo: [evento, batch]

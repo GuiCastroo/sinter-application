@@ -1,0 +1,10 @@
+# arquivo: standards/std-eventos-kafka.yaml
+apiVersion: sinter.dev/v1
+kind: Standard
+metadata:
+  id: std-eventos-kafka
+  name: Eventos em Kafka
+  status: approved
+spec:
+  summary: "Eventos de negócio são publicados em Kafka com schema registrado e nome no passado."
+  appliesTo: [evento]

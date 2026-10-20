@@ -1,0 +1,200 @@
+{
+ "dominio": "Online Boutique",
+ "servicos": [
+  "frontend",
+  "cartservice",
+  "productcatalogservice",
+  "currencyservice",
+  "shippingservice",
+  "checkoutservice",
+  "paymentservice",
+  "emailservice",
+  "recommendationservice",
+  "adservice",
+  "shoppingassistantservice (opcional)",
+  "loadgenerator"
+ ],
+ "jornadas": [
+  "Comprar um produto",
+  "Navegar e montar o carrinho",
+  "Pedir ajuda ao assistente de compras (opcional)"
+ ],
+ "chamadas": [
+  {
+   "de": "frontend",
+   "para": "productcatalogservice",
+   "contrato": "ListProducts, GetProduct, SearchProducts",
+   "interno": true
+  },
+  {
+   "de": "frontend",
+   "para": "currencyservice",
+   "contrato": "GetSupportedCurrencies, Convert",
+   "interno": true
+  },
+  {
+   "de": "frontend",
+   "para": "cartservice",
+   "contrato": "GetCart, AddItem, EmptyCart",
+   "interno": true
+  },
+  {
+   "de": "frontend",
+   "para": "recommendationservice",
+   "contrato": "ListRecommendations",
+   "interno": true
+  },
+  {
+   "de": "frontend",
+   "para": "shippingservice",
+   "contrato": "GetQuote",
+   "interno": true
+  },
+  {
+   "de": "frontend",
+   "para": "checkoutservice",
+   "contrato": "PlaceOrder",
+   "interno": true
+  },
+  {
+   "de": "frontend",
+   "para": "adservice",
+   "contrato": "GetAds (timeout de 100 ms)",
+   "interno": true
+  },
+  {
+   "de": "frontend",
+   "para": "shoppingassistantservice (opcional)",
+   "contrato": "POST /",
+   "interno": true
+  },
+  {
+   "de": "checkoutservice",
+   "para": "cartservice",
+   "contrato": "GetCart, EmptyCart",
+   "interno": true
+  },
+  {
+   "de": "checkoutservice",
+   "para": "productcatalogservice",
+   "contrato": "GetProduct",
+   "interno": true
+  },
+  {
+   "de": "checkoutservice",
+   "para": "currencyservice",
+   "contrato": "Convert",
+   "interno": true
+  },
+  {
+   "de": "checkoutservice",
+   "para": "shippingservice",
+   "contrato": "GetQuote, ShipOrder",
+   "interno": true
+  },
+  {
+   "de": "checkoutservice",
+   "para": "paymentservice",
+   "contrato": "Charge",
+   "interno": true
+  },
+  {
+   "de": "checkoutservice",
+   "para": "emailservice",
+   "contrato": "SendOrderConfirmation",
+   "interno": true
+  },
+  {
+   "de": "recommendationservice",
+   "para": "productcatalogservice",
+   "contrato": "ListProducts",
+   "interno": true
+  },
+  {
+   "de": "shoppingassistantservice (opcional)",
+   "para": "Gemini (gemini-1.5-flash, Google AI) 🩷",
+   "contrato": "API de chat/visão",
+   "interno": false
+  },
+  {
+   "de": "shoppingassistantservice (opcional)",
+   "para": "AlloyDB 🩷",
+   "contrato": "busca vetorial (AlloyDBVectorStore)",
+   "interno": false
+  },
+  {
+   "de": "shoppingassistantservice (opcional)",
+   "para": "Secret Manager 🩷",
+   "contrato": "leitura da senha do AlloyDB",
+   "interno": false
+  },
+  {
+   "de": "loadgenerator",
+   "para": "frontend",
+   "contrato": "/, /setCurrency, /product/{id}, /cart, /cart/checkout, /logout",
+   "interno": true
+  }
+ ],
+ "jornada_usa_servico": [
+  {
+   "jornada": "Comprar um produto",
+   "servico": "frontend"
+  },
+  {
+   "jornada": "Comprar um produto",
+   "servico": "cartservice"
+  },
+  {
+   "jornada": "Comprar um produto",
+   "servico": "productcatalogservice"
+  },
+  {
+   "jornada": "Comprar um produto",
+   "servico": "currencyservice"
+  },
+  {
+   "jornada": "Comprar um produto",
+   "servico": "shippingservice"
+  },
+  {
+   "jornada": "Comprar um produto",
+   "servico": "checkoutservice"
+  },
+  {
+   "jornada": "Comprar um produto",
+   "servico": "paymentservice"
+  },
+  {
+   "jornada": "Comprar um produto",
+   "servico": "emailservice"
+  },
+  {
+   "jornada": "Navegar e montar o carrinho",
+   "servico": "frontend"
+  },
+  {
+   "jornada": "Navegar e montar o carrinho",
+   "servico": "cartservice"
+  },
+  {
+   "jornada": "Navegar e montar o carrinho",
+   "servico": "productcatalogservice"
+  },
+  {
+   "jornada": "Navegar e montar o carrinho",
+   "servico": "currencyservice"
+  },
+  {
+   "jornada": "Navegar e montar o carrinho",
+   "servico": "recommendationservice"
+  },
+  {
+   "jornada": "Navegar e montar o carrinho",
+   "servico": "adservice"
+  },
+  {
+   "jornada": "Pedir ajuda ao assistente de compras (opcional)",
+   "servico": "frontend"
+  }
+ ]
+}

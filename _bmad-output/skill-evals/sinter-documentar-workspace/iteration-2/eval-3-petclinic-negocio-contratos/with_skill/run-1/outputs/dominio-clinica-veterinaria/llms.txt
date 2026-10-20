@@ -1,0 +1,63 @@
+# Clínica Veterinária
+
+> cadastro de uma clínica veterinária — donos, pets, veterinários e o histórico de visitas de cada pet — com um assistente de IA que responde perguntas e cadastra dono/pet por conversa. Não há agendamento com confirmação, cobrança nem prontuário clínico.
+
+Documentação em 6 páginas. Leia este cartão primeiro; abra só a seção de que precisar. Resumos de tudo em `llm/resumos.md`; ligações em `llm/grafo.json`.
+
+## Fronteira
+- **Faz:** Cadastra donos e seus pets; Registra histórico de visitas (data + descrição); Mantém cadastro de veterinários e especialidades; Responde perguntas e age via chatbot de IA; Agrega a "ficha" do dono com pets e visitas
+- **Não faz:** Agendamento com confirmação/conflito de horário; Cobrança, pagamento, convênio pet; Prontuário clínico (diagnóstico, receita, exames); Notificação ao dono (e-mail/SMS); Estoque de insumos/medicamentos
+- **Não sabemos:** Se há front-end de agendamento em outro repositório; Se há autenticação/login de usuário; Se há papel de "recepção" distinto de "veterinário"; Regra real por trás dos tipos de pet aceitos pela IA; Dono/responsável de cada serviço (sem CODEOWNERS)
+
+## Serviços
+- [customers-service](3-servicos.md#customers-service): Cadastro — Dono do pet e seus pets: CRUD completo
+- [visits-service](3-servicos.md#visits-service): Atendimento — Registra e lista visitas de um pet
+- [vets-service](3-servicos.md#vets-service): Equipe clínica — Lista veterinários e suas especialidades (com cache)
+- [genai-service](3-servicos.md#genai-service): Assistente de IA — Chatbot que consulta e cria dados via tool calling
+- [api-gateway](3-servicos.md#api-gateway): Borda — Roteia o front-end e agrega dono + visitas
+- [config-server](3-servicos.md#config-server): Plataforma — Configuração centralizada vinda de um repo Git
+- [discovery-server](3-servicos.md#discovery-server): Plataforma — Registro de serviços (Eureka)
+- [admin-server](3-servicos.md#admin-server): Plataforma — Painel de saúde/observabilidade (Spring Boot Admin)
+
+## Jornadas
+- [Cadastrar dono e pet](4-jornadas.md#cadastrar-dono-e-pet): Recepção registra um novo dono e seus pets — Sem orquestrador — chamada direta ao customers-service
+- [Registrar uma visita](4-jornadas.md#registrar-uma-visita): Clínica registra o atendimento de um pet — Sem orquestrador — chamada direta ao visits-service
+- [Consultar a ficha do dono](4-jornadas.md#consultar-a-ficha-do-dono): Ver o dono com seus pets e o histórico de visitas de cada um — api-gateway agrega customers-service + visits-service
+- [Consultar veterinários](4-jornadas.md#consultar-veterinários): Ver a equipe clínica e suas especialidades — Sem orquestrador — chamada direta ao vets-service (cacheada)
+- [Conversar com o assistente de IA](4-jornadas.md#conversar-com-o-assistente-de-ia): Perguntar ou pedir ações em linguagem natural — genai-service decide (tool calling) quais chamadas fazer
+
+## Quem orquestra
+- Cadastrar dono e pet — Ninguém — chamadas diretas e sequenciais — Cliente (front-end ou IA) decide a ordem
+- Registrar uma visita — Ninguém — chamada direta — —
+- Consultar a ficha do dono — api-gateway — Agregação pontual (fan-out): busca dono, depois visitas, com circuit breaker
+- Consultar veterinários — Ninguém — chamada direta (proxy) — —
+
+## Regras que mandam
+- Telefone do dono — Só dígitos, até 12 caracteres, obrigatório
+- Nome do pet — Obrigatório, mínimo 1 caractere
+- Descrição da visita — Até 8192 caracteres
+- Tipos de pet aceitos pela IA — 1=cat, 2=dog, 3=lizard, 4=snake, 5=bird, 6=hamster *(a confirmar)*
+- Memória de conversa do assistente de IA — Mantém as últimas 10 mensagens de contexto
+
+## Entra e sai
+- Entra — Cadastro de dono/pet, registro de visita, perguntas em linguagem natural — Front-end (AngularJS no api-gateway), usuário do chat
+- Sai — Ficha do dono, lista de veterinários, respostas do assistente — Front-end, usuário do chat
+- Sai — Perguntas/comandos em linguagem natural — 🩷 OpenAI ou Azure OpenAI (provedor de LLM externo)
+- Entra — Configuração de todos os serviços — 🩷 Repositório Git externo spring-petclinic-microservices-config
+- Sai — Traces e métricas técnicas — 🩷 Zipkin, Prometheus, Grafana
+
+## Ainda não se sabe
+- Segredos encontrados (só localização, valor não copiado):
+- spring-petclinic-genai-service/src/main/resources/application.yml (linhas 9, 17, 18, 25): variáveis OPENAI_API_KEY, AZURE_OPENAI_KEY, AZURE…
+- docker-compose.yml (serviço genai-service): repassa as mesmas variáveis ao container.
+- Conflitos entre fontes: nenhum encontrado — a lacuna principal é que a config real (portas, timeouts, credenciais) fica no repositório exte…
+
+## Onde procurar
+- [Negócio](1-negocio.md): cadastro de uma clínica veterinária — donos, pets, veterinários e o histórico de visitas de cada pet — com um assistente de IA que responde…
+- [Arquitetura](2-arquitetura.md): microsserviços Spring Cloud — um serviço por subdomínio (donos/pets, visitas, veterinários, IA), um gateway de borda que agrega e roteia, t…
+- [Serviços](3-servicos.md): 8 serviços Spring Boot. Quatro carregam o negócio (donos/pets, visitas, veterinários, chatbot de IA), um é a borda (api-gateway), três são …
+- [Jornadas](4-jornadas.md): 5 jornadas, todas síncronas via REST. Sem orquestrador único: cada jornada é uma chamada direta a um serviço, ou uma agregação pontual do `…
+
+## Optional
+- [Infraestrutura](5-infraestrutura.md): aplicações Spring Boot independentes, registradas num Eureka (`discovery-server`) e configuradas por um Config Server que busca valores num…
+- [Referência](6-referencia.md): glossário, regras, decisões reconstruídas, padrões de código, como rodar localmente e as dúvidas em aberto por papel — para quem vai mexer …

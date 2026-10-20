@@ -1,0 +1,18 @@
+{
+  "eval_id": 1,
+  "eval_name": "microservices-boutique",
+  "prompt": "tenho esse repo de microsserviços da loja (Online Boutique do Google) em /Users/guilhermesilvacastro/harness_corp/_bmad-output/skill-evals/sinter-documentar-workspace/fixtures/microservices-demo. documenta o domínio inteiro pra mim: como os serviços se falam, a infra no kubernetes e o fluxo de compra do cliente passo a passo",
+  "assertions": [
+    "Tem as 6 páginas (negócio, arquitetura, serviços, jornadas, infraestrutura, referência)",
+    "Toda página abre com 'Em resumo' e tem o índice 'Nesta página'",
+    "Poucos arquivos: no máximo 15 Markdown escritos (fora llm/ e site/)",
+    "Negócio tem a parede do Event Storming (tabela com 🟧) e a seção 'Quem orquestra'",
+    "Negócio sem jargão técnico (no máximo 3 termos como lambda, gRPC, DynamoDB)",
+    "Cartão para IA (llms.txt) existe e cabe em ~1.500 tokens",
+    "80%+ das seções de serviço abrem com 'Em resumo'",
+    "Jornadas têm diagrama de sequência",
+    "Mapa dos serviços sai das tabelas 'Consome' (3+ ligações)",
+    "Referência tem 'Dúvidas e perguntas'",
+    "A jornada de compra passa por checkout e payment"
+  ]
+}

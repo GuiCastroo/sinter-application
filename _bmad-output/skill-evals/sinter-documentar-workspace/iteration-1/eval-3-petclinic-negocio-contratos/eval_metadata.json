@@ -1,0 +1,17 @@
+{
+  "eval_id": 3,
+  "eval_name": "petclinic-negocio-contratos",
+  "prompt": "arquiteto aqui. tenho o spring-petclinic-microservices em /Users/guilhermesilvacastro/harness_corp/_bmad-output/skill-evals/sinter-documentar-workspace/fixtures/spring-petclinic-microservices e quero montar o repo do domínio 'clinica veterinaria' com capacidades de negócio, contratos das APIs e o modelo de dados de cada serviço",
+  "assertions": [
+    "Usa as gavetas do padrão (5+ de: capacidades, fluxos, sistemas, infraestrutura, subdominios, glossario, regras-de-negocio, decisoes, padroes)",
+    "80%+ dos itens têm cabeçalho YAML com proveniência e tipo de extração",
+    "Itens nascem como proposta (status: proposed) e nenhum como approved",
+    "Itens ligam camadas com realiza / realizado-por",
+    "Tem ao menos um diagrama de sequência Mermaid",
+    "Tem RELATORIO.md com perguntas para as pessoas",
+    "Marca inferências na camada de negócio (extraction: inferred em capacidades ou fluxos)",
+    "Documenta infraestrutura como itens próprios (1+ arquivo em infraestrutura/recursos)",
+    "Modelo de dados com erDiagram em 3+ serviços",
+    "2+ capacidades de negócio documentadas"
+  ]
+}

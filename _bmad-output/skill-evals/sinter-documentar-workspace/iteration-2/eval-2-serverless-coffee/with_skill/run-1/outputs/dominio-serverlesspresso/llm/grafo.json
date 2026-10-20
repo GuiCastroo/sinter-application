@@ -1,0 +1,157 @@
+{
+ "dominio": "Serverlesspresso",
+ "servicos": [
+  "00-baseCore",
+  "validator-service (`backends/9-validator`)",
+  "config-service (`backends/2-config-service`)",
+  "order-processor (`backends/4-order-processing`)",
+  "order-manager (`backends/5-order-manager`)",
+  "publisher-service (`backends/6-publisher-service`)",
+  "order-journey-service (`backends/8-order-journey`)",
+  "metrics-service (`backends/7-metrics-service`)",
+  "counting-service (`backends/1-counting-service`, não usado)",
+  "EventPlayer (`extensions/EventPlayer`)",
+  "OrderRobotExtension (`extensions/OrderRobotExtension`)",
+  "PersistOrderMetricsToDynamoDB (`extensions/PersistOrderMetricsToDynamoDB`)",
+  "WaitTimes (`extensions/WaitTimes`)"
+ ],
+ "jornadas": [
+  "Pedir um café",
+  "Configurar o evento"
+ ],
+ "chamadas": [
+  {
+   "de": "validator-service (`backends/9-validator`)",
+   "para": "config-service (`backends/2-config-service`)",
+   "contrato": "ConfigTable (leitura direta)",
+   "interno": true
+  },
+  {
+   "de": "order-processor (`backends/4-order-processing`)",
+   "para": "config-service (`backends/2-config-service`)",
+   "contrato": "ConfigTable.GetItem (storeOpen)",
+   "interno": true
+  },
+  {
+   "de": "order-processor (`backends/4-order-processing`)",
+   "para": "counting-service (`backends/1-counting-service`, não usado)",
+   "contrato": "CountingTable.UpdateItem (gera o número do pedido, lógica reimplementada inline no ASL — ver nota abaixo)",
+   "interno": true
+  },
+  {
+   "de": "order-processor (`backends/4-order-processing`)",
+   "para": "order-manager (`backends/5-order-manager`)",
+   "contrato": "SendTaskSuccess recebido",
+   "interno": true
+  },
+  {
+   "de": "order-manager (`backends/5-order-manager`)",
+   "para": "order-processor (`backends/4-order-processing`)",
+   "contrato": "TaskToken gravado por evento, resumido via SendTaskSuccess",
+   "interno": true
+  },
+  {
+   "de": "order-manager (`backends/5-order-manager`)",
+   "para": "config-service (`backends/2-config-service`)",
+   "contrato": "ConfigTable.GetItem (cardápio)",
+   "interno": true
+  },
+  {
+   "de": "publisher-service (`backends/6-publisher-service`)",
+   "para": "order-processor (`backends/4-order-processing`)",
+   "contrato": "Eventos por prefixo de detail-type (OrderProcessor.*)",
+   "interno": true
+  },
+  {
+   "de": "publisher-service (`backends/6-publisher-service`)",
+   "para": "order-manager (`backends/5-order-manager`)",
+   "contrato": "Eventos por prefixo de detail-type (OrderManager.*)",
+   "interno": true
+  },
+  {
+   "de": "publisher-service (`backends/6-publisher-service`)",
+   "para": "validator-service (`backends/9-validator`)",
+   "contrato": "Eventos por prefixo de detail-type (Validator.*)",
+   "interno": true
+  },
+  {
+   "de": "publisher-service (`backends/6-publisher-service`)",
+   "para": "config-service (`backends/2-config-service`)",
+   "contrato": "Eventos por prefixo de detail-type (ConfigService.*)",
+   "interno": true
+  },
+  {
+   "de": "order-journey-service (`backends/8-order-journey`)",
+   "para": "validator-service (`backends/9-validator`)",
+   "contrato": "Qualquer evento (sem filtro de detail-type)",
+   "interno": true
+  },
+  {
+   "de": "order-journey-service (`backends/8-order-journey`)",
+   "para": "config-service (`backends/2-config-service`)",
+   "contrato": "Qualquer evento (sem filtro de detail-type)",
+   "interno": true
+  },
+  {
+   "de": "order-journey-service (`backends/8-order-journey`)",
+   "para": "order-processor (`backends/4-order-processing`)",
+   "contrato": "Qualquer evento (sem filtro de detail-type)",
+   "interno": true
+  },
+  {
+   "de": "order-journey-service (`backends/8-order-journey`)",
+   "para": "order-manager (`backends/5-order-manager`)",
+   "contrato": "Qualquer evento (sem filtro de detail-type)",
+   "interno": true
+  },
+  {
+   "de": "metrics-service (`backends/7-metrics-service`)",
+   "para": "validator-service (`backends/9-validator`)",
+   "contrato": "Validator.NewOrder",
+   "interno": true
+  },
+  {
+   "de": "metrics-service (`backends/7-metrics-service`)",
+   "para": "order-manager (`backends/5-order-manager`)",
+   "contrato": "OrderManager.OrderCancelled*, OrderManager.WaitingCompletion",
+   "interno": true
+  },
+  {
+   "de": "metrics-service (`backends/7-metrics-service`)",
+   "para": "order-processor (`backends/4-order-processing`)",
+   "contrato": "OrderProcessor.OrderTimeOut",
+   "interno": true
+  },
+  {
+   "de": "EventPlayer (`extensions/EventPlayer`)",
+   "para": "—",
+   "contrato": "Lê events.json local e publica no bus Serverlesspresso",
+   "interno": false
+  },
+  {
+   "de": "OrderRobotExtension (`extensions/OrderRobotExtension`)",
+   "para": "validator-service (`backends/9-validator`)",
+   "contrato": "Chama a mesma API que um cliente real chamaria *(a confirmar, não lido em detalhe)*",
+   "interno": true
+  },
+  {
+   "de": "OrderRobotExtension (`extensions/OrderRobotExtension`)",
+   "para": "order-manager (`backends/5-order-manager`)",
+   "contrato": "Chama a mesma API que um barista real chamaria *(a confirmar, não lido em detalhe)*",
+   "interno": true
+  },
+  {
+   "de": "PersistOrderMetricsToDynamoDB (`extensions/PersistOrderMetricsToDynamoDB`)",
+   "para": "order-manager (`backends/5-order-manager`)",
+   "contrato": "OrderManager.WaitingCompletion via EventBridge → SQS",
+   "interno": true
+  },
+  {
+   "de": "WaitTimes (`extensions/WaitTimes`)",
+   "para": "order-manager (`backends/5-order-manager`)",
+   "contrato": "Eventos de pedido enviado e concluído",
+   "interno": true
+  }
+ ],
+ "jornada_usa_servico": []
+}
