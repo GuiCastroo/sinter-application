@@ -58,13 +58,13 @@ def test_acha_o_catalogo_subindo_pastas(
     assert run(["validate"]) == 0
 
 
-def test_dominios_do_exemplo_passam(
-    catalogo_com_dominios: Path,
+def test_subdominios_do_exemplo_passam(
+    catalogo_ate_subdominios: Path,
     capsys: pytest.CaptureFixture[str],
     golden: Callable[[str, str], None],
 ) -> None:
-    code = run(["validate", str(catalogo_com_dominios), "--json"])
+    code = run(["validate", str(catalogo_ate_subdominios), "--json"])
     out = capsys.readouterr().out
     assert json.loads(out)["report"]["errors"] == []
     assert code == 0
-    golden("validate_dominios.json", out)
+    golden("validate_subdominios.json", out)

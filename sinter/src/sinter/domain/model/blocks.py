@@ -107,3 +107,41 @@ class DataAsset(SinterModel):
     personal_data: bool
     layers: dict[str, DataLayerInfo]
     docs: list[Doc] = Field(default_factory=list)
+
+
+Lifecycle = Literal["legacy", "modernizing", "modern", "retired"]
+RepoRole = Literal["frontend", "bff", "api", "batch", "lib", "infra"]
+
+
+class RepoUse(SinterModel):
+    """Um dos N repos que compõem uma aplicação."""
+
+    repo: str
+    path: str | None = None
+    role: RepoRole
+    platform: str
+    docs: list[Doc] = Field(default_factory=list)
+
+
+class Application(SinterModel):
+    id: str
+    name: str
+    lifecycle: Lifecycle
+    aliases: list[str] = Field(default_factory=list)
+    repositories: list[RepoUse] = Field(min_length=1)
+    docs: list[Doc] = Field(default_factory=list)
+
+
+class BoundaryIn(SinterModel):
+    from_: str = Field(alias="from")
+    what: str
+
+
+class BoundaryOut(SinterModel):
+    to: str
+    what: str
+
+
+class Boundaries(SinterModel):
+    in_: list[BoundaryIn] = Field(default_factory=list, alias="in")
+    out: list[BoundaryOut] = Field(default_factory=list)

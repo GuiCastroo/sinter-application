@@ -40,6 +40,16 @@ def catalogo_com_dominios(raiz_catalogo: Path) -> Path:
 
 
 @pytest.fixture
+def catalogo_ate_subdominios(catalogo_com_dominios: Path) -> Path:
+    """+ os subdomínios de cada domínio: o que a Story 1.3 conhece."""
+    for sub_file in sorted((EXEMPLO / "domains").glob("*/subdomains/*.yaml")):
+        target = catalogo_com_dominios / sub_file.relative_to(EXEMPLO)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(sub_file, target)
+    return catalogo_com_dominios
+
+
+@pytest.fixture
 def golden(request: pytest.FixtureRequest):  # type: ignore[no-untyped-def]
     update = bool(request.config.getoption("--update-golden"))
 

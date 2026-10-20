@@ -3,9 +3,11 @@
 from collections import defaultdict
 from collections.abc import Iterable
 
+from sinter.domain.model.blocks import Decision
 from sinter.domain.model.catalog import Catalog, ParsedManifest
 from sinter.domain.model.domain import Domain
 from sinter.domain.model.registry import ADR_ID, DOMAIN_ID
+from sinter.domain.model.subdomain import Subdomain
 from sinter.domain.validation.engine import FileFacts, Problem, problem, rule
 from sinter.domain.validation.finding import ERROR, Related
 
@@ -82,8 +84,17 @@ def parent_is_organization(catalog: Catalog, facts: FileFacts) -> Iterable[Probl
 
 @rule(code="ADR_DOMAIN_MISMATCH", severity=ERROR)
 def adr_uses_own_domain_id(catalog: Catalog, facts: FileFacts) -> Iterable[Problem]:
-    for m, d in _domains(catalog):
-        for i, decision in enumerate(d.spec.decisions):
+    by_id = {d.metadata.id: d for _m, d in _domains(catalog)}
+    owners: list[tuple[ParsedManifest, Domain, list[Decision]]] = [
+        (m, d, d.spec.decisions) for m, d in _domains(catalog)
+    ]
+    for m in catalog.valid_manifests("Subdomain"):
+        assert isinstance(m.model, Subdomain)
+        parent = by_id.get(m.model.metadata.domain)
+        if parent is not None:
+            owners.append((m, parent, m.model.spec.decisions))
+    for m, d, decisions in owners:
+        for i, decision in enumerate(decisions):
             match = ADR_ID.match(decision.id)
             if match and match.group(1) != d.metadata.domain_id:
                 yield problem(
