@@ -21,6 +21,8 @@ class FileFacts:
     """Fatos de arquivo calculados pela aplicação, iguais no `validate` e no `apply`."""
 
     formatted: Mapping[str, bool] = field(default_factory=dict)
+    existing: frozenset[str] = frozenset()
+    """Caminhos de docs (resolvidos) que existem no catálogo."""
 
 
 @dataclass(frozen=True)

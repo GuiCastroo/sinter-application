@@ -1,8 +1,119 @@
 {
   "report": {
     "errors": [],
-    "warnings": []
+    "warnings": [
+      {
+        "code": "DOM_REF_NOT_IN_CATALOG",
+        "severity": "warning",
+        "file": "domains/camb/subdomains/sub-camb-carteira.yaml",
+        "path": "spec.data[dat-camb-posicao-cambio].layers.refined.consumers[0]",
+        "message": "domínio 'dom-contabilidade' ainda não está no catálogo",
+        "line": 54,
+        "source": null,
+        "related": []
+      },
+      {
+        "code": "DOM_REF_NOT_IN_CATALOG",
+        "severity": "warning",
+        "file": "domains/camb/subdomains/sub-camb-carteira.yaml",
+        "path": "spec.data[dat-camb-posicao-cambio].layers.refined.consumers[1]",
+        "message": "domínio 'dom-risco' ainda não está no catálogo",
+        "line": 54,
+        "source": null,
+        "related": []
+      },
+      {
+        "code": "DOM_REF_NOT_IN_CATALOG",
+        "severity": "warning",
+        "file": "domains/camb/subdomains/sub-camb-carteira.yaml",
+        "path": "spec.boundaries.out[0].to",
+        "message": "domínio 'dom-contabilidade' ainda não está no catálogo",
+        "line": 63,
+        "source": null,
+        "related": []
+      },
+      {
+        "code": "DOM_REF_NOT_IN_CATALOG",
+        "severity": "warning",
+        "file": "domains/camb/subdomains/sub-camb-dados-cliente.yaml",
+        "path": "spec.boundaries.in[0].from",
+        "message": "domínio 'dom-cliente' ainda não está no catálogo",
+        "line": 33,
+        "source": null,
+        "related": []
+      },
+      {
+        "code": "DOM_REF_NOT_IN_CATALOG",
+        "severity": "warning",
+        "file": "domains/camb/subdomains/sub-camb-limite.yaml",
+        "path": "spec.boundaries.in[0].from",
+        "message": "domínio 'dom-credito' ainda não está no catálogo",
+        "line": 38,
+        "source": null,
+        "related": []
+      },
+      {
+        "code": "DOM_REF_NOT_IN_CATALOG",
+        "severity": "warning",
+        "file": "domains/camb/subdomains/sub-camb-liquidacao.yaml",
+        "path": "spec.boundaries.out[1].to",
+        "message": "domínio 'dom-contas' ainda não está no catálogo",
+        "line": 47,
+        "source": null,
+        "related": []
+      },
+      {
+        "code": "DOM_REF_NOT_IN_CATALOG",
+        "severity": "warning",
+        "file": "domains/pagv/journeys/jor-pagv-pagar-pedido.yaml",
+        "path": "spec.stages[pagar].steps[antifraude].calls",
+        "message": "domínio 'dom-risco' ainda não está no catálogo",
+        "line": 40,
+        "source": null,
+        "related": []
+      },
+      {
+        "code": "DOM_REF_NOT_IN_CATALOG",
+        "severity": "warning",
+        "file": "domains/pagv/subdomains/sub-pagv-autorizacao.yaml",
+        "path": "spec.boundaries.out[0].to",
+        "message": "domínio 'dom-risco' ainda não está no catálogo",
+        "line": 29,
+        "source": null,
+        "related": []
+      },
+      {
+        "code": "DOM_REF_NOT_IN_CATALOG",
+        "severity": "warning",
+        "file": "domains/pagv/subdomains/sub-pagv-autorizacao.yaml",
+        "path": "spec.boundaries.out[2].to",
+        "message": "domínio 'dom-fiscal' ainda não está no catálogo",
+        "line": 31,
+        "source": null,
+        "related": []
+      },
+      {
+        "code": "DOM_REF_NOT_IN_CATALOG",
+        "severity": "warning",
+        "file": "domains/pagv/subdomains/sub-pagv-checkout.yaml",
+        "path": "spec.boundaries.in[0].from",
+        "message": "domínio 'dom-vendas' ainda não está no catálogo",
+        "line": 36,
+        "source": null,
+        "related": []
+      },
+      {
+        "code": "DOM_REF_NOT_IN_CATALOG",
+        "severity": "warning",
+        "file": "domains/pagv/subdomains/sub-pagv-conciliacao.yaml",
+        "path": "spec.boundaries.out[0].to",
+        "message": "domínio 'dom-financeiro' ainda não está no catálogo",
+        "line": 70,
+        "source": null,
+        "related": []
+      }
+    ]
   },
   "filesChecked": 31,
-  "summary": "0 erros, 0 avisos em 31 arquivos."
+  "summary": "0 erros, 11 avisos em 31 arquivos."
 }

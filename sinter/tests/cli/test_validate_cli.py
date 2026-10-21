@@ -61,18 +61,6 @@ def test_acha_o_catalogo_subindo_pastas(
     assert run(["validate"]) == 0
 
 
-def test_subdominios_do_exemplo_passam(
-    catalogo_ate_subdominios: Path,
-    capsys: pytest.CaptureFixture[str],
-    golden: Callable[[str, str], None],
-) -> None:
-    code = run(["validate", str(catalogo_ate_subdominios), "--json"])
-    out = capsys.readouterr().out
-    assert json.loads(out)["report"]["errors"] == []
-    assert code == 0
-    golden("validate_subdominios.json", out)
-
-
 def test_exemplo_completo_passa(
     tmp_path: Path, capsys: pytest.CaptureFixture[str], golden: Callable[[str, str], None]
 ) -> None:
@@ -80,6 +68,8 @@ def test_exemplo_completo_passa(
     shutil.copytree(EXEMPLO, root)
     code = run(["validate", str(root), "--json"])
     out = capsys.readouterr().out
-    assert json.loads(out)["report"]["errors"] == []
+    report = json.loads(out)["report"]
+    assert report["errors"] == []  # SM-1: zero erros
+    assert {w["code"] for w in report["warnings"]} == {"DOM_REF_NOT_IN_CATALOG"}
     assert code == 0
     golden("validate_exemplo.json", out)

@@ -162,7 +162,7 @@ spec:
   target: app-pagv-novo
   phase: {phase}
   evidence:
-    - {{ source: doc-x, locator: "docs/a.md#b", extraction: human }}
+    - {{ source: conversation/2026-10-01, locator: "#msg-3", extraction: human }}
 """
 REL_ID = "rel-app-pagv-velho--modernized_by--app-pagv-novo"
 

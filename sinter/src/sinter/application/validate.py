@@ -1,8 +1,8 @@
 """Caso de uso do `sinter validate`."""
 
-from sinter.application.load import load
+from sinter.application.load import file_facts, load
 from sinter.domain.services.summary import validation_summary
-from sinter.domain.validation.engine import FileFacts, validate_catalog
+from sinter.domain.validation.engine import validate_catalog
 from sinter.ports.inbound.common import Report
 from sinter.ports.inbound.validate import ValidateRequest, ValidateResult
 from sinter.ports.outbound.catalog_files import CatalogFiles
@@ -16,7 +16,8 @@ class Validate:
 
     def __call__(self, request: ValidateRequest) -> ValidateResult:
         catalog, load_findings = load(self._files, self._codec)
-        findings = [*load_findings, *validate_catalog(catalog, FileFacts())]
+        facts = file_facts(catalog, self._files)
+        findings = [*load_findings, *validate_catalog(catalog, facts)]
         report = Report.from_findings(findings)
         files_checked = len(self._files.list_manifests())
         return ValidateResult(

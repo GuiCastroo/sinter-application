@@ -3,6 +3,8 @@
 from sinter.domain.errors import SinterError
 from sinter.domain.model.catalog import Catalog, ParsedManifest, build_catalog
 from sinter.domain.model.registry import SUPPORTED_SCHEMA_VERSION
+from sinter.domain.services.references import documents, resolve_doc_path
+from sinter.domain.validation.engine import FileFacts
 from sinter.domain.validation.finding import ERROR, Finding
 from sinter.domain.validation.schema import parse_manifest
 from sinter.ports.outbound.catalog_files import CatalogFiles
@@ -56,3 +58,13 @@ def load(files: CatalogFiles, codec: ManifestCodec) -> tuple[Catalog, list[Findi
             {"catalog": org.spec.schema_version, "supported": SUPPORTED_SCHEMA_VERSION},
         )
     return catalog, findings
+
+
+def file_facts(catalog: Catalog, files: CatalogFiles) -> FileFacts:
+    """Fatos de arquivo que as regras precisam, calculados igual no validate e no apply (AD-31)."""
+    paths = {
+        resolve_doc_path(at.manifest.file, at.doc.path)
+        for at in documents(catalog)
+        if at.doc.path is not None
+    }
+    return FileFacts(existing=frozenset(p for p in paths if files.exists(p)))
