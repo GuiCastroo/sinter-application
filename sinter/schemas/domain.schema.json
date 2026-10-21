@@ -1,0 +1,763 @@
+{
+  "$defs": {
+    "DataAsset": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "producedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Producedby"
+        },
+        "personalData": {
+          "title": "Personaldata",
+          "type": "boolean"
+        },
+        "layers": {
+          "additionalProperties": {
+            "$ref": "#/$defs/DataLayerInfo"
+          },
+          "title": "Layers",
+          "type": "object"
+        },
+        "docs": {
+          "items": {
+            "$ref": "#/$defs/Doc"
+          },
+          "title": "Docs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "personalData",
+        "layers"
+      ],
+      "title": "DataAsset",
+      "type": "object"
+    },
+    "DataLayerInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "location": {
+          "title": "Location",
+          "type": "string"
+        },
+        "format": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Format"
+        },
+        "refresh": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Refresh"
+        },
+        "quality": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Quality",
+          "type": "array"
+        },
+        "consumers": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Consumers",
+          "type": "array"
+        }
+      },
+      "required": [
+        "location"
+      ],
+      "title": "DataLayerInfo",
+      "type": "object"
+    },
+    "Decision": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "date": {
+          "format": "date",
+          "title": "Date",
+          "type": "string"
+        },
+        "context": {
+          "title": "Context",
+          "type": "string"
+        },
+        "decision": {
+          "title": "Decision",
+          "type": "string"
+        },
+        "consequences": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Consequences",
+          "type": "array"
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "date",
+        "context",
+        "decision"
+      ],
+      "title": "Decision",
+      "type": "object"
+    },
+    "Doc": {
+      "additionalProperties": false,
+      "description": "Um doc ligado a um nível: arquivo em docs/ (path) ou link (url), ou reuso por id (ref).",
+      "properties": {
+        "ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ref"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Id"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Type"
+        },
+        "path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Path"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        },
+        "date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Date"
+        },
+        "verifiedAt": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Verifiedat"
+        }
+      },
+      "title": "Doc",
+      "type": "object"
+    },
+    "DomainMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "candidate",
+            "approved",
+            "rejected",
+            "deprecated",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "owners": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Owners",
+          "type": "array"
+        },
+        "domainId": {
+          "title": "Domainid",
+          "type": "string"
+        },
+        "area": {
+          "title": "Area",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "status",
+        "domainId",
+        "area"
+      ],
+      "title": "DomainMetadata",
+      "type": "object"
+    },
+    "DomainSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "parent": {
+          "title": "Parent",
+          "type": "string"
+        },
+        "purpose": {
+          "title": "Purpose",
+          "type": "string"
+        },
+        "does": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Does",
+          "type": "array"
+        },
+        "doesNot": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Doesnot",
+          "type": "array"
+        },
+        "unknowns": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Unknowns",
+          "type": "array"
+        },
+        "subdomains": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Subdomains",
+          "type": "array"
+        },
+        "sharedRepositories": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Sharedrepositories",
+          "type": "array"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/Rule"
+          },
+          "title": "Rules",
+          "type": "array"
+        },
+        "mainJourneys": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Mainjourneys",
+          "type": "array"
+        },
+        "glossary": {
+          "items": {
+            "$ref": "#/$defs/GlossaryTerm"
+          },
+          "title": "Glossary",
+          "type": "array"
+        },
+        "operation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Operation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "modernization": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Modernization"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "data": {
+          "items": {
+            "$ref": "#/$defs/DataAsset"
+          },
+          "title": "Data",
+          "type": "array"
+        },
+        "regulations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Regulations",
+          "type": "array"
+        },
+        "standards": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Standards",
+          "type": "array"
+        },
+        "decisions": {
+          "items": {
+            "$ref": "#/$defs/Decision"
+          },
+          "title": "Decisions",
+          "type": "array"
+        },
+        "docs": {
+          "items": {
+            "$ref": "#/$defs/Doc"
+          },
+          "title": "Docs",
+          "type": "array"
+        },
+        "nextTaskNumber": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nexttasknumber"
+        },
+        "nextAdrNumber": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nextadrnumber"
+        },
+        "delivery": {
+          "anyOf": [
+            {
+              "enum": [
+                "direct",
+                "pr"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Delivery"
+        }
+      },
+      "required": [
+        "parent",
+        "purpose",
+        "subdomains"
+      ],
+      "title": "DomainSpec",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "locator": {
+          "title": "Locator",
+          "type": "string"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        },
+        "contentHash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Contenthash"
+        },
+        "extraction": {
+          "enum": [
+            "human",
+            "extracted",
+            "inferred"
+          ],
+          "title": "Extraction",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "locator",
+        "extraction"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "GlossaryTerm": {
+      "additionalProperties": false,
+      "properties": {
+        "term": {
+          "title": "Term",
+          "type": "string"
+        },
+        "definition": {
+          "title": "Definition",
+          "type": "string"
+        },
+        "synonyms": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Synonyms",
+          "type": "array"
+        },
+        "notToConfuseWith": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nottoconfusewith"
+        }
+      },
+      "required": [
+        "term",
+        "definition"
+      ],
+      "title": "GlossaryTerm",
+      "type": "object"
+    },
+    "Modernization": {
+      "additionalProperties": false,
+      "properties": {
+        "goal": {
+          "title": "Goal",
+          "type": "string"
+        },
+        "decision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decision"
+        }
+      },
+      "required": [
+        "goal"
+      ],
+      "title": "Modernization",
+      "type": "object"
+    },
+    "Operation": {
+      "additionalProperties": false,
+      "properties": {
+        "hours": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hours"
+        },
+        "batchWindows": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Batchwindows",
+          "type": "array"
+        },
+        "criticality": {
+          "anyOf": [
+            {
+              "enum": [
+                "baixa",
+                "media",
+                "alta",
+                "critica"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Criticality"
+        },
+        "volume": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Volume"
+        }
+      },
+      "title": "Operation",
+      "type": "object"
+    },
+    "Rule": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "statement": {
+          "title": "Statement",
+          "type": "string"
+        },
+        "exceptions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Exceptions",
+          "type": "array"
+        },
+        "example": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Example"
+        },
+        "regulations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Regulations",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "statement"
+      ],
+      "title": "Rule",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "sinter.dev/v1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "kind": {
+      "const": "Domain",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/DomainMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/DomainSpec"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "title": "Domain",
+  "type": "object"
+}

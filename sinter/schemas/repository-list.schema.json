@@ -1,0 +1,105 @@
+{
+  "$defs": {
+    "Metadata": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "candidate",
+            "approved",
+            "rejected",
+            "deprecated",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "owners": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Owners",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "status"
+      ],
+      "title": "Metadata",
+      "type": "object"
+    },
+    "RepositoryListSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "repositories": {
+          "items": {
+            "$ref": "#/$defs/RepositoryRef"
+          },
+          "title": "Repositories",
+          "type": "array"
+        }
+      },
+      "required": [
+        "repositories"
+      ],
+      "title": "RepositoryListSpec",
+      "type": "object"
+    },
+    "RepositoryRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "url": {
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "url"
+      ],
+      "title": "RepositoryRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "sinter.dev/v1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "kind": {
+      "const": "RepositoryList",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/Metadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/RepositoryListSpec"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "title": "RepositoryList",
+  "type": "object"
+}

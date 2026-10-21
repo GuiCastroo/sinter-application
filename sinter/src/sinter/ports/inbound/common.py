@@ -1,6 +1,7 @@
 """Tipos usados por mais de um Result (AD-26, AD-35)."""
 
 from collections.abc import Iterable
+from typing import Any
 
 from pydantic import Field
 
@@ -19,3 +20,15 @@ class Report(SinterModel):
             errors=[f for f in ordered if f.severity == "error"],
             warnings=[f for f in ordered if f.severity == "warning"],
         )
+
+
+class ErrorBody(SinterModel):
+    code: str
+    message: str
+    details: dict[str, Any] = Field(default_factory=dict)
+
+
+class ErrorEnvelope(SinterModel):
+    """Saída de qualquer comando que falha com SinterError (AD-33, AD-37)."""
+
+    error: ErrorBody

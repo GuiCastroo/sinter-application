@@ -1,0 +1,30 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "files": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Files",
+      "type": "array"
+    },
+    "changed": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Changed",
+      "type": "array"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "string"
+    }
+  },
+  "required": [
+    "files",
+    "changed",
+    "summary"
+  ],
+  "title": "SchemaExportResult",
+  "type": "object"
+}

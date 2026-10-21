@@ -39,6 +39,7 @@ lint = "ruff check ."
 format-check = "ruff format --check ."
 types = "mypy"
 test = "pytest"
+schemas = "sinter schema export schemas"
 check = ["imports", "lint", "format-check", "types", "test"]
 
 [tool.pytest.ini_options]

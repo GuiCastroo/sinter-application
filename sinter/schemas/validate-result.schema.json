@@ -1,0 +1,134 @@
+{
+  "$defs": {
+    "Finding": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "warning"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "file": {
+          "title": "File",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "line": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Line"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "related": {
+          "items": {
+            "$ref": "#/$defs/Related"
+          },
+          "title": "Related",
+          "type": "array"
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "file",
+        "path",
+        "message"
+      ],
+      "title": "Finding",
+      "type": "object"
+    },
+    "Related": {
+      "additionalProperties": false,
+      "properties": {
+        "file": {
+          "title": "File",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "file",
+        "path"
+      ],
+      "title": "Related",
+      "type": "object"
+    },
+    "Report": {
+      "additionalProperties": false,
+      "properties": {
+        "errors": {
+          "items": {
+            "$ref": "#/$defs/Finding"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "warnings": {
+          "items": {
+            "$ref": "#/$defs/Finding"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "title": "Report",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "report": {
+      "$ref": "#/$defs/Report"
+    },
+    "filesChecked": {
+      "title": "Fileschecked",
+      "type": "integer"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "string"
+    }
+  },
+  "required": [
+    "report",
+    "filesChecked",
+    "summary"
+  ],
+  "title": "ValidateResult",
+  "type": "object"
+}
