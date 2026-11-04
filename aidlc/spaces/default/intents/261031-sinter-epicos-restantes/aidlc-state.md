@@ -60,6 +60,9 @@
 
 
 
+
+
+
 ## Phase Progress
 <!-- Status values: Pending, Active, Verified, Skipped -->
 
@@ -119,9 +122,9 @@
 <!-- Derived, engine-owned projection; routing ignores hand edits. -->
 | unit | owner | code-generation | gate |
 | --- | --- | --- | --- |
-| u1-get-niveis | - | [x] | [x] |
-| u13-fmt | - | [x] | [x] |
-| u4-read | - | [?] | [?] |
+| u1-get-niveis | - | [ ] | [ ] |
+| u13-fmt | - | [ ] | [ ] |
+| u4-read | Guilherme Castro | [x] | [x] |
 | u7-catalog-init | - | [ ] | [ ] |
 | u2-calculados | - | [ ] | [ ] |
 | u5-find-areas | - | [ ] | [ ] |
@@ -143,7 +146,7 @@
 - **Current Stage**: code-generation
 - **Next Stage**: build-and-test
 - **Status**: Running
-- **Last Updated**: 2026-11-03T19:57:06Z
+- **Last Updated**: 2026-11-04T03:58:53Z
 
 - **Construction Autonomy Mode**: autonomous
 
