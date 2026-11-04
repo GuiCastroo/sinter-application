@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "status": "claimed",
+  "owner": "Guilherme Castro",
+  "space": "default",
+  "intent_uuid": "01a19036-f9ff-71d5-8617-c1919df72673",
+  "intent_id8": "9df72673",
+  "unit": "u4-read",
+  "generation": 1,
+  "nonce": "645dc5f6-29f3-4dcf-88e7-25f1269652b5",
+  "base_oid": "bf2e9def15316b74481eb50f6c30232cd4d41676",
+  "integration_ref": "refs/remotes/origin/main",
+  "claim_ref": "refs/heads/claim/9df72673/u4-read",
+  "predecessor_oid": null,
+  "gate_rhythm": "per-stage",
+  "audit_shard": "macbook-air-de-guilherme-local-2c773a56486f.md"
+}
