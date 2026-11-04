@@ -1,0 +1,2 @@
+uv run --project sinter --directory sinter poe check
+

@@ -1,0 +1,32 @@
+{
+  "stage": "code-generation",
+  "unit": "u1-get-niveis",
+  "upstream_ids": [
+    "FR15",
+    "FR6",
+    "FR20",
+    "FR21"
+  ],
+  "coverage": [
+    {
+      "id": "FR15",
+      "status": "OK",
+      "target": "sinter/tests/domain/test_levels.py"
+    },
+    {
+      "id": "FR6",
+      "status": "OK",
+      "target": "sinter/tests/domain/test_inheritance.py"
+    },
+    {
+      "id": "FR20",
+      "status": "OK",
+      "target": "sinter/tests/domain/test_inheritance.py"
+    },
+    {
+      "id": "FR21",
+      "status": "OK",
+      "target": "sinter/tests/domain/test_inheritance.py"
+    }
+  ]
+}

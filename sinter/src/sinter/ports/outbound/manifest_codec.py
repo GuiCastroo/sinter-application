@@ -26,3 +26,7 @@ class ManifestCodec(Protocol):
     def split(self, text: str) -> list[ManifestText]:
         """Separa os documentos; levanta ManifestSyntaxError se o YAML for inválido."""
         ...
+
+    def format(self, text: str) -> str:
+        """Formata YAML canônico sem perder comentários ou estilos round-trip."""
+        ...

@@ -54,6 +54,19 @@ class Catalog:
     def find(self, ident: str, kind: str | None = None) -> list[Entry]:
         return [e for e in self.entries if e.id == ident and (kind is None or e.kind == kind)]
 
+    def manifest(self, ident: str) -> ParsedManifest | None:
+        """O manifesto válido cujo metadata.id é `ident` (primeiro, na ordem dos arquivos)."""
+        for m in self.manifests:
+            if m.valid and m.id == ident:
+                return m
+        return None
+
+    def manifest_of_file(self, file: str) -> ParsedManifest | None:
+        for m in self.manifests:
+            if m.file == file:
+                return m
+        return None
+
     def organization(self) -> Organization | None:
         for m in self.valid_manifests("Organization"):
             if isinstance(m.model, Organization):

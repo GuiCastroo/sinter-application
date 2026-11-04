@@ -38,7 +38,8 @@ def _org(version: int = 1) -> str:
 def test_catalogo_minimo_valido() -> None:
     result = _validate({"organization.yaml": _org()})
     assert result.report.errors == []
-    assert result.summary == "0 erros, 0 avisos em 1 arquivo."
+    assert [finding.code for finding in result.report.warnings] == ["FILE_NOT_FORMATTED"]
+    assert result.summary == "0 erros, 1 aviso em 1 arquivo."
 
 
 def test_campo_obrigatorio_e_campo_desconhecido() -> None:

@@ -6,7 +6,8 @@ from collections.abc import Sequence
 
 import typer
 
-from sinter.adapters.inbound.cli.commands import schema, validate
+from sinter.adapters.inbound.cli.commands import fmt as fmt_command
+from sinter.adapters.inbound.cli.commands import get, read, schema, validate
 from sinter.adapters.inbound.cli.errors import envelope, internal_error, usage_error
 from sinter.adapters.inbound.cli.render.json import to_json
 from sinter.domain.errors import SinterError
@@ -26,7 +27,10 @@ def _root() -> None:
 
 
 validate.register(app)
+get.register(app)
+read.register(app)
 schema.register(app)
+fmt_command.register(app)
 
 
 def _fail(err: SinterError, json_out: bool) -> int:

@@ -1,0 +1,52 @@
+{
+  "stage": "code-generation",
+  "unit": "u1-get-niveis",
+  "version": 1,
+  "writes": [
+    {
+      "path": "sinter/src/sinter/domain/model/views.py"
+    },
+    {
+      "path": "sinter/src/sinter/ports/inbound/get.py"
+    },
+    {
+      "path": "sinter/src/sinter/domain/services/inheritance.py"
+    },
+    {
+      "path": "sinter/src/sinter/domain/services/levels.py"
+    },
+    {
+      "path": "sinter/src/sinter/domain/services/summary.py"
+    },
+    {
+      "path": "sinter/src/sinter/application/get.py"
+    },
+    {
+      "path": "sinter/src/sinter/adapters/inbound/cli/commands/get.py"
+    },
+    {
+      "path": "sinter/src/sinter/adapters/inbound/cli/render/get.py"
+    },
+    {
+      "path": "sinter/schemas/get-result.schema.json"
+    },
+    {
+      "path": "sinter/tests/domain/test_views.py"
+    },
+    {
+      "path": "sinter/tests/domain/test_inheritance.py"
+    },
+    {
+      "path": "sinter/tests/domain/test_levels.py"
+    },
+    {
+      "path": "sinter/tests/application/test_get.py"
+    },
+    {
+      "path": "sinter/tests/cli/test_get_cli.py"
+    },
+    {
+      "path": "sinter/tests/contract/test_schemas.py"
+    }
+  ]
+}

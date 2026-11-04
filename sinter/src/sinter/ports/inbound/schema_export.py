@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 from sinter.domain.model.base import SinterModel
 from sinter.ports.inbound.common import ErrorEnvelope
+from sinter.ports.inbound.get import GetResult
 from sinter.ports.inbound.validate import ValidateResult
 
 
@@ -21,6 +22,7 @@ def published_results() -> dict[str, type[BaseModel]]:
     """Resultados da CLI que também são contrato (o `--json` de cada comando)."""
     return {
         "error": ErrorEnvelope,
+        "get-result": GetResult,
         "schema-export-result": SchemaExportResult,
         "validate-result": ValidateResult,
     }

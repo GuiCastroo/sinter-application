@@ -1,0 +1,14 @@
+{
+  "stage": "code-generation",
+  "unit": "u13-fmt",
+  "upstream_ids": [
+    "FR18"
+  ],
+  "coverage": [
+    {
+      "id": "FR18",
+      "status": "OK",
+      "target": "sinter/tests/test_fmt_fixture.py"
+    }
+  ]
+}

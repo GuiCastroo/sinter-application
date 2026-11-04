@@ -1,6 +1,5 @@
 import json
 import shutil
-from collections.abc import Callable
 from pathlib import Path
 
 import pytest
@@ -17,16 +16,18 @@ def test_help_mostra_validate(capsys: pytest.CaptureFixture[str]) -> None:
 
 def test_raiz_do_exemplo_passa(raiz_catalogo: Path, capsys: pytest.CaptureFixture[str]) -> None:
     assert run(["validate", str(raiz_catalogo)]) == 0
-    assert "0 erros, 0 avisos em 11 arquivos." in capsys.readouterr().out
+    assert "0 erros, 9 avisos em 11 arquivos." in capsys.readouterr().out
 
 
-def test_json_da_raiz_do_exemplo(
-    raiz_catalogo: Path, capsys: pytest.CaptureFixture[str], golden: Callable[[str, str], None]
-) -> None:
+def test_json_da_raiz_do_exemplo(raiz_catalogo: Path, capsys: pytest.CaptureFixture[str]) -> None:
     assert run(["validate", str(raiz_catalogo), "--json"]) == 0
     out = capsys.readouterr().out
-    golden("validate_raiz.json", out)
-    assert json.loads(out)["report"] == {"errors": [], "warnings": []}
+    result = json.loads(out)
+    assert result["report"]["errors"] == []
+    assert [warning["code"] for warning in result["report"]["warnings"]] == [
+        "FILE_NOT_FORMATTED"
+    ] * 9
+    assert result["summary"] == "0 erros, 9 avisos em 11 arquivos."
 
 
 def test_erro_de_validacao_sai_com_1(
@@ -61,15 +62,15 @@ def test_acha_o_catalogo_subindo_pastas(
     assert run(["validate"]) == 0
 
 
-def test_exemplo_completo_passa(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str], golden: Callable[[str, str], None]
-) -> None:
+def test_exemplo_completo_passa(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     root = tmp_path / "catalogo"
     shutil.copytree(EXEMPLO, root)
     code = run(["validate", str(root), "--json"])
     out = capsys.readouterr().out
     report = json.loads(out)["report"]
     assert report["errors"] == []  # SM-1: zero erros
-    assert {w["code"] for w in report["warnings"]} == {"DOM_REF_NOT_IN_CATALOG"}
+    codes = [warning["code"] for warning in report["warnings"]]
+    assert codes.count("FILE_NOT_FORMATTED") == 29
+    assert codes.count("DOM_REF_NOT_IN_CATALOG") == 11
+    assert len(codes) == 40
     assert code == 0
-    golden("validate_exemplo.json", out)

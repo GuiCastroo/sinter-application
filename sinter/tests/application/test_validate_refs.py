@@ -53,7 +53,7 @@ def _validate(
 
 
 def _codes(findings: list[Finding]) -> set[tuple[str, str]]:
-    return {(f.code, f.path) for f in findings}
+    return {(f.code, f.path) for f in findings if f.code != "FILE_NOT_FORMATTED"}
 
 
 def test_referencias_internas_inexistentes() -> None:

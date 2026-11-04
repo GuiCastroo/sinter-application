@@ -21,3 +21,15 @@ class MemoryCatalogFiles:
 
     def exists(self, path: str) -> bool:
         return path in self._files or any(p.startswith(f"{path}/") for p in self._files)
+
+    @property
+    def contents(self) -> dict[str, str]:
+        return self._files
+
+
+class MemoryCatalogWriter:
+    def __init__(self, files: MemoryCatalogFiles) -> None:
+        self._files = files.contents
+
+    def write_all(self, contents: dict[str, str]) -> None:
+        self._files.update(contents)

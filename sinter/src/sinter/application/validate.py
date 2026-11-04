@@ -16,7 +16,7 @@ class Validate:
 
     def __call__(self, request: ValidateRequest) -> ValidateResult:
         catalog, load_findings = load(self._files, self._codec)
-        facts = file_facts(catalog, self._files)
+        facts = file_facts(catalog, self._files, self._codec)
         findings = [*load_findings, *validate_catalog(catalog, facts)]
         report = Report.from_findings(findings)
         files_checked = len(self._files.list_manifests())

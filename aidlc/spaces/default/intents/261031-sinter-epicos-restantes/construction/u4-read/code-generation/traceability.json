@@ -1,0 +1,14 @@
+{
+  "stage": "code-generation",
+  "unit": "u4-read",
+  "upstream_ids": [
+    "FR16"
+  ],
+  "coverage": [
+    {
+      "id": "FR16",
+      "status": "OK",
+      "target": "sinter/tests/cli/test_read_cli.py"
+    }
+  ]
+}

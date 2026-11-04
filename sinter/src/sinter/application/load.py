@@ -60,11 +60,22 @@ def load(files: CatalogFiles, codec: ManifestCodec) -> tuple[Catalog, list[Findi
     return catalog, findings
 
 
-def file_facts(catalog: Catalog, files: CatalogFiles) -> FileFacts:
+def file_facts(catalog: Catalog, files: CatalogFiles, codec: ManifestCodec) -> FileFacts:
     """Fatos de arquivo que as regras precisam, calculados igual no validate e no apply (AD-31)."""
     paths = {
         resolve_doc_path(at.manifest.file, at.doc.path)
         for at in documents(catalog)
         if at.doc.path is not None
     }
-    return FileFacts(existing=frozenset(p for p in paths if files.exists(p)))
+    formatted: dict[str, bool] = {}
+    for path in files.list_manifests():
+        try:
+            source = files.read(path)
+            formatted[path] = source == codec.format(source)
+        except ManifestSyntaxError:
+            # A sintaxe já gera seu próprio erro; não acrescenta aviso derivado.
+            continue
+    return FileFacts(
+        formatted=formatted,
+        existing=frozenset(p for p in paths if files.exists(p)),
+    )

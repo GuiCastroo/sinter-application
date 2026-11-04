@@ -1,0 +1,19 @@
+{
+  "stage": "code-generation",
+  "unit": "u4-read",
+  "version": 1,
+  "writes": [
+    { "path": "sinter/src/sinter/domain/services/text.py" },
+    { "path": "sinter/src/sinter/domain/services/markdown.py" },
+    { "path": "sinter/src/sinter/ports/outbound/catalog_document_reader.py" },
+    { "path": "sinter/src/sinter/adapters/outbound/yaml_fs/documents.py" },
+    { "path": "sinter/src/sinter/ports/inbound/read.py" },
+    { "path": "sinter/src/sinter/application/read.py" },
+    { "path": "sinter/src/sinter/adapters/inbound/cli/commands/read.py" },
+    { "path": "sinter/src/sinter/adapters/inbound/cli/app.py" },
+    { "path": "sinter/src/sinter/bootstrap.py" },
+    { "path": "sinter/tests/domain/test_markdown.py" },
+    { "path": "sinter/tests/application/test_read.py" },
+    { "path": "sinter/tests/cli/test_read_cli.py" }
+  ]
+}

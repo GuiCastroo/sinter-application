@@ -1,0 +1,147 @@
+{
+  "stage": "units-generation",
+  "upstream_ids": [
+    "FR15",
+    "FR6",
+    "FR20",
+    "FR21",
+    "FR4",
+    "FR5",
+    "FR7",
+    "FR8",
+    "FR10",
+    "FR19",
+    "FR11",
+    "FR12",
+    "FR13",
+    "FR16",
+    "FR22",
+    "FR25",
+    "FR1",
+    "FR18",
+    "FR3",
+    "FR2",
+    "FR14",
+    "FR23",
+    "FR24"
+  ],
+  "coverage": [
+    {
+      "id": "FR15",
+      "status": "OK",
+      "target": "U1"
+    },
+    {
+      "id": "FR6",
+      "status": "OK",
+      "target": "U1"
+    },
+    {
+      "id": "FR20",
+      "status": "OK",
+      "target": "U1"
+    },
+    {
+      "id": "FR21",
+      "status": "OK",
+      "target": "U1"
+    },
+    {
+      "id": "FR4",
+      "status": "OK",
+      "target": "U2"
+    },
+    {
+      "id": "FR5",
+      "status": "OK",
+      "target": "U2"
+    },
+    {
+      "id": "FR7",
+      "status": "OK",
+      "target": "U2"
+    },
+    {
+      "id": "FR8",
+      "status": "OK",
+      "target": "U2"
+    },
+    {
+      "id": "FR10",
+      "status": "OK",
+      "target": "U2"
+    },
+    {
+      "id": "FR19",
+      "status": "OK",
+      "target": "U2"
+    },
+    {
+      "id": "FR11",
+      "status": "OK",
+      "target": "U3"
+    },
+    {
+      "id": "FR12",
+      "status": "OK",
+      "target": "U3"
+    },
+    {
+      "id": "FR13",
+      "status": "OK",
+      "target": "U3"
+    },
+    {
+      "id": "FR16",
+      "status": "OK",
+      "target": "U4"
+    },
+    {
+      "id": "FR22",
+      "status": "OK",
+      "target": "U5"
+    },
+    {
+      "id": "FR25",
+      "status": "OK",
+      "target": "U5"
+    },
+    {
+      "id": "FR1",
+      "status": "OK",
+      "target": "U7"
+    },
+    {
+      "id": "FR18",
+      "status": "OK",
+      "target": "U8"
+    },
+    {
+      "id": "FR3",
+      "status": "OK",
+      "target": "U10"
+    },
+    {
+      "id": "FR2",
+      "status": "OK",
+      "target": "U12"
+    },
+    {
+      "id": "FR14",
+      "status": "OK",
+      "target": "U12"
+    },
+    {
+      "id": "FR23",
+      "status": "OK",
+      "target": "U12"
+    },
+    {
+      "id": "FR24",
+      "status": "OK",
+      "target": "U14"
+    }
+  ],
+  "reverse": []
+}
+

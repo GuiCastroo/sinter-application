@@ -1,0 +1,1415 @@
+{
+  "$defs": {
+    "AppSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "lifecycle": {
+          "enum": [
+            "legacy",
+            "modernizing",
+            "modern",
+            "retired"
+          ],
+          "title": "Lifecycle",
+          "type": "string"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "lifecycle"
+      ],
+      "title": "AppSummary",
+      "type": "object"
+    },
+    "ApplicationLevel0": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "Application",
+          "default": "Application",
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "enum": [
+                "candidate",
+                "approved",
+                "rejected",
+                "deprecated",
+                "superseded"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "purpose": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Purpose"
+        },
+        "counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Counts",
+          "type": "object"
+        },
+        "domain": {
+          "title": "Domain",
+          "type": "string"
+        },
+        "lifecycle": {
+          "enum": [
+            "legacy",
+            "modernizing",
+            "modern",
+            "retired"
+          ],
+          "title": "Lifecycle",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "domain",
+        "lifecycle"
+      ],
+      "title": "ApplicationLevel0",
+      "type": "object"
+    },
+    "DecisionView": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "date": {
+          "format": "date",
+          "title": "Date",
+          "type": "string"
+        },
+        "decision": {
+          "title": "Decision",
+          "type": "string"
+        },
+        "origin": {
+          "title": "Origin",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "date",
+        "decision",
+        "origin"
+      ],
+      "title": "DecisionView",
+      "type": "object"
+    },
+    "DocView": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "type": {
+          "title": "Type",
+          "type": "string"
+        },
+        "path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Path"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        },
+        "origin": {
+          "title": "Origin",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "type",
+        "origin"
+      ],
+      "title": "DocView",
+      "type": "object"
+    },
+    "DomainLevel0": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "Domain",
+          "default": "Domain",
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "enum": [
+                "candidate",
+                "approved",
+                "rejected",
+                "deprecated",
+                "superseded"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "purpose": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Purpose"
+        },
+        "counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Counts",
+          "type": "object"
+        },
+        "domainId": {
+          "title": "Domainid",
+          "type": "string"
+        },
+        "area": {
+          "title": "Area",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "domainId",
+        "area"
+      ],
+      "title": "DomainLevel0",
+      "type": "object"
+    },
+    "DomainLevel1": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "Domain",
+          "default": "Domain",
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "enum": [
+                "candidate",
+                "approved",
+                "rejected",
+                "deprecated",
+                "superseded"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "purpose": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Purpose"
+        },
+        "counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Counts",
+          "type": "object"
+        },
+        "domainId": {
+          "title": "Domainid",
+          "type": "string"
+        },
+        "area": {
+          "title": "Area",
+          "type": "string"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/RuleView"
+          },
+          "title": "Rules",
+          "type": "array"
+        },
+        "regulations": {
+          "items": {
+            "$ref": "#/$defs/RefView"
+          },
+          "title": "Regulations",
+          "type": "array"
+        },
+        "standards": {
+          "items": {
+            "$ref": "#/$defs/RefView"
+          },
+          "title": "Standards",
+          "type": "array"
+        },
+        "decisions": {
+          "items": {
+            "$ref": "#/$defs/DecisionView"
+          },
+          "title": "Decisions",
+          "type": "array"
+        },
+        "docs": {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/IdentifiedDocView"
+              },
+              {
+                "$ref": "#/$defs/DocView"
+              }
+            ]
+          },
+          "title": "Docs",
+          "type": "array"
+        },
+        "glossary": {
+          "items": {
+            "$ref": "#/$defs/TermView"
+          },
+          "title": "Glossary",
+          "type": "array"
+        },
+        "does": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Does",
+          "type": "array"
+        },
+        "doesNot": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Doesnot",
+          "type": "array"
+        },
+        "unknowns": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Unknowns",
+          "type": "array"
+        },
+        "gaps": {
+          "items": {
+            "$ref": "#/$defs/Gap"
+          },
+          "title": "Gaps",
+          "type": "array"
+        },
+        "subdomains": {
+          "items": {
+            "$ref": "#/$defs/SubdomainLevel0"
+          },
+          "title": "Subdomains",
+          "type": "array"
+        },
+        "mainJourneys": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Mainjourneys",
+          "type": "array"
+        },
+        "operation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OperationView"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "modernization": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Modernization"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "domainId",
+        "area",
+        "does",
+        "doesNot",
+        "unknowns",
+        "gaps",
+        "subdomains",
+        "mainJourneys"
+      ],
+      "title": "DomainLevel1",
+      "type": "object"
+    },
+    "Finding": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "warning"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "file": {
+          "title": "File",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "line": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Line"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "related": {
+          "items": {
+            "$ref": "#/$defs/Related"
+          },
+          "title": "Related",
+          "type": "array"
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "file",
+        "path",
+        "message"
+      ],
+      "title": "Finding",
+      "type": "object"
+    },
+    "Gap": {
+      "additionalProperties": false,
+      "description": "Campo que ninguém preencheu: a IA sabe que não foi dito, em vez de supor que não há nada.",
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field"
+      ],
+      "title": "Gap",
+      "type": "object"
+    },
+    "IdentifiedDocView": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "type": {
+          "title": "Type",
+          "type": "string"
+        },
+        "path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Path"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        },
+        "origin": {
+          "title": "Origin",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "type",
+        "origin",
+        "id"
+      ],
+      "title": "IdentifiedDocView",
+      "type": "object"
+    },
+    "JourneyLevel0": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "Journey",
+          "default": "Journey",
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "enum": [
+                "candidate",
+                "approved",
+                "rejected",
+                "deprecated",
+                "superseded"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "purpose": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Purpose"
+        },
+        "counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Counts",
+          "type": "object"
+        },
+        "domain": {
+          "title": "Domain",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "domain"
+      ],
+      "title": "JourneyLevel0",
+      "type": "object"
+    },
+    "Modernization": {
+      "additionalProperties": false,
+      "properties": {
+        "goal": {
+          "title": "Goal",
+          "type": "string"
+        },
+        "decision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decision"
+        }
+      },
+      "required": [
+        "goal"
+      ],
+      "title": "Modernization",
+      "type": "object"
+    },
+    "Omitted": {
+      "additionalProperties": false,
+      "properties": {
+        "what": {
+          "title": "What",
+          "type": "string"
+        },
+        "command": {
+          "title": "Command",
+          "type": "string"
+        }
+      },
+      "required": [
+        "what",
+        "command"
+      ],
+      "title": "Omitted",
+      "type": "object"
+    },
+    "Operation": {
+      "additionalProperties": false,
+      "properties": {
+        "hours": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hours"
+        },
+        "batchWindows": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Batchwindows",
+          "type": "array"
+        },
+        "criticality": {
+          "anyOf": [
+            {
+              "enum": [
+                "baixa",
+                "media",
+                "alta",
+                "critica"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Criticality"
+        },
+        "volume": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Volume"
+        }
+      },
+      "title": "Operation",
+      "type": "object"
+    },
+    "OperationView": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/$defs/Operation"
+        },
+        "origin": {
+          "title": "Origin",
+          "type": "string"
+        },
+        "inheritedFields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Inheritedfields",
+          "type": "array"
+        },
+        "inheritedFrom": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Inheritedfrom"
+        }
+      },
+      "required": [
+        "value",
+        "origin"
+      ],
+      "title": "OperationView",
+      "type": "object"
+    },
+    "OrganizationLevel0": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "Organization",
+          "default": "Organization",
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "enum": [
+                "candidate",
+                "approved",
+                "rejected",
+                "deprecated",
+                "superseded"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "purpose": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Purpose"
+        },
+        "counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Counts",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "OrganizationLevel0",
+      "type": "object"
+    },
+    "OtherLevel0": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "RepositoryList",
+            "Regulation",
+            "Standard",
+            "Relation",
+            "Repository",
+            "Rule",
+            "Doc",
+            "Data",
+            "Decision",
+            "Area",
+            "?"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "enum": [
+                "candidate",
+                "approved",
+                "rejected",
+                "deprecated",
+                "superseded"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "purpose": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Purpose"
+        },
+        "counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Counts",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "name"
+      ],
+      "title": "OtherLevel0",
+      "type": "object"
+    },
+    "RefView": {
+      "additionalProperties": false,
+      "description": "Id citado (regulação, padrão) com o nível onde foi declarado.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "origin": {
+          "title": "Origin",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "origin"
+      ],
+      "title": "RefView",
+      "type": "object"
+    },
+    "Related": {
+      "additionalProperties": false,
+      "properties": {
+        "file": {
+          "title": "File",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "file",
+        "path"
+      ],
+      "title": "Related",
+      "type": "object"
+    },
+    "Report": {
+      "additionalProperties": false,
+      "properties": {
+        "errors": {
+          "items": {
+            "$ref": "#/$defs/Finding"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "warnings": {
+          "items": {
+            "$ref": "#/$defs/Finding"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "title": "Report",
+      "type": "object"
+    },
+    "RuleView": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "statement": {
+          "title": "Statement",
+          "type": "string"
+        },
+        "exceptions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Exceptions",
+          "type": "array"
+        },
+        "regulations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Regulations",
+          "type": "array"
+        },
+        "origin": {
+          "title": "Origin",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "statement",
+        "origin"
+      ],
+      "title": "RuleView",
+      "type": "object"
+    },
+    "SubdomainLevel0": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "Subdomain",
+          "default": "Subdomain",
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "enum": [
+                "candidate",
+                "approved",
+                "rejected",
+                "deprecated",
+                "superseded"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "purpose": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Purpose"
+        },
+        "counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Counts",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "SubdomainLevel0",
+      "type": "object"
+    },
+    "SubdomainLevel1": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "Subdomain",
+          "default": "Subdomain",
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "enum": [
+                "candidate",
+                "approved",
+                "rejected",
+                "deprecated",
+                "superseded"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "purpose": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Purpose"
+        },
+        "counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Counts",
+          "type": "object"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/RuleView"
+          },
+          "title": "Rules",
+          "type": "array"
+        },
+        "regulations": {
+          "items": {
+            "$ref": "#/$defs/RefView"
+          },
+          "title": "Regulations",
+          "type": "array"
+        },
+        "standards": {
+          "items": {
+            "$ref": "#/$defs/RefView"
+          },
+          "title": "Standards",
+          "type": "array"
+        },
+        "decisions": {
+          "items": {
+            "$ref": "#/$defs/DecisionView"
+          },
+          "title": "Decisions",
+          "type": "array"
+        },
+        "docs": {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/IdentifiedDocView"
+              },
+              {
+                "$ref": "#/$defs/DocView"
+              }
+            ]
+          },
+          "title": "Docs",
+          "type": "array"
+        },
+        "glossary": {
+          "items": {
+            "$ref": "#/$defs/TermView"
+          },
+          "title": "Glossary",
+          "type": "array"
+        },
+        "domain": {
+          "title": "Domain",
+          "type": "string"
+        },
+        "does": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Does",
+          "type": "array"
+        },
+        "doesNot": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Doesnot",
+          "type": "array"
+        },
+        "unknowns": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Unknowns",
+          "type": "array"
+        },
+        "gaps": {
+          "items": {
+            "$ref": "#/$defs/Gap"
+          },
+          "title": "Gaps",
+          "type": "array"
+        },
+        "applications": {
+          "items": {
+            "$ref": "#/$defs/AppSummary"
+          },
+          "title": "Applications",
+          "type": "array"
+        },
+        "operation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OperationView"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "modernization": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Modernization"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "domain",
+        "does",
+        "doesNot",
+        "unknowns",
+        "gaps",
+        "applications"
+      ],
+      "title": "SubdomainLevel1",
+      "type": "object"
+    },
+    "TermView": {
+      "additionalProperties": false,
+      "properties": {
+        "term": {
+          "title": "Term",
+          "type": "string"
+        },
+        "definition": {
+          "title": "Definition",
+          "type": "string"
+        },
+        "synonyms": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Synonyms",
+          "type": "array"
+        },
+        "notToConfuseWith": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nottoconfusewith"
+        },
+        "origin": {
+          "title": "Origin",
+          "type": "string"
+        }
+      },
+      "required": [
+        "term",
+        "definition",
+        "origin"
+      ],
+      "title": "TermView",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "level": {
+      "title": "Level",
+      "type": "integer"
+    },
+    "item": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DomainLevel1"
+        },
+        {
+          "$ref": "#/$defs/SubdomainLevel1"
+        },
+        {
+          "discriminator": {
+            "mapping": {
+              "?": "#/$defs/OtherLevel0",
+              "Application": "#/$defs/ApplicationLevel0",
+              "Area": "#/$defs/OtherLevel0",
+              "Data": "#/$defs/OtherLevel0",
+              "Decision": "#/$defs/OtherLevel0",
+              "Doc": "#/$defs/OtherLevel0",
+              "Domain": "#/$defs/DomainLevel0",
+              "Journey": "#/$defs/JourneyLevel0",
+              "Organization": "#/$defs/OrganizationLevel0",
+              "Regulation": "#/$defs/OtherLevel0",
+              "Relation": "#/$defs/OtherLevel0",
+              "Repository": "#/$defs/OtherLevel0",
+              "RepositoryList": "#/$defs/OtherLevel0",
+              "Rule": "#/$defs/OtherLevel0",
+              "Standard": "#/$defs/OtherLevel0",
+              "Subdomain": "#/$defs/SubdomainLevel0"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/DomainLevel0"
+            },
+            {
+              "$ref": "#/$defs/SubdomainLevel0"
+            },
+            {
+              "$ref": "#/$defs/JourneyLevel0"
+            },
+            {
+              "$ref": "#/$defs/OrganizationLevel0"
+            },
+            {
+              "$ref": "#/$defs/ApplicationLevel0"
+            },
+            {
+              "$ref": "#/$defs/OtherLevel0"
+            }
+          ]
+        }
+      ],
+      "title": "Item"
+    },
+    "omitted": {
+      "items": {
+        "$ref": "#/$defs/Omitted"
+      },
+      "title": "Omitted",
+      "type": "array"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "string"
+    },
+    "report": {
+      "$ref": "#/$defs/Report"
+    }
+  },
+  "required": [
+    "level",
+    "item",
+    "omitted",
+    "summary"
+  ],
+  "title": "GetResult",
+  "type": "object"
+}

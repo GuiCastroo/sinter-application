@@ -1,0 +1,29 @@
+{
+  "stage": "code-generation",
+  "unit": "u13-fmt",
+  "version": 1,
+  "writes": [
+    { "path": "sinter/src/sinter/adapters/inbound/cli/app.py" },
+    { "path": "sinter/src/sinter/adapters/inbound/cli/commands/fmt.py" },
+    { "path": "sinter/src/sinter/adapters/inbound/cli/render/fmt.py" },
+    { "path": "sinter/src/sinter/adapters/outbound/memory/files.py" },
+    { "path": "sinter/src/sinter/adapters/outbound/yaml_fs/codec.py" },
+    { "path": "sinter/src/sinter/adapters/outbound/yaml_fs/files.py" },
+    { "path": "sinter/src/sinter/application/fmt.py" },
+    { "path": "sinter/src/sinter/application/load.py" },
+    { "path": "sinter/src/sinter/application/validate.py" },
+    { "path": "sinter/src/sinter/bootstrap.py" },
+    { "path": "sinter/src/sinter/domain/validation/rules/formatting.py" },
+    { "path": "sinter/src/sinter/ports/inbound/fmt.py" },
+    { "path": "sinter/src/sinter/ports/outbound/catalog_files.py" },
+    { "path": "sinter/src/sinter/ports/outbound/catalog_writer.py" },
+    { "path": "sinter/src/sinter/ports/outbound/manifest_codec.py" },
+    { "path": "sinter/tests/adapters/test_yaml_fs.py" },
+    { "path": "sinter/tests/application/test_fmt.py" },
+    { "path": "sinter/tests/application/test_validate.py" },
+    { "path": "sinter/tests/application/test_validate_refs.py" },
+    { "path": "sinter/tests/cli/test_fmt_cli.py" },
+    { "path": "sinter/tests/cli/test_validate_cli.py" },
+    { "path": "sinter/tests/test_fmt_fixture.py" }
+  ]
+}
