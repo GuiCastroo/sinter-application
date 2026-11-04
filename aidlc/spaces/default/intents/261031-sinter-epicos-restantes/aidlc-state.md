@@ -124,7 +124,7 @@
 | --- | --- | --- | --- |
 | u1-get-niveis | - | [ ] | [ ] |
 | u13-fmt | - | [ ] | [ ] |
-| u4-read | Guilherme Castro | [x] | [x] |
+| u4-read | - | [x] | [x] |
 | u7-catalog-init | - | [ ] | [ ] |
 | u2-calculados | - | [ ] | [ ] |
 | u5-find-areas | - | [ ] | [ ] |
