@@ -1,17 +1,17 @@
 {
   "version": 1,
-  "status": "claimed",
-  "owner": "gscastroEfluxus",
+  "status": "released",
+  "owner": "released",
   "space": "default",
   "intent_uuid": "01a19036-f9ff-71d5-8617-c1919df72673",
   "intent_id8": "9df72673",
   "unit": "u4-read",
-  "generation": 2,
-  "nonce": "b8f01dae-5d2e-4613-8b8d-2fe813d4680c",
+  "generation": 3,
+  "nonce": "23a26417-aca8-416f-b31a-2fb85420b223",
   "base_oid": "bf2e9def15316b74481eb50f6c30232cd4d41676",
   "integration_ref": "refs/remotes/origin/main",
   "claim_ref": "refs/heads/claim/9df72673/u4-read",
-  "predecessor_oid": "8b76bf15b41d53887ea7bc112fb81c12225c57ff",
+  "predecessor_oid": "e66416c244490978213ad278d9f477609468c5b6",
   "gate_rhythm": "per-stage",
   "audit_shard": "macbook-air-de-guilherme-local-20247fe9041b.md"
 }
