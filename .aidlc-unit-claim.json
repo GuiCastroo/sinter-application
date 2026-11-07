@@ -11,7 +11,9 @@
   "base_oid": "bf2e9def15316b74481eb50f6c30232cd4d41676",
   "integration_ref": "refs/remotes/origin/main",
   "claim_ref": "refs/heads/claim/9df72673/u4-read",
-  "predecessor_oid": "9c6c80b69d447e4c30c523586e20a1ec30e02167",
+  "predecessor_oid": "ba68705028851cba901b05148098bd18cfb55941",
   "gate_rhythm": "per-stage",
-  "audit_shard": "macbook-air-de-guilherme-local-2c773a56486f.md"
+  "audit_shard": "macbook-air-de-guilherme-local-2c773a56486f.md",
+  "candidate_tree_oid": "fdda3dfba449a8f01627ad463b528dd56f379988",
+  "candidate_head_oid": "7fb8dac2a2580b3dfd7a5ecdba0d29d41c89382a"
 }
