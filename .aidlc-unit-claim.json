@@ -1,17 +1,17 @@
 {
   "version": 1,
-  "status": "released",
-  "owner": "released",
+  "status": "claimed",
+  "owner": "Guilherme Castro",
   "space": "default",
   "intent_uuid": "01a19036-f9ff-71d5-8617-c1919df72673",
   "intent_id8": "9df72673",
   "unit": "u4-read",
   "generation": 3,
-  "nonce": "23a26417-aca8-416f-b31a-2fb85420b223",
+  "nonce": "1e4e856e-f4eb-48c0-8a3d-09e1f972b27c",
   "base_oid": "bf2e9def15316b74481eb50f6c30232cd4d41676",
   "integration_ref": "refs/remotes/origin/main",
   "claim_ref": "refs/heads/claim/9df72673/u4-read",
-  "predecessor_oid": "e66416c244490978213ad278d9f477609468c5b6",
+  "predecessor_oid": "9c6c80b69d447e4c30c523586e20a1ec30e02167",
   "gate_rhythm": "per-stage",
-  "audit_shard": "macbook-air-de-guilherme-local-20247fe9041b.md"
+  "audit_shard": "macbook-air-de-guilherme-local-2c773a56486f.md"
 }
